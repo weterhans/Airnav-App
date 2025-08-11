@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perum LPPNPI - Cabang Surabaya</title>
+    <!-- Memuat Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Memuat Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Menambahkan warna kustom sesuai logo AirNav
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'airnav-blue': '#255A9B', // Biru dominan dari logo
+                        'airnav-red': '#D92D20',   // Merah aksen dari logo
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Menggunakan font Inter sebagai default */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #030712; /* bg-gray-950 */
+        }
+        /* Style untuk scrollbar agar lebih sesuai dengan tema gelap */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #030712; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
+    </style>
+</head>
+<body class="bg-gray-950 text-white">
+
+    <div id="app-container" class="flex flex-col min-h-screen">
+
+        <!-- ===== Header Dinamis ===== -->
+        <header class="bg-airnav-blue shadow-lg sticky top-0 z-50">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-between h-16">
+                    <!-- Tombol Kiri: Menu atau Kembali (diisi oleh JS) -->
+                    <div id="header-left" class="w-1/3"></div>
+                    
+                    <!-- Judul Halaman (Tengah, diisi oleh JS) -->
+                    <h1 id="header-title" class="w-1/3 text-xl font-bold tracking-wider uppercase text-center truncate"></h1>
+                    
+                    <!-- Ikon Aksi (Kanan) -->
+                    <div id="header-right" class="w-1/3 flex items-center justify-end space-x-2">
+                        <button class="p-2 rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
+                        </button>
+                        <button class="p-2 rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-white transition-colors">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" /></svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== Konten Utama ===== -->
+        <main class="flex-grow container mx-auto">
+            
+            <!-- VIEW 1: Menu Utama (Home) -->
+            <div id="home-view" class="p-4 sm:p-6 lg:p-8">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 sm:gap-6">
+                    
+                    <!-- Card-card menu yang sudah fungsional -->
+                    <a href="#harian-cnsd" data-target="harian-cnsd-view" data-title="Harian CNSD" class="nav-link group bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-airnav-blue/40 transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-gray-800">
+                        <img src="https://placehold.co/600x400/255A9B/FFFFFF?text=Harian+CNSD" alt="Harian CNSD" class="w-full h-32 sm:h-40 object-cover">
+                        <div class="p-4"><h3 class="font-semibold text-center text-gray-300 group-hover:text-white">HARIAN CNSD</h3></div>
+                    </a>
+
+                    <a href="#harian-tfp" data-target="harian-tfp-view" data-title="Harian TFP" class="nav-link group bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-airnav-blue/40 transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-gray-800">
+                        <img src="https://placehold.co/600x400/10B981/FFFFFF?text=Harian+TFP" alt="Harian TFP" class="w-full h-32 sm:h-40 object-cover">
+                        <div class="p-4"><h3 class="font-semibold text-center text-gray-300 group-hover:text-white">HARIAN TFP</h3></div>
+                    </a>
+
+                    <a href="#wo-cnsd" data-target="wo-cnsd-view" data-title="MR & WO CNSD" class="nav-link group bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-airnav-blue/40 transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-gray-800">
+                        <img src="https://placehold.co/600x400/D92D20/FFFFFF?text=WO+CNSD" alt="Maintenace Request & Work Order CNSD" class="w-full h-32 sm:h-40 object-cover">
+                        <div class="p-4"><h3 class="font-semibold text-center text-gray-300 group-hover:text-white">MR & WO CNSD</h3></div>
+                    </a>
+
+                    <a href="#wo-tfp" data-target="wo-tfp-view" data-title="MR & WO TFP" class="nav-link group bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-airnav-blue/40 transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-gray-800">
+                        <img src="https://placehold.co/600x400/F97316/FFFFFF?text=WO+TFP" alt="Maintenace Request & Work Order TFP" class="w-full h-32 sm:h-40 object-cover">
+                        <div class="p-4"><h3 class="font-semibold text-center text-gray-300 group-hover:text-white">MR & WO TFP</h3></div>
+                    </a>
+
+                    <a href="#rostering" data-target="rostering-view" data-title="Rostering" class="nav-link group bg-gray-900 rounded-lg overflow-hidden shadow-lg hover:shadow-airnav-blue/40 transform hover:-translate-y-1 transition-all duration-300 cursor-pointer border border-gray-800">
+                        <img src="https://placehold.co/600x400/F59E0B/FFFFFF?text=ROSTERING" alt="Rostering" class="w-full h-32 sm:h-40 object-cover">
+                        <div class="p-4"><h3 class="font-semibold text-center text-gray-300 group-hover:text-white">ROSTERING</h3></div>
+                    </a>
+                </div>
+            </div>
+
+            <!-- VIEW-VIEW KONTEN (disembunyikan secara default) -->
+            <div id="harian-cnsd-view" class="page-view hidden p-4 sm:p-6 lg:p-8"><h2 class="text-2xl font-bold mb-4">Konten Harian CNSD</h2><p>Letakkan konten untuk Harian CNSD di sini.</p></div>
+            <div id="harian-tfp-view" class="page-view hidden p-4 sm:p-6 lg:p-8"><h2 class="text-2xl font-bold mb-4">Konten Harian TFP</h2><p>Letakkan konten untuk Harian TFP di sini.</p></div>
+            <div id="wo-cnsd-view" class="page-view hidden p-4 sm:p-6 lg:p-8"><h2 class="text-2xl font-bold mb-4">Konten MR & WO CNSD</h2><p>Letakkan konten untuk MR & WO CNSD di sini.</p></div>
+            <div id="wo-tfp-view" class="page-view hidden p-4 sm:p-6 lg:p-8"><h2 class="text-2xl font-bold mb-4">Konten MR & WO TFP</h2><p>Letakkan konten untuk MR & WO TFP di sini.</p></div>
+            <div id="rostering-view" class="page-view hidden p-4 sm:p-6 lg:p-8"><h2 class="text-2xl font-bold mb-4">Konten Rostering</h2><p>Letakkan konten untuk Rostering di sini.</p></div>
+            
+        </main>
+
+        <!-- ===== Footer / Bottom Navigation ===== -->
+        <footer class="bg-airnav-blue shadow-lg sticky bottom-0 z-50 mt-auto">
+            <div class="container mx-auto px-4">
+                <div class="flex items-center justify-around h-16">
+                    <a href="#" class="flex flex-col items-center justify-center text-blue-200 hover:text-white transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" /></svg><span class="text-xs font-medium">MY ACCOUNT</span></a>
+                    <a href="#home" id="home-btn" class="flex flex-col items-center justify-center text-white transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg><span class="text-xs font-medium">HOME</span></a>
+                    <a href="#" class="flex flex-col items-center justify-center text-blue-200 hover:text-white transition-colors duration-200"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg><span class="text-xs font-medium">SURABAYA</span></a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const headerLeft = document.getElementById('header-left');
+            const headerTitle = document.getElementById('header-title');
+            const homeView = document.getElementById('home-view');
+            const homeBtn = document.getElementById('home-btn');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const pageViews = document.querySelectorAll('.page-view');
+
+            const menuButtonTemplate = `<button class="p-2 rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" /></svg></button>`;
+            const backButtonTemplate = `<button id="back-btn" class="p-2 rounded-full hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-white transition-colors"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg></button>`;
+
+            function showView(viewId, viewTitle) {
+                homeView.classList.add('hidden');
+                pageViews.forEach(view => view.classList.add('hidden'));
+                
+                const targetView = document.getElementById(viewId);
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                    updateHeader(viewTitle);
+                } else {
+                    showHome();
+                }
+            }
+            
+            function showHome() {
+                pageViews.forEach(view => view.classList.add('hidden'));
+                homeView.classList.remove('hidden');
+                updateHeader('AirNav Surabaya', true);
+            }
+
+            function updateHeader(title, isHome = false) {
+                headerTitle.textContent = title;
+                if (isHome) {
+                    headerLeft.innerHTML = menuButtonTemplate;
+                } else {
+                    headerLeft.innerHTML = backButtonTemplate;
+                    document.getElementById('back-btn').addEventListener('click', showHome);
+                }
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    const targetId = this.dataset.target;
+                    const targetTitle = this.dataset.title;
+                    showView(targetId, targetTitle);
+                });
+            });
+
+            homeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                showHome();
+            });
+
+            showHome();
+        });
+    </script>
+</body>
+</html>
