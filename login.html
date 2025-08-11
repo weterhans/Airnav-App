@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Perum LPPNPI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Konfigurasi warna kustom AirNav
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'airnav-blue': '#255A9B',
+                        'airnav-red': '#D92D20',
+                        'indigo-600': '#255A9B',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="min-h-screen flex flex-col items-center justify-center p-4 bg-white">
+        <div class="w-full max-w-sm">
+            <img src="img\airnav.ico" alt="Logo AirNav Indonesia" class="w-32 h-32 mx-auto mb-6 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/128x128/255A9B/FFFFFF?text=AirNav';">
+            <h1 class="text-2xl font-bold text-center text-gray-900 mb-2">Selamat Datang</h1>
+            <p class="text-center text-gray-500 mb-8">Silakan masuk ke Dashboard AirNav</p>
+            <form id="login-form" class="space-y-6">
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                    <input type="text" id="username" name="username" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-3 px-4 text-gray-900 focus:outline-none focus:ring-indigo-600 focus:border-indigo-600" placeholder="Masukkan username">
+                </div>
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" id="password" name="password" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-3 px-4 text-gray-900 focus:outline-none focus:ring-indigo-600 focus:border-indigo-600" placeholder="Masukkan password">
+                </div>
+                <div>
+                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-blue-800 transition-colors">Login</button>
+                </div>
+            </form>
+            <p id="login-error" class="text-red-500 text-center mt-4 hidden">Username atau Password tidak boleh kosong.</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loginForm = document.getElementById('login-form');
+            const loginError = document.getElementById('login-error');
+            const usernameInput = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+
+            // Cek jika pengguna sudah login sebelumnya
+            if (sessionStorage.getItem('loggedInUser')) {
+                const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+                window.location.href = currentPath + '/index.html';
+            }
+
+            // FIX: Pindahkan fokus dari username ke password saat menekan Enter
+            usernameInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    // Mencegah form dari submit (perilaku default)
+                    event.preventDefault();
+                    // Pindahkan fokus ke input password
+                    passwordInput.focus();
+                }
+            });
+
+            loginForm.addEventListener('submit', (e) => {
+                e.preventDefault(); 
+                const username = usernameInput.value.trim();
+                const password = passwordInput.value.trim();
+
+                if (username && password) {
+                    sessionStorage.setItem('loggedInUser', username);
+                    // Arahkan ke halaman dasbor utama
+                    const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+                    window.location.href = currentPath + '/index.html';
+                } else {
+                    loginError.classList.remove('hidden');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
