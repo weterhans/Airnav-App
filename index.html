@@ -44,7 +44,6 @@
             background: #555;
         }
         /* Styles for when the sidebar is collapsed */
-        /* FIX: Changed #logo-text to #logo-container to hide the entire logo block */
         #sidebar.collapsed .menu-text,
         #sidebar.collapsed #logo-container,
         #sidebar.collapsed #logout-text {
@@ -80,7 +79,6 @@
             <!-- Sidebar -->
             <aside id="sidebar" class="bg-white w-64 fixed top-0 left-0 h-full shadow-lg z-20 transform md:transform-none -translate-x-full">
                 <div class="sidebar-header flex items-center justify-between p-4 border-b border-gray-200">
-                    <!-- FIX: Wrapped logo image and text in a container div -->
                     <div id="logo-container" class="flex items-center">
                          <img src="img\airnav.ico" class="w-8 h-8 mr-2" alt="Logo AirNav" onerror="this.onerror=null;this.src='https://placehold.co/32x32/FFFFFF/255A9B?text=A';">
                         <h1 id="logo-text" class="text-xl font-bold text-indigo-600">AirNav</h1>
@@ -162,60 +160,142 @@
                 <div id="dashboard-content" class="content-panel p-6 md:p-8">
                     <h3 class="text-2xl font-bold mb-6">Akses Cepat</h3>
                     <div id="quick-links-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="harian cnsd laporan"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="cnsd-content" aria-label="Buka laporan Harian CNSD"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-blue-100 rounded-full"><svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div><span class="text-sm font-medium text-red-500">2 Baru</span></div><h4 class="text-lg font-semibold text-gray-800">Harian CNSD</h4><p class="text-sm text-gray-500 mt-1">Kelola laporan harian divisi CNSD.</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
-                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="harian tfp laporan"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="tfp-content" aria-label="Buka laporan Harian TFP"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-green-100 rounded-full"><svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div><span class="text-sm font-medium text-green-500">Lengkap</span></div><h4 class="text-lg font-semibold text-gray-800">Harian TFP</h4><p class="text-sm text-gray-500 mt-1">Akses dan input data laporan TFP.</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
-                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="wo cnsd work order"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="wo-cnsd-content" aria-label="Lihat Work Order CNSD"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-yellow-100 rounded-full"><svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div><span class="text-sm font-medium text-gray-600">5 Aktif</span></div><h4 class="text-lg font-semibold text-gray-800">WO CNSD</h4><p class="text-sm text-gray-500 mt-1">Kelola Work Order untuk CNSD.</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Lihat WO &rarr;</span></a></div>
-                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="wo tfp work order"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="wo-tfp-content" aria-label="Lihat Work Order TFP"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-purple-100 rounded-full"><svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg></div><span class="text-sm font-medium text-red-500">1 Overdue</span></div><h4 class="text-lg font-semibold text-gray-800">WO TFP</h4><p class="text-sm text-gray-500 mt-1">Lihat status Work Order untuk TFP.</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Lihat WO &rarr;</span></a></div>
-                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="rostering jadwal"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="rostering-content" aria-label="Buka jadwal Rostering"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-teal-100 rounded-full"><svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div><span class="text-sm font-medium text-blue-500">Update</span></div><h4 class="text-lg font-semibold text-gray-800">Rostering</h4><p class="text-sm text-gray-500 mt-1">Atur dan lihat jadwal kerja tim.</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Buka Jadwal &rarr;</span></a></div>
+                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="harian cnsd laporan"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="cnsd-content" aria-label="Buka laporan Harian CNSD"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-blue-100 rounded-full"><svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">Harian CNSD</h4><p class="text-sm text-gray-500 mt-1">Kelola laporan harian CNSD</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
+                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="harian tfp laporan"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="tfp-content" aria-label="Buka laporan Harian TFP"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-green-100 rounded-full"><svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">Harian TFP</h4><p class="text-sm text-gray-500 mt-1">Kelola laporan harian  TFP</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
+                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="wo cnsd work order"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="wo-cnsd-content" aria-label="Lihat Work Order CNSD"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-yellow-100 rounded-full"><svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">WO CNSD</h4><p class="text-sm text-gray-500 mt-1">Kelola Work Order untuk CNSD</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
+                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="wo tfp work order"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="wo-tfp-content" aria-label="Lihat Work Order TFP"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-purple-100 rounded-full"><svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">WO TFP</h4><p class="text-sm text-gray-500 mt-1">Kelola Work Order untuk TFP</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
+                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="rostering jadwal"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="rostering-content" aria-label="Buka jadwal Rostering"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-teal-100 rounded-full"><svg class="w-6 h-6 text-teal-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">Rostering</h4><p class="text-sm text-gray-500 mt-1">Atur dan lihat jadwal kerja tim</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Buka Jadwal &rarr;</span></a></div>
                     </div>
                     <div id="no-results-message" class="text-center text-gray-500 mt-8 hidden">
                         <p>Tidak ada hasil yang ditemukan.</p>
                     </div>
-                    <div class="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
-                        <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-md flex flex-col">
-                            <h4 class="text-lg font-semibold mb-4">Ringkasan Work Order</h4>
-                            <div class="relative h-80 flex-grow"><canvas id="woChart"></canvas></div>
-                        </div>
-                        <div class="bg-white p-6 rounded-xl shadow-md">
-                            <h4 class="text-lg font-semibold mb-4">Aktivitas Terkini</h4>
-                            <ul class="space-y-4">
-                                <li class="flex items-start"><div class="w-2 h-2 bg-green-500 rounded-full mt-2 mr-3 flex-shrink-0"></div><div><p class="text-sm text-gray-700"><strong>Budi</strong> menyelesaikan <strong>WO-TFP-0089</strong>.</p><p class="text-xs text-gray-400">15 menit yang lalu</p></div></li>
-                                <li class="flex items-start"><div class="w-2 h-2 bg-blue-500 rounded-full mt-2 mr-3 flex-shrink-0"></div><div><p class="text-sm text-gray-700">Jadwal <strong>Rostering</strong> minggu depan telah diperbarui.</p><p class="text-xs text-gray-400">1 jam yang lalu</p></div></li>
-                                <li class="flex items-start"><div class="w-2 h-2 bg-yellow-500 rounded-full mt-2 mr-3 flex-shrink-0"></div><div><p class="text-sm text-gray-700">Laporan <strong>Harian CNSD</strong> untuk kemarin perlu verifikasi.</p><p class="text-xs text-gray-400">3 jam yang lalu</p></div></li>
-                                <li class="flex items-start"><div class="w-2 h-2 bg-red-500 rounded-full mt-2 mr-3 flex-shrink-0"></div><div><p class="text-sm text-gray-700"><strong>WO-TFP-0075</strong> telah melewati batas waktu.</p><p class="text-xs text-gray-400">Kemarin</p></div></li>
-                            </ul>
-                        </div>
+                </div>
+
+                <!-- 2. Halaman Menu Harian CNSD -->
+                <div id="cnsd-content" class="content-panel p-6 md:p-8 hidden">
+                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Harian CNSD</h1>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="jadwal-cnsa-content">
+                            <img src="img\Jadwal.png" alt="Ilustrasi Jadwal" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <h3 class="font-semibold text-gray-800">JADWAL CNSD</h3>
+                        </a>
+                        <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="daily-cnsa-content">
+                            <img src="img\Daily.png" alt="Ilustrasi Daily" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <h3 class="font-semibold text-gray-800">DAILY CNSD</h3>
+                        </a>
+                        <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="kegiatan-cnsa-content">
+                            <img src="img\Kegiatan CNSD.png" alt="Ilustrasi Kegiatan" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <h3 class="font-semibold text-gray-800">KEGIATAN CNSD</h3>
+                        </a>
+                        <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="save-data-cnsa-content">
+                            <img src="img\Save Data.png" alt="Ilustrasi Save Data" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <h3 class="font-semibold text-gray-800">SAVE DATA CNSD</h3>
+                        </a>
                     </div>
                 </div>
 
-                <!-- 2. Konten Harian CNSD (Awalnya tersembunyi) -->
-                <div id="cnsd-content" class="content-panel p-6 md:p-8 hidden">
-                    <h1 class="text-3xl font-bold text-gray-800">Halaman Harian CNSD</h1>
-                    <p class="mt-2 text-gray-600">Anda bisa menambahkan tabel, formulir, atau komponen lain untuk Harian CNSD di sini.</p>
-                </div>
-
-                <!-- 3. Konten Harian TFP (Awalnya tersembunyi) -->
+                <!-- 3. Halaman Menu Harian TFP -->
                 <div id="tfp-content" class="content-panel p-6 md:p-8 hidden">
-                    <h1 class="text-3xl font-bold text-gray-800">Halaman Harian TFP</h1>
-                    <p class="mt-2 text-gray-600">Konten untuk Harian TFP akan ditampilkan di sini.</p>
+                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Harian TFP</h1>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="jadwal-tfp-content">
+                            <img src="img\Jadwal.png" alt="Ilustrasi Jadwal TFP" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <h3 class="font-semibold text-gray-800">JADWAL TFP</h3>
+                        </a>
+                        <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="daily-tfp-content">
+                            <img src="img\Daily.png" alt="Ilustrasi Daily TFP" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <h3 class="font-semibold text-gray-800">DAILY TFP</h3>
+                        </a>
+                        <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="kegiatan-tfp-content">
+                            <img src="img\Kegiatan TFP.png" alt="Ilustrasi Kegiatan TFP" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <h3 class="font-semibold text-gray-800">KEGIATAN TFP</h3>
+                        </a>
+                        <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="save-data-tfp-content">
+                            <img src="img\Save Data.png" alt="Ilustrasi Save Data TFP" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <h3 class="font-semibold text-gray-800">SAVE DATA TFP</h3>
+                        </a>
+                    </div>
                 </div>
 
-                <!-- 4. Konten Work Orders CNSD (Awalnya tersembunyi) -->
-                <div id="wo-cnsd-content" class="content-panel p-6 md:p-8 hidden">
-                    <h1 class="text-3xl font-bold text-gray-800">Halaman Work Orders CNSD</h1>
-                    <p class="mt-2 text-gray-600">Manajemen Work Orders untuk CNSD akan ada di sini.</p>
+                <!-- Halaman Konten Lainnya -->
+                <div id="wo-cnsd-content" class="content-panel p-6 md:p-8 hidden"><h1 class="text-3xl font-bold">Work Orders CNSD</h1></div>
+                <div id="wo-tfp-content" class="content-panel p-6 md:p-8 hidden"><h1 class="text-3xl font-bold">Work Orders TFP</h1></div>
+                <div id="rostering-content" class="content-panel p-6 md:p-8 hidden"><h1 class="text-3xl font-bold">Rostering</h1></div>
+                
+                <!-- Halaman Sub-Menu CNSD -->
+                <div id="jadwal-cnsa-content" class="content-panel p-6 md:p-8 hidden">
+                    <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="cnsd-content" aria-label="Kembali ke Harian CNSD">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Jadwal CNSA</h1>
+                    </div>
+                    <p>Konten untuk Jadwal CNSA.</p>
+                </div>
+                <div id="daily-cnsa-content" class="content-panel p-6 md:p-8 hidden">
+                    <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="cnsd-content" aria-label="Kembali ke Harian CNSD">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Daily CNSA</h1>
+                    </div>
+                    <p>Konten untuk Daily CNSA.</p>
+                </div>
+                <div id="kegiatan-cnsa-content" class="content-panel p-6 md:p-8 hidden">
+                    <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="cnsd-content" aria-label="Kembali ke Harian CNSD">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Kegiatan CNSA</h1>
+                    </div>
+                    <p>Konten untuk Kegiatan CNSA.</p>
+                </div>
+                <div id="save-data-cnsa-content" class="content-panel p-6 md:p-8 hidden">
+                    <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="cnsd-content" aria-label="Kembali ke Harian CNSD">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Save Data CNSA</h1>
+                    </div>
+                    <p>Konten untuk Save Data CNSA.</p>
                 </div>
                 
-                <!-- 5. Konten Work Orders TFP (Awalnya tersembunyi) -->
-                <div id="wo-tfp-content" class="content-panel p-6 md:p-8 hidden">
-                    <h1 class="text-3xl font-bold text-gray-800">Halaman Work Orders TFP</h1>
-                    <p class="mt-2 text-gray-600">Manajemen Work Orders untuk TFP akan ada di sini.</p>
+                <!-- Halaman Sub-Menu TFP -->
+                <div id="jadwal-tfp-content" class="content-panel p-6 md:p-8 hidden">
+                    <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="tfp-content" aria-label="Kembali ke Harian TFP">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Jadwal TFP</h1>
+                    </div>
+                    <p>Konten untuk Jadwal TFP.</p>
                 </div>
-
-                <!-- 6. Konten Rostering (Awalnya tersembunyi) -->
-                <div id="rostering-content" class="content-panel p-6 md:p-8 hidden">
-                    <h1 class="text-3xl font-bold text-gray-800">Halaman Rostering</h1>
-                    <p class="mt-2 text-gray-600">Jadwal dan rostering tim akan ditampilkan di sini.</p>
+                <div id="daily-tfp-content" class="content-panel p-6 md:p-8 hidden">
+                    <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="tfp-content" aria-label="Kembali ke Harian TFP">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Daily TFP</h1>
+                    </div>
+                    <p>Konten untuk Daily TFP.</p>
+                </div>
+                <div id="kegiatan-tfp-content" class="content-panel p-6 md:p-8 hidden">
+                    <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="tfp-content" aria-label="Kembali ke Harian TFP">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Kegiatan TFP</h1>
+                    </div>
+                    <p>Konten untuk Kegiatan TFP.</p>
+                </div>
+                <div id="save-data-tfp-content" class="content-panel p-6 md:p-8 hidden">
+                    <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="tfp-content" aria-label="Kembali ke Harian TFP">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Save Data TFP</h1>
+                    </div>
+                    <p>Konten untuk Save Data TFP.</p>
                 </div>
 
             </main>
@@ -253,6 +333,8 @@
             // --- LOGIKA NAVIGASI SPA ---
             const navLinks = document.querySelectorAll('.nav-link');
             const quickLinks = document.querySelectorAll('.quick-link');
+            const subNavLinks = document.querySelectorAll('.sub-nav-link');
+            const backButtons = document.querySelectorAll('.back-button');
             const contentPanels = document.querySelectorAll('.content-panel');
 
             const handleNavigation = (targetId) => {
@@ -261,9 +343,14 @@
                 if (targetPanel) {
                     targetPanel.classList.remove('hidden');
                 }
-                navLinks.forEach(navLink => {
-                    navLink.classList.toggle('menu-active', navLink.getAttribute('data-target') === targetId);
-                });
+                
+                let isSubMenu = !document.querySelector(`.nav-link[data-target="${targetId}"]`);
+                
+                if(!isSubMenu) {
+                    navLinks.forEach(navLink => {
+                        navLink.classList.toggle('menu-active', navLink.getAttribute('data-target') === targetId);
+                    });
+                }
             };
 
             navLinks.forEach(link => {
@@ -277,6 +364,20 @@
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     handleNavigation(link.getAttribute('data-target'));
+                });
+            });
+            
+            subNavLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    handleNavigation(link.getAttribute('data-target'));
+                });
+            });
+
+            backButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    handleNavigation(button.getAttribute('data-target'));
                 });
             });
 

@@ -14,67 +14,112 @@
                     colors: {
                         'airnav-blue': '#255A9B',
                         'airnav-red': '#D92D20',
-                        'indigo-600': '#255A9B',
+                        'indigo-600': '#255A9B', // Menggunakan warna biru AirNav untuk tombol
                     }
                 }
             }
         }
     </script>
     <style>
+        /* Custom styles for the page */
         body {
             font-family: 'Inter', sans-serif;
         }
     </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-airnav-blue">
 
-    <div class="min-h-screen flex flex-col items-center justify-center p-4 bg-white">
-        <div class="w-full max-w-sm">
-            <img src="img\airnav.ico" alt="Logo AirNav Indonesia" class="w-32 h-32 mx-auto mb-6 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/128x128/255A9B/FFFFFF?text=AirNav';">
-            <h1 class="text-2xl font-bold text-center text-gray-900 mb-2">Selamat Datang</h1>
-            <p class="text-center text-gray-500 mb-8">Silakan masuk ke Dashboard AirNav</p>
-            <form id="login-form" class="space-y-6">
-                <div>
-                    <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
-                    <input type="text" id="username" name="username" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-3 px-4 text-gray-900 focus:outline-none focus:ring-indigo-600 focus:border-indigo-600" placeholder="Masukkan username">
+    <!-- Splash Screen Animation -->
+    <div id="splash-screen" class="fixed top-0 left-0 w-full h-full bg-white flex items-center justify-center z-50 transition-opacity duration-1000 ease-in-out">
+        <!-- Logo yang akan muncul perlahan -->
+        <img id="splash-logo" src="img/airnav.ico" alt="Logo AirNav Indonesia" class="w-48 h-48 object-contain opacity-0 transition-opacity duration-1000 ease-in-out" onerror="this.onerror=null;this.src='https://placehold.co/192x192/FFFFFF/FFFFFF?text=';">
+    </div>
+
+    <!-- Main Content (Login Form) - Initially hidden -->
+    <div id="main-content" class="opacity-0 transition-opacity duration-1000 ease-in-out">
+        <div class="min-h-screen flex flex-col items-center justify-center p-4">
+            <!-- Card Login -->
+            <div class="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8">
+                <img src="img/airnav.ico" alt="Logo AirNav Indonesia" class="w-24 h-24 mx-auto mb-4 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/96x96/255A9B/FFFFFF?text=AirNav';">
+                <h1 class="text-2xl font-bold text-center text-gray-900 mb-2">Selamat Datang</h1>
+                <p class="text-center text-gray-500 mb-8">Silakan masuk ke E-Logbook Teknik AirNav Surabaya</p>
+                
+                <!-- Form Login -->
+                <form id="login-form" class="space-y-6">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="username" name="username" class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-3 px-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent" placeholder="Masukkan username">
+                    </div>
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                        <input type="password" id="password" name="password" class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-3 px-4 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent" placeholder="Masukkan password">
+                    </div>
+                    <div>
+                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                            Login
+                        </button>
+                    </div>
+                </form>
+                <p id="login-error" class="text-red-500 text-center mt-4 hidden">Username atau Password tidak boleh kosong.</p>
+                
+                <!-- Tombol Register -->
+                <div class="text-center mt-6">
+                    <p class="text-sm text-gray-500">
+                        Belum punya akun? 
+                        <a href="register.html" id="register-link" class="font-medium text-airnav-blue hover:text-blue-800">
+                            Register disini
+                        </a>
+                    </p>
                 </div>
-                <div>
-                    <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
-                    <input type="password" id="password" name="password" class="mt-1 block w-full bg-gray-100 border border-gray-300 rounded-md shadow-sm py-3 px-4 text-gray-900 focus:outline-none focus:ring-indigo-600 focus:border-indigo-600" placeholder="Masukkan password">
-                </div>
-                <div>
-                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-blue-800 transition-colors">Login</button>
-                </div>
-            </form>
-            <p id="login-error" class="text-red-500 text-center mt-4 hidden">Username atau Password tidak boleh kosong.</p>
+            </div>
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            const splashScreen = document.getElementById('splash-screen');
+            const splashLogo = document.getElementById('splash-logo');
+            const mainContent = document.getElementById('main-content');
             const loginForm = document.getElementById('login-form');
             const loginError = document.getElementById('login-error');
             const usernameInput = document.getElementById('username');
             const passwordInput = document.getElementById('password');
+            const registerLink = document.getElementById('register-link');
 
-            // Cek jika pengguna sudah login sebelumnya
+            // Cek jika pengguna sudah login, langsung ke index.html tanpa splash screen
             if (sessionStorage.getItem('loggedInUser')) {
+                splashScreen.style.display = 'none';
+                mainContent.classList.remove('opacity-0');
                 const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
                 window.location.href = currentPath + '/index.html';
+                return; // Hentikan eksekusi script lebih lanjut
             }
 
-            // FIX: Pindahkan fokus dari username ke password saat menekan Enter
+            // Animasi splash screen
+            setTimeout(() => {
+                splashLogo.classList.remove('opacity-0');
+            }, 100); 
+
+            setTimeout(() => {
+                splashScreen.classList.add('opacity-0');
+                mainContent.classList.remove('opacity-0');
+                setTimeout(() => {
+                    splashScreen.style.display = 'none';
+                }, 1000); 
+
+            }, 2000); 
+
+            // Pindah ke input password saat menekan Enter di username
             usernameInput.addEventListener('keydown', function(event) {
                 if (event.key === 'Enter') {
-                    // Mencegah form dari submit (perilaku default)
                     event.preventDefault();
-                    // Pindahkan fokus ke input password
                     passwordInput.focus();
                 }
             });
 
+            // Logika saat form di-submit
             loginForm.addEventListener('submit', (e) => {
-                e.preventDefault(); 
+                e.preventDefault();
                 const username = usernameInput.value.trim();
                 const password = passwordInput.value.trim();
 
@@ -86,6 +131,20 @@
                 } else {
                     loginError.classList.remove('hidden');
                 }
+            });
+
+            // *** ANIMASI PINDAH HALAMAN ***
+            registerLink.addEventListener('click', function(e) {
+                e.preventDefault(); // Mencegah pindah halaman secara langsung
+                const destination = this.href;
+
+                // 1. Mulai animasi fade-out pada container utama
+                mainContent.classList.add('opacity-0');
+
+                // 2. Tunggu animasi selesai (sesuai durasi transisi), lalu pindah halaman
+                setTimeout(() => {
+                    window.location.href = destination;
+                }, 1000); // Durasi harus sama dengan transisi opacity di #main-content
             });
         });
     </script>
