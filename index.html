@@ -435,12 +435,7 @@
                 else { greetingText = `Selamat Malam, ${capitalizedName}!`; }
                 greetingElement.textContent = greetingText;
             };
-
-            // Memanggil fungsi saat halaman dimuat
-            loggedInUser = sessionStorage.getItem('loggedInUser');
-            if (loggedInUser) {
-                updateGreeting(loggedInUser);
-            }
+            updateGreeting(loggedInUser);
 
             // --- Chart.js Initialization ---
             const ctx = document.getElementById('woChart').getContext('2d');
