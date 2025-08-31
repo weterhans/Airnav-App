@@ -52,23 +52,15 @@
         #sidebar.collapsed .sidebar-header {
             justify-content: center;
         }
-        /* Utility class for visually hiding elements (for accessibility) */
-        .sr-only {
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            padding: 0;
-            margin: -1px;
-            overflow: hidden;
-            clip: rect(0, 0, 0, 0);
-            white-space: nowrap;
-            border-width: 0;
-        }
         /* Kelas untuk menu yang aktif */
         .menu-active {
             background-color: #e5e7eb; /* bg-gray-200 */
             font-weight: 600; /* font-semibold */
             color: #1f2937; /* text-gray-800 */
+        }
+        /* FIX: Center icon when sidebar is collapsed */
+        #sidebar.collapsed .nav-link {
+            justify-content: center;
         }
     </style>
 </head>
@@ -90,30 +82,30 @@
                 <!-- Navigasi Menu -->
                 <nav id="sidebar-menu" class="mt-6">
                     <a href="#" class="nav-link flex items-center px-6 py-3 text-gray-700 menu-active" data-target="dashboard-content">
-                        <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
-                        <span class="menu-text">Dashboard</span>
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                        <span class="menu-text ml-3">Dashboard</span>
                     </a>
                     <a href="#" class="nav-link flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100" data-target="cnsd-content">
-                        <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        <span class="menu-text">Harian CNSD</span>
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                        <span class="menu-text ml-3">Harian CNSD</span>
                     </a>
                     <a href="#" class="nav-link flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100" data-target="tfp-content">
-                        <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
-                        <span class="menu-text">Harian TFP</span>
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                        <span class="menu-text ml-3">Harian TFP</span>
                     </a>
                     <a href="#" class="nav-link flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100" data-target="wo-cnsd-content">
-                        <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                        <span class="menu-text">Work Orders CNSD</span>
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
+                        <span class="menu-text ml-3">Work Orders CNSD</span>
                     </a>
                     <a href="#" class="nav-link flex items-center px-6 py-3 text-gray-600 hover:bg-gray-100" data-target="wo-tfp-content">
-                        <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
-                        <span class="menu-text">Work Orders TFP</span>
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg>
+                        <span class="menu-text ml-3">Work Orders TFP</span>
                     </a>
                 </nav>
                 <div class="absolute bottom-0 w-full p-6 border-t border-gray-200">
                     <a href="#" id="logout-btn" class="flex items-center text-gray-600 hover:text-indigo-600">
-                        <svg class="w-6 h-6 mr-3 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
-                        <span id="logout-text" class="menu-text">Logout</span>
+                        <svg class="w-6 h-6 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                        <span id="logout-text" class="menu-text ml-3">Logout</span>
                     </a>
                 </div>
             </aside>
@@ -133,54 +125,55 @@
                                 <svg class="w-5 h-5 text-gray-400" viewBox="0 0 24 24" fill="none"><path d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
                             </span>
                             <label for="search-input" class="sr-only">Cari</label>
-                            <input type="text" id="search-input" placeholder="Cari Akses Cepat..." class="w-full pl-10 pr-4 py-2 border rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                            <input type="text" id="search-input" placeholder="Cari menu atau halaman..." class="w-full pl-10 pr-4 py-2 border rounded-full bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-600">
+                             <div id="search-results" class="absolute top-full mt-2 w-full bg-white rounded-md shadow-lg z-30 hidden overflow-hidden"></div>
                         </div>
                         <div class="relative">
                             <button id="profile-button" class="block h-10 w-10 rounded-full overflow-hidden border-2 border-gray-300 focus:outline-none focus:border-indigo-600">
-                                <img class="h-full w-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=User" alt="Your avatar" onerror="this.onerror=null;this.src='https://placehold.co/100x100/E2E8F0/4A5568?text=U';">
+                                <img id="avatar-img" class="h-full w-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=User" alt="Your avatar" onerror="this.onerror=null;this.src='https://placehold.co/100x100/E2E8F0/4A5568?text=U';">
                             </button>
                             <div id="profile-menu" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-md shadow-xl z-20">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Profil</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Pengaturan</a>
+                                <a href="./profil.html" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Profil</a>
                                 <a href="#" id="profile-logout-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-indigo-600 hover:text-white">Logout</a>
                             </div>
                         </div>
                     </div>
                 </header>
-
-               
+                
                 <!-- 1. Konten Dashboard (Tampil secara default) -->
                 <div id="dashboard-content" class="content-panel p-6 md:p-8">
                     <h3 class="text-2xl font-bold mb-6">Akses Cepat</h3>
-                    <div id="quick-links-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="harian cnsd laporan"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="cnsd-content" aria-label="Buka laporan Harian CNSD"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-blue-100 rounded-full"><svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">Harian CNSD</h4><p class="text-sm text-gray-500 mt-1">Kelola laporan harian CNSD</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
-                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="harian tfp laporan"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="tfp-content" aria-label="Buka laporan Harian TFP"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-green-100 rounded-full"><svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">Harian TFP</h4><p class="text-sm text-gray-500 mt-1">Kelola laporan harian TFP</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
-                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="wo cnsd work order"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="wo-cnsd-content" aria-label="Lihat Work Order CNSD"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-yellow-100 rounded-full"><svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">WO CNSD</h4><p class="text-sm text-gray-500 mt-1">Kelola Work Order untuk CNSD</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
-                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300" data-search-keywords="wo tfp work order"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="wo-tfp-content" aria-label="Lihat Work Order TFP"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-purple-100 rounded-full"><svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">WO TFP</h4><p class="text-sm text-gray-500 mt-1">Kelola Work Order untuk TFP</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
-                    </div>
-                    <div id="no-results-message" class="text-center text-gray-500 mt-8 hidden">
-                        <p>Tidak ada hasil yang ditemukan.</p>
+                    <div id="quick-links-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="cnsd-content" aria-label="Buka laporan Harian CNSD"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-blue-100 rounded-full"><svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">Harian CNSD</h4><p class="text-sm text-gray-500 mt-1">Kelola laporan harian CNSD</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
+                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="tfp-content" aria-label="Buka laporan Harian TFP"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-green-100 rounded-full"><svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">Harian TFP</h4><p class="text-sm text-gray-500 mt-1">Kelola laporan harian TFP</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
+                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="wo-cnsd-content" aria-label="Lihat Work Order CNSD"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-yellow-100 rounded-full"><svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">WO CNSD</h4><p class="text-sm text-gray-500 mt-1">Kelola Work Order untuk CNSD</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
+                        <div class="quick-link-card bg-white p-6 rounded-xl shadow-md hover:shadow-xl transition-shadow duration-300"><a href="#" class="quick-link flex flex-col justify-between h-full" data-target="wo-tfp-content" aria-label="Lihat Work Order TFP"><div><div class="flex items-center justify-between mb-4"><div class="p-3 bg-purple-100 rounded-full"><svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 4a2 2 0 114 0v1a1 1 0 001 1h3a1 1 0 011 1v3a1 1 0 01-1 1h-1a2 2 0 100 4h1a1 1 0 011 1v3a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1a2 2 0 10-4 0v1a1 1 0 01-1 1H7a1 1 0 01-1-1v-3a1 1 0 00-1-1H4a2 2 0 110-4h1a1 1 0 001-1V7a1 1 0 011-1h3a1 1 0 001-1V4z"></path></svg></div></div><h4 class="text-lg font-semibold text-gray-800">WO TFP</h4><p class="text-sm text-gray-500 mt-1">Kelola Work Order untuk TFP</p></div><span class="mt-4 text-sm font-semibold text-indigo-600 hover:text-indigo-800">Masuk &rarr;</span></a></div>
                     </div>
                 </div>
 
                 <!-- 2. Halaman Menu Harian CNSD -->
                 <div id="cnsd-content" class="content-panel p-6 md:p-8 hidden">
-                    <h1 class="text-3xl font-bold text-gray-800 mb-6">Harian CNSD</h1>
+                    <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="dashboard-content" aria-label="Kembali ke Dashboard">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Harian CNSD</h1>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="jadwal-cnsa-content">
-                            <img src="img\Jadwal.png" alt="Ilustrasi Jadwal" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <img src="img\Jadwal.png" alt="Ilustrasi Jadwal" class="rounded-md mb-4 w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E2E8F0/4A5568?text=Jadwal';">
                             <h3 class="font-semibold text-gray-800">JADWAL CNSD</h3>
                         </a>
                         <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="daily-cnsa-content">
-                            <img src="img\Daily.png" alt="Ilustrasi Daily" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <img src="img\Daily.png" alt="Ilustrasi Daily" class="rounded-md mb-4 w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E2E8F0/4A5568?text=Daily';">
                             <h3 class="font-semibold text-gray-800">DAILY CNSD</h3>
                         </a>
                         <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="kegiatan-cnsa-content">
-                            <img src="img\Kegiatan CNSD.png" alt="Ilustrasi Kegiatan" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <img src="img\Kegiatan CNSD.png" alt="Ilustrasi Kegiatan" class="rounded-md mb-4 w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E2E8F0/4A5568?text=Kegiatan';">
                             <h3 class="font-semibold text-gray-800">KEGIATAN CNSD</h3>
                         </a>
                         <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="save-data-cnsa-content">
-                            <img src="img\Save Data.png" alt="Ilustrasi Save Data" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <img src="img\Save Data.png" alt="Ilustrasi Save Data" class="rounded-md mb-4 w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/E2E8F0/4A5568?text=Save';">
                             <h3 class="font-semibold text-gray-800">SAVE DATA CNSD</h3>
                         </a>
                     </div>
@@ -188,22 +181,27 @@
 
                 <!-- 3. Halaman Menu Harian TFP -->
                 <div id="tfp-content" class="content-panel p-6 md:p-8 hidden">
-                     <h1 class="text-3xl font-bold text-gray-800 mb-6">Harian TFP</h1>
+                     <div class="flex items-center mb-6">
+                        <button class="back-button p-2 rounded-md hover:bg-gray-200" data-target="dashboard-content" aria-label="Kembali ke Dashboard">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </button>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Harian TFP</h1>
+                    </div>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                         <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="jadwal-tfp-content">
-                            <img src="img\Jadwal.png" alt="Ilustrasi Jadwal TFP" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <img src="img\Jadwal.png" alt="Ilustrasi Jadwal TFP" class="rounded-md mb-4 w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/A7F3D0/10B981?text=Jadwal';">
                             <h3 class="font-semibold text-gray-800">JADWAL TFP</h3>
                         </a>
                         <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="daily-tfp-content">
-                            <img src="img\Daily.png" alt="Ilustrasi Daily TFP" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <img src="img\Daily.png" alt="Ilustrasi Daily TFP" class="rounded-md mb-4 w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/A7F3D0/10B981?text=Daily';">
                             <h3 class="font-semibold text-gray-800">DAILY TFP</h3>
                         </a>
                         <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="kegiatan-tfp-content">
-                            <img src="img\Kegiatan TFP.png" alt="Ilustrasi Kegiatan TFP" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <img src="img\Kegiatan TFP.png" alt="Ilustrasi Kegiatan TFP" class="rounded-md mb-4 w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/A7F3D0/10B981?text=Kegiatan';">
                             <h3 class="font-semibold text-gray-800">KEGIATAN TFP</h3>
                         </a>
                         <a href="#" class="sub-nav-link block bg-white p-4 rounded-lg shadow hover:shadow-lg transition-shadow" data-target="save-data-tfp-content">
-                            <img src="img\Save Data.png" alt="Ilustrasi Save Data TFP" class="rounded-md mb-4 w-full h-40 object-cover">
+                            <img src="img\Save Data.png" alt="Ilustrasi Save Data TFP" class="rounded-md mb-4 w-full h-40 object-cover" onerror="this.onerror=null;this.src='https://placehold.co/600x400/A7F3D0/10B981?text=Save';">
                             <h3 class="font-semibold text-gray-800">SAVE DATA TFP</h3>
                         </a>
                     </div>
@@ -318,15 +316,30 @@
             const logoutBtn = document.getElementById('logout-btn');
             const profileLogoutBtn = document.getElementById('profile-logout-btn');
             const searchInput = document.getElementById('search-input');
-            const quickLinkCards = document.querySelectorAll('.quick-link-card');
-            const noResultsMessage = document.getElementById('no-results-message');
+            const searchResultsContainer = document.getElementById('search-results');
+            const avatarImg = document.getElementById('avatar-img');
             
             // --- LOGIKA NAVIGASI SPA ---
-            const navLinks = document.querySelectorAll('.nav-link');
-            const quickLinks = document.querySelectorAll('.quick-link');
-            const subNavLinks = document.querySelectorAll('.sub-nav-link');
-            const backButtons = document.querySelectorAll('.back-button');
+            const allNavigationalLinks = document.querySelectorAll('.nav-link, .quick-link, .sub-nav-link, .back-button');
             const contentPanels = document.querySelectorAll('.content-panel');
+            const navLinks = document.querySelectorAll('.nav-link');
+
+            const searchablePages = [
+                { id: 'dashboard-content', title: 'Dashboard', keywords: 'dashboard utama akses cepat' },
+                { id: 'cnsd-content', title: 'Harian CNSD', keywords: 'harian cnsd laporan' },
+                { id: 'tfp-content', title: 'Harian TFP', keywords: 'harian tfp laporan' },
+                { id: 'wo-cnsd-content', title: 'Work Orders CNSD', keywords: 'wo cnsd work order' },
+                { id: 'wo-tfp-content', title: 'Work Orders TFP', keywords: 'wo tfp work order' },
+                { id: 'jadwal-cnsa-content', title: 'Jadwal CNSD', keywords: 'jadwal cnsa cnsd' },
+                { id: 'daily-cnsa-content', title: 'Daily CNSD', keywords: 'daily cnsa cnsd' },
+                { id: 'kegiatan-cnsa-content', title: 'Kegiatan CNSD', keywords: 'kegiatan cnsa cnsd' },
+                { id: 'save-data-cnsa-content', title: 'Save Data CNSD', keywords: 'save data cnsa cnsd' },
+                { id: 'jadwal-tfp-content', title: 'Jadwal TFP', keywords: 'jadwal tfp' },
+                { id: 'daily-tfp-content', title: 'Daily TFP', keywords: 'daily tfp' },
+                { id: 'kegiatan-tfp-content', title: 'Kegiatan TFP', keywords: 'kegiatan tfp' },
+                { id: 'save-data-tfp-content', title: 'Save Data TFP', keywords: 'save data tfp' },
+            ];
+
 
             const handleNavigation = (targetId) => {
                 contentPanels.forEach(panel => panel.classList.add('hidden'));
@@ -335,62 +348,65 @@
                     targetPanel.classList.remove('hidden');
                 }
                 
-                let isSubMenu = !document.querySelector(`.nav-link[data-target="${targetId}"]`);
+                const isMainMenu = Array.from(navLinks).some(link => link.dataset.target === targetId);
                 
-                if(!isSubMenu) {
+                if(isMainMenu) {
                     navLinks.forEach(navLink => {
                         navLink.classList.toggle('menu-active', navLink.getAttribute('data-target') === targetId);
                     });
                 }
             };
 
-            navLinks.forEach(link => {
+            allNavigationalLinks.forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.preventDefault();
                     handleNavigation(link.getAttribute('data-target'));
                 });
             });
 
-            quickLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    handleNavigation(link.getAttribute('data-target'));
-                });
-            });
-            
-            subNavLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    handleNavigation(link.getAttribute('data-target'));
-                });
-            });
-
-            backButtons.forEach(button => {
-                button.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    handleNavigation(button.getAttribute('data-target'));
-                });
-            });
-
-            // --- LOGIKA PENCARIAN ---
+            // --- LOGIKA PENCARIAN GLOBAL ---
             searchInput.addEventListener('input', (e) => {
                 const searchTerm = e.target.value.toLowerCase();
-                let visibleCount = 0;
+                searchResultsContainer.innerHTML = '';
 
-                quickLinkCards.forEach(card => {
-                    const keywords = card.dataset.searchKeywords.toLowerCase();
-                    const isVisible = keywords.includes(searchTerm);
-                    card.style.display = isVisible ? '' : 'none';
-                    if(isVisible) visibleCount++;
-                });
+                if (searchTerm.length > 0) {
+                    const results = searchablePages.filter(page => 
+                        page.title.toLowerCase().includes(searchTerm) || 
+                        page.keywords.toLowerCase().includes(searchTerm)
+                    );
 
-                noResultsMessage.style.display = visibleCount === 0 ? 'block' : 'none';
+                    if (results.length > 0) {
+                        results.forEach(result => {
+                            const resultItem = document.createElement('a');
+                            resultItem.href = '#';
+                            resultItem.className = 'block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100';
+                            resultItem.textContent = result.title;
+                            resultItem.addEventListener('click', (ev) => {
+                                ev.preventDefault();
+                                handleNavigation(result.id);
+                                searchResultsContainer.classList.add('hidden');
+                                searchInput.value = '';
+                            });
+                            searchResultsContainer.appendChild(resultItem);
+                        });
+                        searchResultsContainer.classList.remove('hidden');
+                    } else {
+                        const noResultItem = document.createElement('p');
+                        noResultItem.className = 'px-4 py-2 text-sm text-gray-500';
+                        noResultItem.textContent = 'Tidak ditemukan...';
+                        searchResultsContainer.appendChild(noResultItem);
+                        searchResultsContainer.classList.remove('hidden');
+                    }
+                } else {
+                    searchResultsContainer.classList.add('hidden');
+                }
             });
 
             // --- LOGOUT LOGIC ---
             const handleLogout = (e) => {
                 e.preventDefault();
                 sessionStorage.removeItem('loggedInUser');
+                localStorage.removeItem(`profile_${loggedInUser}`);
                 redirectToLogin();
             };
             logoutBtn.addEventListener('click', handleLogout);
@@ -416,50 +432,48 @@
             });
             
             document.addEventListener('click', (e) => {
-                if (!profileMenu.classList.contains('hidden') && !profileButton.contains(e.target)) {
+                if (!profileMenu.classList.contains('hidden') && !profileButton.contains(e.target) && !e.target.closest('#profile-button')) {
                     profileMenu.classList.add('hidden');
+                }
+                 if (searchInput !== e.target && !searchResultsContainer.contains(e.target)) {
+                    searchResultsContainer.classList.add('hidden');
                 }
                 if (window.innerWidth < 768 && !sidebar.classList.contains('-translate-x-full') && !sidebar.contains(e.target) && !sidebarOpenMobile.contains(e.target)) {
                     sidebar.classList.add('-translate-x-full');
                 }
             });
 
-            // --- Dynamic Greeting ---
-            const updateGreeting = (name) => {
+            // --- Dynamic Greeting & Avatar ---
+            const updateGreetingAndAvatar = () => {
+                const name = sessionStorage.getItem('loggedInUser');
+                if (!name) return;
+
+                const savedProfile = localStorage.getItem(`profile_${name}`);
+                const userProfile = savedProfile ? JSON.parse(savedProfile) : {
+                    fullname: name.charAt(0).toUpperCase() + name.slice(1),
+                    avatar: `https://placehold.co/100x100/E2E8F0/4A5568?text=${name.charAt(0).toUpperCase()}`
+                };
+                
+                avatarImg.src = userProfile.avatar;
+
                 const hours = new Date().getHours();
-                const capitalizedName = name.charAt(0).toUpperCase() + name.slice(1);
+                const capitalizedName = userProfile.fullname.charAt(0).toUpperCase() + userProfile.fullname.slice(1);
                 let greetingText;
-                if (hours < 11) { greetingText = `Selamat Pagi, ${capitalizedName}!`; } 
-                else if (hours < 15) { greetingText = `Selamat Siang, ${capitalizedName}!`; } 
-                else if (hours < 19) { greetingText = `Selamat Sore, ${capitalizedName}!`; } 
-                else { greetingText = `Selamat Malam, ${capitalizedName}!`; }
+                if (hours >= 4 && hours < 13) { 
+                    greetingText = `Selamat Pagi, ${capitalizedName}!`; 
+                } else if (hours >= 13 && hours < 19) { 
+                    greetingText = `Selamat Siang, ${capitalizedName}!`; 
+                } else { 
+                    greetingText = `Selamat Malam, ${capitalizedName}!`; 
+                }
                 greetingElement.textContent = greetingText;
             };
-            updateGreeting(loggedInUser);
 
-            // --- Chart.js Initialization ---
-            const ctx = document.getElementById('woChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ['Baru', 'Dikerjakan', 'Selesai', 'Tertunda', 'Overdue'],
-                    datasets: [{
-                        label: 'Jumlah Work Order',
-                        data: [3, 8, 15, 2, 1],
-                        backgroundColor: ['rgba(59, 130, 246, 0.5)', 'rgba(245, 158, 11, 0.5)', 'rgba(16, 185, 129, 0.5)', 'rgba(107, 114, 128, 0.5)', 'rgba(239, 68, 68, 0.5)'],
-                        borderColor: ['rgba(59, 130, 246, 1)', 'rgba(245, 158, 11, 1)', 'rgba(16, 185, 129, 1)', 'rgba(107, 114, 128, 1)', 'rgba(239, 68, 68, 1)'],
-                        borderWidth: 1,
-                        borderRadius: 5
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: true, grid: { color: '#e5e7eb' } }, x: { grid: { display: false } } },
-                    plugins: { legend: { display: false } }
-                }
-            });
+            updateGreetingAndAvatar();
+            window.addEventListener('pageshow', updateGreetingAndAvatar);
+
         });
     </script>
 </body>
 </html>
+

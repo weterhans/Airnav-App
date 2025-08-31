@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profil Pengguna - Perum LPPNPI</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        // Konfigurasi warna kustom AirNav
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'airnav-blue': '#255A9B',
+                        'airnav-red': '#D92D20',
+                        'indigo-600': '#255A9B',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+        /* Style untuk modal */
+        #edit-modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        #profile-avatar-container {
+            cursor: pointer;
+            position: relative;
+        }
+        #profile-avatar-container:hover::after {
+            content: 'Ganti Foto';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 9999px;
+            font-weight: 500;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <div class="min-h-screen p-4 sm:p-6 lg:p-8">
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Halaman -->
+            <div class="flex items-center mb-6">
+                <a href="./index.html" class="p-2 rounded-md hover:bg-gray-200" aria-label="Kembali ke Dashboard">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                </a>
+                <h1 class="text-2xl font-bold text-gray-800 ml-4">Profil Pengguna</h1>
+            </div>
+
+            <!-- Konten Profil -->
+            <div class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-6 border-b border-gray-200">
+                    <div class="flex items-center mb-4 sm:mb-0">
+                        <div id="profile-avatar-container" class="h-20 w-20 rounded-full">
+                           <img id="profile-avatar" class="h-20 w-20 rounded-full object-cover" src="https://placehold.co/100x100/E2E8F0/4A5568?text=U" alt="Foto Profil">
+                        </div>
+                        <input type="file" id="photo-upload" class="hidden" accept="image/*">
+                        <div class="ml-4">
+                            <h2 id="profile-fullname" class="text-xl font-bold text-gray-900">ADMIN</h2>
+                            <p id="profile-username" class="text-sm text-gray-500">@admin</p>
+                        </div>
+                    </div>
+                    <div class="flex space-x-2">
+                        <button id="edit-profile-btn" class="flex items-center bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-airnav-blue transition-colors">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                            Edit
+                        </button>
+                        <a id="whatsapp-btn" href="#" target="_blank" class="flex items-center bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors">
+                             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.886-.001 2.269.654 4.495 1.918 6.313l-.906 3.267 3.358-.878z"/></svg>
+                            WhatsApp
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Detail Informasi -->
+                <div class="mt-6 space-y-4">
+                    <div class="flex flex-col sm:flex-row">
+                        <p class="w-full sm:w-1/3 text-sm font-medium text-gray-500">Nama Lengkap</p>
+                        <p id="detail-fullname" class="w-full sm:w-2/3 text-gray-800 font-semibold">ADMIN</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row">
+                        <p class="w-full sm:w-1/3 text-sm font-medium text-gray-500">Username</p>
+                        <p id="detail-username" class="w-full sm:w-2/3 text-gray-800 font-semibold">admin</p>
+                    </div>
+                     <div class="flex flex-col sm:flex-row">
+                        <p class="w-full sm:w-1/3 text-sm font-medium text-gray-500">Nomor WhatsApp</p>
+                        <p id="detail-whatsapp" class="w-full sm:w-2/3 text-gray-800 font-semibold">-</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row">
+                        <p class="w-full sm:w-1/3 text-sm font-medium text-gray-500">ID Pengguna</p>
+                        <p id="detail-id" class="w-full sm:w-2/3 text-gray-800 font-semibold">-</p>
+                    </div>
+                    <div class="flex flex-col sm:flex-row">
+                        <p class="w-full sm:w-1/3 text-sm font-medium text-gray-500">Lokasi</p>
+                        <p id="detail-lokasi" class="w-full sm:w-2/3 text-gray-800 font-semibold">SURABAYA</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Edit Profil -->
+    <div id="edit-modal" class="fixed inset-0 z-30 flex items-center justify-center hidden">
+        <div id="edit-modal-backdrop" class="absolute inset-0"></div>
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-lg m-4 p-6 relative z-40">
+            <h3 class="text-xl font-bold mb-6">Edit Profil</h3>
+            <form id="edit-profile-form">
+                <div class="space-y-4">
+                    <div>
+                        <label for="edit-fullname" class="block text-sm font-medium text-gray-700">Nama Lengkap</label>
+                        <input type="text" id="edit-fullname" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="edit-username" class="block text-sm font-medium text-gray-700">Username</label>
+                        <input type="text" id="edit-username" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                     <div>
+                        <label for="edit-whatsapp" class="block text-sm font-medium text-gray-700">Nomor WhatsApp</label>
+                        <input type="tel" id="edit-whatsapp" placeholder="Contoh: 6281234567890" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="edit-id" class="block text-sm font-medium text-gray-700">ID Pengguna</label>
+                        <input type="text" id="edit-id" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="edit-lokasi" class="block text-sm font-medium text-gray-700">Lokasi</label>
+                        <input type="text" id="edit-lokasi" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                </div>
+                <div class="mt-8 flex justify-end space-x-3">
+                    <button type="button" id="cancel-edit-btn" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">Batal</button>
+                    <button type="submit" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-airnav-blue transition-colors">Simpan</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+
+            if (!loggedInUser) {
+                const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+                window.location.href = currentPath + '/login.html';
+                return;
+            }
+
+            // --- Element Selectors ---
+            const profileAvatarContainer = document.getElementById('profile-avatar-container');
+            const profileAvatar = document.getElementById('profile-avatar');
+            const photoUpload = document.getElementById('photo-upload');
+            const profileFullName = document.getElementById('profile-fullname');
+            const profileUsername = document.getElementById('profile-username');
+            const detailFullName = document.getElementById('detail-fullname');
+            const detailUsername = document.getElementById('detail-username');
+            const detailWhatsapp = document.getElementById('detail-whatsapp');
+            const detailId = document.getElementById('detail-id');
+            const detailLokasi = document.getElementById('detail-lokasi');
+            const whatsappBtn = document.getElementById('whatsapp-btn');
+            
+            // Modal Elements
+            const editProfileBtn = document.getElementById('edit-profile-btn');
+            const editModal = document.getElementById('edit-modal');
+            const modalBackdrop = document.getElementById('edit-modal-backdrop');
+            const cancelEditBtn = document.getElementById('cancel-edit-btn');
+            const editProfileForm = document.getElementById('edit-profile-form');
+            const editFullnameInput = document.getElementById('edit-fullname');
+            const editUsernameInput = document.getElementById('edit-username');
+            const editWhatsappInput = document.getElementById('edit-whatsapp');
+            const editIdInput = document.getElementById('edit-id');
+            const editLokasiInput = document.getElementById('edit-lokasi');
+
+            let userProfile = {};
+
+            // --- Function to load profile data ---
+            const loadProfileData = () => {
+                const savedProfile = localStorage.getItem(`profile_${loggedInUser}`);
+                userProfile = savedProfile ? JSON.parse(savedProfile) : {
+                    fullname: loggedInUser.charAt(0).toUpperCase() + loggedInUser.slice(1),
+                    username: loggedInUser,
+                    whatsapp: '',
+                    id: '',
+                    // FIX: Changed default location to SURABAYA
+                    lokasi: 'SURABAYA', 
+                    avatar: `https://placehold.co/100x100/E2E8F0/4A5568?text=${loggedInUser.charAt(0).toUpperCase()}`
+                };
+                updateProfileUI();
+            };
+
+            // --- Function to update UI with profile data ---
+            const updateProfileUI = () => {
+                const capitalizedName = userProfile.fullname.charAt(0).toUpperCase() + userProfile.fullname.slice(1);
+                
+                profileAvatar.src = userProfile.avatar;
+                profileFullName.textContent = capitalizedName;
+                profileUsername.textContent = `@${userProfile.username}`;
+                detailFullName.textContent = capitalizedName;
+                detailUsername.textContent = userProfile.username;
+                detailWhatsapp.textContent = userProfile.whatsapp || '-';
+                detailId.textContent = userProfile.id || '-';
+                detailLokasi.textContent = userProfile.lokasi;
+
+                if (userProfile.whatsapp) {
+                    whatsappBtn.href = `https://wa.me/${userProfile.whatsapp}`;
+                    whatsappBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                } else {
+                    whatsappBtn.href = '#';
+                    whatsappBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                }
+            };
+            
+            // --- Function to save profile data ---
+            const saveProfileData = () => {
+                localStorage.setItem(`profile_${loggedInUser}`, JSON.stringify(userProfile));
+            };
+
+            // --- Event Listeners ---
+
+            // Open Edit Modal
+            editProfileBtn.addEventListener('click', () => {
+                editFullnameInput.value = userProfile.fullname;
+                editUsernameInput.value = userProfile.username;
+                editWhatsappInput.value = userProfile.whatsapp;
+                editIdInput.value = userProfile.id;
+                editLokasiInput.value = userProfile.lokasi;
+                editModal.classList.remove('hidden');
+            });
+            
+            // Close Edit Modal
+            const closeModal = () => {
+                editModal.classList.add('hidden');
+            };
+            cancelEditBtn.addEventListener('click', closeModal);
+            modalBackdrop.addEventListener('click', closeModal);
+
+            // Handle Form Submission
+            editProfileForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                userProfile.fullname = editFullnameInput.value;
+                userProfile.username = editUsernameInput.value;
+                userProfile.whatsapp = editWhatsappInput.value;
+                userProfile.id = editIdInput.value;
+                userProfile.lokasi = editLokasiInput.value;
+
+                saveProfileData();
+                updateProfileUI();
+                closeModal();
+            });
+
+            // Handle Photo Upload
+            profileAvatarContainer.addEventListener('click', () => {
+                photoUpload.click();
+            });
+
+            photoUpload.addEventListener('change', (event) => {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        userProfile.avatar = e.target.result;
+                        saveProfileData();
+                        updateProfileUI();
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+
+            // Initial load
+            loadProfileData();
+        });
+    </script>
+
+</body>
+</html>
