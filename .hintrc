@@ -19,7 +19,8 @@
       "default",
       {
         "ignore": [
-          "-moz-appearance"
+          "-moz-appearance",
+          "min-width: fit-content"
         ]
       }
     ],
@@ -28,6 +29,7 @@
       {
         "label": "off"
       }
-    ]
+    ],
+    "no-inline-styles": "off"
   }
 }
