@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perum LPPNPI - Work Order</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'airnav-blue': '#255A9B',
+                        'airnav-red': '#D92D20',
+                        'indigo-600': '#255A9B',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        #sidebar, #main-content { transition: all 0.3s ease-in-out; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+        #sidebar.collapsed .menu-text,
+        #sidebar.collapsed #logo-container,
+        #sidebar.collapsed #logout-text { display: none; }
+        #sidebar.collapsed .sidebar-header { justify-content: center; }
+        .menu-active { background-color: #e5e7eb; font-weight: 600; color: #1f2937; }
+        #sidebar.collapsed .nav-link { justify-content: center; }
+
+        .maintenance-form-container { background-color: white; border: 2px solid #000; max-width: 900px; margin: 20px auto; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .form-header { display: flex; align-items: center; border-bottom: 2px solid #000; padding: 15px; background-color: #f9f9f9; }
+        .form-logo { width: 60px; height: 60px; background: linear-gradient(135deg, #1e3a8a, #3b82f6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 18px; margin-right: 15px; position: relative; }
+        .company-name { color: #1e3a8a; font-size: 10px; font-weight: bold; position: absolute; margin-top: 75px; margin-left: -15px; white-space: nowrap; }
+        .form-title { font-size: 20px; font-weight: bold; text-align: center; flex: 1; text-transform: uppercase; }
+        .form-row { display: flex; border-bottom: 1px solid #000; min-height: 40px; }
+        .form-row:last-child { border-bottom: none; }
+        .form-field { padding: 8px; border-right: 1px solid #000; display: flex; align-items: center; }
+        .form-field:last-child { border-right: none; }
+        .form-field label { font-weight: bold; margin-right: 5px; min-width: fit-content; }
+        .form-field input[type="text"], .form-field input[type="date"], .form-field input[type="time"] { border: none; outline: none; flex: 1; padding: 2px; font-size: 14px; width: 100%; }
+        .textarea-field { padding: 8px; border-bottom: 1px solid #000; }
+        .textarea-field label { font-weight: bold; display: block; margin-bottom: 5px; }
+        .textarea-field textarea { width: 100%; border: none; outline: none; resize: vertical; font-family: inherit; font-size: 14px; min-height: 80px; box-sizing: border-box; }
+        .checkbox-group { padding: 8px; border-bottom: 1px solid #000; }
+        .checkbox-group label { font-weight: bold; margin-bottom: 5px; display: block; }
+        .checkbox-options { display: flex; flex-wrap: wrap; gap: 15px; }
+        .checkbox-option { display: flex; align-items: center; gap: 5px; }
+        .checkbox-option input[type="radio"] { margin: 0; }
+        .three-column { display: grid; grid-template-columns: 1fr 1fr 1fr; }
+        .three-column .form-field { text-align: center; font-weight: bold; background-color: #f9f9f9; }
+        .signature-row { display: grid; grid-template-columns: 1fr 1fr 1fr; min-height: 80px; }
+        .form-w-100 { flex: 0 0 100%; } .form-w-50 { flex: 0 0 50%; } .form-w-25 { flex: 0 0 25%; }
+        
+        @media print {
+            body { margin: 0; background-color: white; }
+            #app-wrapper > div > aside, #app-wrapper > div > main > header, #wo-cnsd-content > div:first-child, #wo-cnsd-content > div:nth-child(2), #wo-form-container > div:last-child, .no-print { display: none !important; }
+            #main-content { margin: 0 !important; padding: 0 !important; }
+            .maintenance-form-container { box-shadow: none; border: none; margin: 0; max-width: 100%; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+
+                <!-- Halaman Work Order CNSD -->
+                <div id="wo-cnsd-content" class="content-panel p-6 md:p-8">
+                    <div class="flex items-center mb-6 no-print">
+                        <a href="../index.html" class="p-2 rounded-md hover:bg-gray-200" aria-label="Kembali ke Dashboard">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </a>
+                        <h1 class="text-2xl font-bold text-gray-800 ml-4">Work Orders CNSD & TFP</h1>
+                    </div>
+                    
+                    <!-- Action Buttons -->
+                    <div class="mb-6 flex flex-wrap gap-4 no-print">
+                        <button id="create-new-wo" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                            Buat Work Order Baru
+                        </button>
+                        <button id="view-wo-list" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg flex items-center">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path></svg>
+                            Lihat Daftar WO
+                        </button>
+                    </div>
+
+                    <!-- Work Order Form -->
+                    <div id="wo-form-container" class="hidden">
+                        <div class="maintenance-form-container">
+                            <div class="form-header">
+                                <img src="../img/airnav.ico" class="w-10 h-10 mr-2" alt="Logo AirNav" onerror="this.onerror=null;this.src='https://placehold.co/32x32/FFFFFF/255A9B?text=A';">
+                                <div class="company-name">Cabang Surabaya</div>
+                                <div class="form-title">MAINTENANCE REQUEST & WORK ORDER</div>
+                            </div>
+                            <form id="maintenance-form">
+                                <div class="form-row"><div class="form-field form-w-100"><label>Tertuju:</label><input type="text" name="tertuju" placeholder="Masukkan nama atau department yang dituju"></div></div>
+                                <div class="form-row">
+                                    <div class="form-field form-w-50"><label>Shift/Dinas/Nama:</label><input type="text" name="shift_dinas_nama"></div>
+                                    <div class="form-field form-w-25"><label>Tanggal:</label><input type="date" name="tanggal"></div>
+                                    <div class="form-field form-w-25"><label>Jam:</label><input type="time" name="jam"></div>
+                                </div>
+                                <div class="textarea-field"><label>Deskripsi:</label><textarea name="deskripsi" placeholder="Deskripsikan masalah..."></textarea></div>
+                                <div class="checkbox-group">
+                                    <label>Output:</label>
+                                    <div class="checkbox-options">
+                                        <div class="checkbox-option"><input type="radio" id="lembar_meter" name="output" value="lembar_meter"><label for="lembar_meter">Lembar Meter Reading</label></div>
+                                        <div class="checkbox-option"><input type="radio" id="status_peralatan" name="output" value="status_peralatan"><label for="status_peralatan">Status Peralatan</label></div>
+                                        <div class="checkbox-option"><input type="radio" id="pencatatan_logbook" name="output" value="pencatatan_logbook"><label for="pencatatan_logbook">Pencatatan Logbook</label></div>
+                                        <div class="checkbox-option"><input type="radio" id="lainnya" name="output" value="lainnya"><label for="lainnya">Lainnya</label></div>
+                                    </div>
+                                </div>
+                                <div class="form-row three-column"><div class="form-field">Manager Teknik</div><div class="form-field">Supervisor</div><div class="form-field">Pelaksana</div></div>
+                                <div class="form-row signature-row"><div class="form-field"></div><div class="form-field"></div><div class="form-field"></div></div>
+                                <div class="form-row"><div class="form-field"><label>Pelaksanaan:</label></div></div>
+                                <div class="checkbox-group">
+                                    <label>Status Pelaksanaan:</label>
+                                    <div class="checkbox-options">
+                                        <div class="checkbox-option"><input type="radio" id="selesai" name="status_pelaksanaan" value="selesai"><label for="selesai">Selesai</label></div>
+                                        <div class="checkbox-option"><input type="radio" id="belum_selesai" name="status_pelaksanaan" value="belum_selesai"><label for="belum_selesai">Belum Selesai</label></div>
+                                        <div class="checkbox-option"><input type="radio" id="belum_selesai_ditunda" name="status_pelaksanaan" value="belum_selesai_ditunda"><label for="belum_selesai_ditunda">Ditunda</label></div>
+                                        <div class="checkbox-option"><input type="radio" id="tidak_bisa" name="status_pelaksanaan" value="tidak_bisa"><label for="tidak_bisa">Tidak bisa dilaksanakan</label></div>
+                                    </div>
+                                </div>
+                                <div class="textarea-field"><label>Catatan/Keterangan:</label><textarea name="catatan" placeholder="Tambahkan catatan..."></textarea></div>
+                                <div class="textarea-field"><label>Usulan:</label><textarea name="usulan" placeholder="Masukkan usulan..."></textarea></div>
+                                <div class="form-row"><div class="form-field"><label>Catatan Pemberi Tugas:</label></div></div>
+                                <div class="textarea-field" style="border-bottom: none;"><textarea name="catatan_pemberi_tugas" placeholder="Catatan dari pemberi tugas..." style="min-height: 60px;"></textarea></div>
+                                <div class="form-row three-column"><div class="form-field">Manager Teknik</div><div class="form-field">Supervisor</div><div class="form-field">Pelaksana</div></div>
+                                <div class="form-row signature-row" style="border-bottom: none;"><div class="form-field"></div><div class="form-field"></div><div class="form-field"></div></div>
+                            </form>
+                        </div>
+                        <div class="flex justify-center gap-4 mt-6 no-print">
+                            <button type="button" id="save-wo" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Simpan</button>
+                            <button type="button" id="print-wo" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg">Print Form</button>
+                            <button type="button" id="cancel-wo" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Batal</button>
+                        </div>
+                    </div>
+
+                    <!-- Work Order List -->
+                    <div id="wo-list-container">
+                        <div class="bg-white rounded-lg shadow">
+                            <div class="p-6 border-b"><h3 class="text-lg font-semibold">Daftar Work Order</h3></div>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full">
+                                    <thead class="bg-gray-50">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No. WO</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tertuju</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Deskripsi</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="wo-table-body" class="bg-white divide-y divide-gray-200"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loggedInUser = sessionStorage.getItem('loggedInUser');
+
+            const redirectToLogin = () => {
+                const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
+                window.location.href = currentPath + '/login.html';
+            };
+
+            if (!loggedInUser) {
+                redirectToLogin();
+                return;
+            }
+
+            // --- Work Order Specific Selectors ---
+            const createNewWoBtn = document.getElementById('create-new-wo');
+            const viewWoListBtn = document.getElementById('view-wo-list');
+            const woFormContainer = document.getElementById('wo-form-container');
+            const woListContainer = document.getElementById('wo-list-container');
+            const maintenanceForm = document.getElementById('maintenance-form');
+            const saveWoBtn = document.getElementById('save-wo');
+            const printWoBtn = document.getElementById('print-wo');
+            const cancelWoBtn = document.getElementById('cancel-wo');
+            const woTableBody = document.getElementById('wo-table-body');
+
+            // --- General Element Selectors ---
+            const sidebar = document.getElementById('sidebar');
+            const sidebarToggle = document.getElementById('sidebar-toggle');
+            const sidebarOpenMobile = document.getElementById('sidebar-open-mobile');
+            const mainContent = document.getElementById('main-content');
+            const profileButton = document.getElementById('profile-button');
+            const profileMenu = document.getElementById('profile-menu');
+            const greetingElement = document.getElementById('greeting');
+            const logoutBtn = document.getElementById('logout-btn');
+            const profileLogoutBtn = document.getElementById('profile-logout-btn');
+
+            // --- WORK ORDER LOGIC ---
+            let workOrders = JSON.parse(localStorage.getItem('workOrders') || '[]');
+            let woCounter = parseInt(localStorage.getItem('woCounter') || '1');
+
+            const showWoForm = (isEditing = false) => {
+                woFormContainer.classList.remove('hidden');
+                woListContainer.classList.add('hidden');
+                if (!isEditing) {
+                    maintenanceForm.reset();
+                    const now = new Date();
+                    const today = now.toISOString().split('T')[0];
+                    const timeString = now.toTimeString().split(' ')[0].substring(0, 5);
+                    maintenanceForm.tanggal.value = today;
+                    maintenanceForm.jam.value = timeString;
+                }
+            };
+
+            const showWoList = () => {
+                woFormContainer.classList.add('hidden');
+                woListContainer.classList.remove('hidden');
+                renderWoTable();
+            };
+            
+            const renderWoTable = () => {
+                if (workOrders.length === 0) {
+                    woTableBody.innerHTML = '<tr><td colspan="6" class="px-6 py-4 text-center text-gray-500">Belum ada work order yang dibuat</td></tr>';
+                    return;
+                }
+                woTableBody.innerHTML = workOrders.map(wo => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">${wo.id}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${wo.date}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${wo.tertuju || '-'}</td>
+                        <td class="px-6 py-4 text-sm text-gray-500 max-w-xs truncate" title="${wo.deskripsi || ''}">${wo.deskripsi || '-'}</td>
+                        <td class="px-6 py-4 whitespace-nowrap"><span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusBadgeClass(wo.status_pelaksanaan)}">${getStatusText(wo.status_pelaksanaan)}</span></td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <button onclick="editWorkOrder('${wo.id}')" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
+                            <button onclick="deleteWorkOrder('${wo.id}')" class="text-red-600 hover:text-red-900">Hapus</button>
+                        </td>
+                    </tr>
+                `).join('');
+            };
+
+            const saveWorkOrder = () => {
+                const formData = new FormData(maintenanceForm);
+                const editingId = maintenanceForm.dataset.editingId;
+
+                if (editingId) { // Update existing
+                    const woIndex = workOrders.findIndex(w => w.id === editingId);
+                    if (woIndex !== -1) {
+                        workOrders[woIndex] = { ...workOrders[woIndex], ...Object.fromEntries(formData), updated_at: new Date().toISOString() };
+                    }
+                } else { // Create new
+                    const woData = {
+                        id: `WO-${woCounter.toString().padStart(4, '0')}`,
+                        ...Object.fromEntries(formData),
+                        status_pelaksanaan: formData.get('status_pelaksanaan') || 'pending',
+                        created_by: loggedInUser,
+                        created_at: new Date().toISOString()
+                    };
+                    workOrders.push(woData);
+                    localStorage.setItem('woCounter', ++woCounter);
+                }
+
+                localStorage.setItem('workOrders', JSON.stringify(workOrders));
+                showWoList();
+            };
+            
+            window.editWorkOrder = (woId) => {
+                const wo = workOrders.find(w => w.id === woId);
+                if (wo) {
+                    for(const key in wo) {
+                        if(maintenanceForm.elements[key]) {
+                            maintenanceForm.elements[key].value = wo[key];
+                        }
+                    }
+                    maintenanceForm.dataset.editingId = woId;
+                    saveWoBtn.textContent = 'Update';
+                    showWoForm(true);
+                }
+            };
+            
+            window.deleteWorkOrder = (woId) => {
+                if (confirm('Apakah Anda yakin ingin menghapus work order ini?')) {
+                    workOrders = workOrders.filter(w => w.id !== woId);
+                    localStorage.setItem('workOrders', JSON.stringify(workOrders));
+                    renderWoTable();
+                }
+            };
+
+            const getStatusBadgeClass = (status) => ({'selesai': 'bg-green-100 text-green-800', 'belum_selesai': 'bg-yellow-100 text-yellow-800', 'belum_selesai_ditunda': 'bg-orange-100 text-orange-800', 'tidak_bisa': 'bg-red-100 text-red-800'}[status] || 'bg-gray-100 text-gray-800');
+            const getStatusText = (status) => ({'selesai': 'Selesai', 'belum_selesai': 'Belum Selesai', 'belum_selesai_ditunda': 'Ditunda', 'tidak_bisa': 'Tidak Bisa'}[status] || 'Pending');
+
+            // --- Event Listeners for Work Order ---
+            createNewWoBtn.addEventListener('click', () => {
+                maintenanceForm.dataset.editingId = '';
+                saveWoBtn.textContent = 'Simpan';
+                showWoForm();
+            });
+            viewWoListBtn.addEventListener('click', showWoList);
+            saveWoBtn.addEventListener('click', saveWorkOrder);
+            printWoBtn.addEventListener('click', () => window.print());
+            cancelWoBtn.addEventListener('click', () => {
+                if (confirm('Apakah Anda yakin? Perubahan yang belum disimpan akan hilang.')) showWoList();
+            });
+
+            // --- LOGOUT LOGIC ---
+            const handleLogout = (e) => {
+                e.preventDefault();
+                sessionStorage.removeItem('loggedInUser');
+                localStorage.removeItem(`profile_${loggedInUser}`);
+                redirectToLogin();
+            };
+            logoutBtn.addEventListener('click', handleLogout);
+            profileLogoutBtn.addEventListener('click', handleLogout);
+
+            // --- DASHBOARD UI LOGIC ---
+            sidebarToggle.addEventListener('click', () => {
+                sidebar.classList.toggle('collapsed');
+                sidebar.classList.toggle('w-64');
+                sidebar.classList.toggle('w-20');
+                mainContent.classList.toggle('md:ml-64');
+                mainContent.classList.toggle('md:ml-20');
+            });
+            sidebarOpenMobile.addEventListener('click', (e) => { e.stopPropagation(); sidebar.classList.remove('-translate-x-full'); });
+            profileButton.addEventListener('click', (e) => { e.stopPropagation(); profileMenu.classList.toggle('hidden'); });
+            document.addEventListener('click', (e) => {
+                if (!profileMenu.classList.contains('hidden') && !profileButton.contains(e.target)) profileMenu.classList.add('hidden');
+                if (window.innerWidth < 768 && !sidebar.classList.contains('-translate-x-full') && !sidebar.contains(e.target)) sidebar.classList.add('-translate-x-full');
+            });
+
+            // --- Dynamic Greeting & Avatar ---
+            const updateGreetingAndAvatar = () => {
+                const name = sessionStorage.getItem('loggedInUser');
+                if (!name) return;
+                const savedProfile = localStorage.getItem(`profile_${name}`);
+                const userProfile = savedProfile ? JSON.parse(savedProfile) : { fullname: name, avatar: `https://placehold.co/100x100/E2E8F0/4A5568?text=${name.charAt(0).toUpperCase()}` };
+                document.getElementById('avatar-img').src = userProfile.avatar;
+                const hours = new Date().getHours();
+                let greetingText = (hours < 13) ? `Selamat Pagi, ${userProfile.fullname}` : (hours < 19) ? `Selamat Siang, ${userProfile.fullname}` : `Selamat Malam, ${userProfile.fullname}`;
+                greetingElement.textContent = greetingText;
+            };
+
+            // --- INITIALIZATION ---
+            updateGreetingAndAvatar();
+            renderWoTable();
+        });
+    </script>
+</body>
+</html>
