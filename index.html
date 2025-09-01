@@ -460,11 +460,11 @@
                 const capitalizedName = userProfile.fullname.charAt(0).toUpperCase() + userProfile.fullname.slice(1);
                 let greetingText;
                 if (hours >= 4 && hours < 13) { 
-                    greetingText = `Selamat Pagi, ${capitalizedName}!`; 
+                    greetingText = `Selamat Pagi, ${capitalizedName}`; 
                 } else if (hours >= 13 && hours < 19) { 
-                    greetingText = `Selamat Siang, ${capitalizedName}!`; 
+                    greetingText = `Selamat Siang, ${capitalizedName}`; 
                 } else { 
-                    greetingText = `Selamat Malam, ${capitalizedName}!`; 
+                    greetingText = `Selamat Malam, ${capitalizedName}`; 
                 }
                 greetingElement.textContent = greetingText;
             };
