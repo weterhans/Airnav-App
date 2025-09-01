@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Maintenance Request & Work Order</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        .form-container {
+            background-color: white;
+            border: 2px solid #000;
+            max-width: 800px;
+            margin: 0 auto;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding: 10px;
+            background-color: #f9f9f9;
+        }
+        
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 15px;
+        }
+        
+        .company-name {
+            color: #1e3a8a;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .title {
+            font-size: 20px;
+            font-weight: bold;
+            text-align: center;
+            flex: 1;
+            text-transform: uppercase;
+        }
+        
+        .form-row {
+            display: flex;
+            border-bottom: 1px solid #000;
+            min-height: 40px;
+        }
+        
+        .form-row:last-child {
+            border-bottom: none;
+        }
+        
+        .form-field {
+            padding: 8px;
+            border-right: 1px solid #000;
+            display: flex;
+            align-items: center;
+        }
+        
+        .form-field:last-child {
+            border-right: none;
+        }
+        
+        .form-field label {
+            font-weight: bold;
+            margin-right: 5px;
+            min-width: fit-content;
+        }
+        
+        .form-field input[type="text"], 
+        .form-field input[type="date"] {
+            border: none;
+            outline: none;
+            flex: 1;
+            padding: 2px;
+            font-size: 14px;
+        }
+        
+        .textarea-field {
+            padding: 8px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .textarea-field label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .textarea-field textarea {
+            width: 100%;
+            border: none;
+            outline: none;
+            resize: vertical;
+            font-family: inherit;
+            font-size: 14px;
+            min-height: 80px;
+            box-sizing: border-box;
+        }
+        
+        .checkbox-group {
+            padding: 8px;
+            border-bottom: 1px solid #000;
+        }
+        
+        .checkbox-group label {
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+        
+        .checkbox-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .checkbox-option input[type="radio"] {
+            margin: 0;
+        }
+        
+        .three-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+        }
+        
+        .three-column .form-field {
+            text-align: center;
+            font-weight: bold;
+            background-color: #f9f9f9;
+        }
+        
+        .signature-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            min-height: 80px;
+        }
+        
+        .w-25 { flex: 0 0 25%; }
+        .w-30 { flex: 0 0 30%; }
+        .w-70 { flex: 0 0 70%; }
+        .w-50 { flex: 0 0 50%; }
+        .w-100 { flex: 0 0 100%; }
+        
+        @media print {
+            body { margin: 0; background-color: white; }
+            .form-container { box-shadow: none; }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                2X
+                <div class="company-name" style="position: absolute; margin-top: 75px; margin-left: -15px; font-size: 10px;">
+                    Cabang Surabaya
+                </div>
+            </div>
+            <div class="title">MAINTENANCE REQUEST & WORK ORDER</div>
+        </div>
+
+        <!-- Form Content -->
+        <div class="form-row">
+            <div class="form-field w-100">
+                <label>Tertuju :</label>
+                <input type="text" name="tertuju" placeholder="Masukkan nama atau department yang dituju">
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field w-50">
+                <label>Shift/Dinas/Nama:</label>
+                <input type="text" name="shift_dinas_nama">
+            </div>
+            <div class="form-field w-25">
+                <label>Tanggal:</label>
+                <input type="date" name="tanggal">
+            </div>
+            <div class="form-field w-25">
+                <label>Jam:</label>
+                <input type="text" name="jam" placeholder="00:00">
+            </div>
+        </div>
+
+        <div class="textarea-field">
+            <label>Deskripsi:</label>
+            <textarea name="deskripsi" placeholder="Deskripsikan masalah atau permintaan maintenance..."></textarea>
+        </div>
+
+        <div class="checkbox-group">
+            <label>Output:</label>
+            <div class="checkbox-options">
+                <div class="checkbox-option">
+                    <input type="radio" id="lembar_meter" name="output" value="lembar_meter">
+                    <label for="lembar_meter">Lembar Meter Reading</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="radio" id="status_peralatan" name="output" value="status_peralatan">
+                    <label for="status_peralatan">Status Peralatan</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="radio" id="pencatatan_logbook" name="output" value="pencatatan_logbook">
+                    <label for="pencatatan_logbook">Pencatatan Logbook</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="radio" id="lainnya" name="output" value="lainnya">
+                    <label for="lainnya">.........................</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row three-column">
+            <div class="form-field">Manager Teknik</div>
+            <div class="form-field">Supervisor</div>
+            <div class="form-field">Pelaksana</div>
+        </div>
+
+        <div class="form-row signature-row">
+            <div class="form-field"></div>
+            <div class="form-field"></div>
+            <div class="form-field"></div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field">
+                <label>Pelaksanaan:</label>
+            </div>
+        </div>
+
+        <div class="checkbox-group">
+            <label>Jam Mulai:</label>
+            <div class="checkbox-options">
+                <div class="checkbox-option">
+                    <input type="radio" id="selesai" name="jam_mulai" value="selesai">
+                    <label for="selesai">Selesai</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="radio" id="belum_selesai" name="jam_mulai" value="belum_selesai">
+                    <label for="belum_selesai">Belum Selesai</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="radio" id="belum_selesai_ditunda" name="jam_mulai" value="belum_selesai_ditunda">
+                    <label for="belum_selesai_ditunda">Belum Selesai ditunda shift berikutnya</label>
+                </div>
+                <div class="checkbox-option">
+                    <input type="radio" id="tidak_bisa" name="jam_mulai" value="tidak_bisa">
+                    <label for="tidak_bisa">Tidak bisa dilaksanakan</label>
+                </div>
+            </div>
+        </div>
+
+        <div class="textarea-field">
+            <label>Catatan/Keterangan:</label>
+            <textarea name="catatan" placeholder="Tambahkan catatan atau keterangan..."></textarea>
+        </div>
+
+        <div class="textarea-field">
+            <label>Usulan:</label>
+            <textarea name="usulan" placeholder="Masukkan usulan atau saran..."></textarea>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field">
+                <label>Catatan Pemberi Tugas:</label>
+            </div>
+        </div>
+
+        <div class="textarea-field" style="border-bottom: none;">
+            <textarea name="catatan_pemberi_tugas" placeholder="Catatan dari pemberi tugas..." style="min-height: 60px;"></textarea>
+        </div>
+
+        <div class="form-row three-column">
+            <div class="form-field">Manager Teknik</div>
+            <div class="form-field">Supervisor</div>
+            <div class="form-field">Pelaksana</div>
+        </div>
+
+        <div class="form-row signature-row" style="border-bottom: none;">
+            <div class="form-field"></div>
+            <div class="form-field"></div>
+            <div class="form-field"></div>
+        </div>
+    </div>
+
+    <script>
+        // Auto-fill current date
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.querySelector('input[name="tanggal"]').value = today;
+            
+            // Auto-fill current time
+            const now = new Date();
+            const timeString = now.getHours().toString().padStart(2, '0') + ':' + 
+                             now.getMinutes().toString().padStart(2, '0');
+            document.querySelector('input[name="jam"]').value = timeString;
+        });
+
+        // Print function
+        function printForm() {
+            window.print();
+        }
+        
+        // Add print button if needed
+        const printBtn = document.createElement('button');
+        printBtn.textContent = 'Print Form';
+        printBtn.style.margin = '20px auto';
+        printBtn.style.display = 'block';
+        printBtn.style.padding = '10px 20px';
+        printBtn.style.backgroundColor = '#1e3a8a';
+        printBtn.style.color = 'white';
+        printBtn.style.border = 'none';
+        printBtn.style.borderRadius = '5px';
+        printBtn.style.cursor = 'pointer';
+        printBtn.onclick = printForm;
+        document.body.appendChild(printBtn);
+    </script>
+</body>
+</html>
