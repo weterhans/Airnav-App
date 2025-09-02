@@ -27,24 +27,49 @@
             background-color: #f9f9f9;
         }
         
+        .logo-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 15px;
+            min-width: 120px;
+        }
+        
         .logo {
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
+            background: linear-gradient(135deg, #255A9B, #3b82f6);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 18px;
-            margin-right: 15px;
+            font-size: 16px;
+            margin-bottom: 5px;
+            position: relative;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 4px;
+            background: #D92D20;
+            border-radius: 2px;
+            transform: rotate(-45deg);
+            top: 50%;
+            left: 50%;
+            margin-left: -12px;
+            margin-top: -2px;
         }
         
         .company-name {
-            color: #1e3a8a;
-            font-size: 14px;
+            color: #255A9B;
+            font-size: 11px;
             font-weight: bold;
+            text-align: center;
+            line-height: 1.2;
         }
         
         .title {
@@ -157,6 +182,11 @@
             min-height: 80px;
         }
         
+        .spacer-row {
+            min-height: 20px;
+            border-bottom: 1px solid #000;
+        }
+        
         .w-25 { flex: 0 0 25%; }
         .w-30 { flex: 0 0 30%; }
         .w-70 { flex: 0 0 70%; }
@@ -173,11 +203,11 @@
     <div class="form-container">
         <!-- Header -->
         <div class="header">
-            <div class="logo">
-                2X
-                <div class="company-name" style="position: absolute; margin-top: 75px; margin-left: -15px; font-size: 10px;">
-                    Cabang Surabaya
+            <div class="logo-section">
+                <div class="logo">
+                    AirNav
                 </div>
+                <div class="company-name">Cabang Surabaya</div>
             </div>
             <div class="title">MAINTENANCE REQUEST & WORK ORDER</div>
         </div>
@@ -190,28 +220,28 @@
             </div>
         </div>
 
-        <div class="form-row">
-            <div class="form-field w-50">
-                <label>Shift/Dinas/Nama:</label>
-                <input type="text" name="shift_dinas_nama">
+        <div class="form-row" style="min-height: 80px;">
+            <div class="form-field w-50" style="align-items: flex-start; padding-top: 12px;">
+                <label style="margin-top: 0;">Shift Dinas/Nama :</label>
+                <textarea name="shift_dinas_nama" style="border: none; outline: none; resize: none; font-family: inherit; font-size: 14px; flex: 1; min-height: 100px; margin-left: 5px;"></textarea>
             </div>
-            <div class="form-field w-25">
-                <label>Tanggal:</label>
+            <div class="form-field w-20" style="align-items: flex-start; padding-top: 12px;">
+                <label>Tanggal :</label>
                 <input type="date" name="tanggal">
             </div>
-            <div class="form-field w-25">
-                <label>Jam:</label>
-                <input type="text" name="jam" placeholder="00:00">
+            <div class="form-field w-30"style="align-items: flex-start; padding-top: 12px;">
+                <label>Jam :</label>
+                <textarea name="jam" style="border: none; outline: none; resize: none; font-family: inherit; font-size: 14px; flex: 1; min-height: 100px; margin-left: 5px;"></textarea>
             </div>
         </div>
 
         <div class="textarea-field">
-            <label>Deskripsi:</label>
+            <label>Deskripsi :</label>
             <textarea name="deskripsi" placeholder="Deskripsikan masalah atau permintaan maintenance..."></textarea>
         </div>
 
         <div class="checkbox-group">
-            <label>Output:</label>
+            <label>Output :</label>
             <div class="checkbox-options">
                 <div class="checkbox-option">
                     <input type="radio" id="lembar_meter" name="output" value="lembar_meter">
@@ -245,46 +275,56 @@
         </div>
 
         <div class="form-row">
-            <div class="form-field">
-                <label>Pelaksanaan:</label>
+            <div class="form-field w-100">
+                <label>Pelaksanaan :</label>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field w-50">
+                <label>Jam Mulai :</label>
+                <input type="text" name="jam_mulai" placeholder="00:00">
+            </div>
+            <div class="form-field w-50">
+                <label>Jam Selesai :</label>
+                <input type="text" name="jam_selesai" placeholder="00:00">
             </div>
         </div>
 
         <div class="checkbox-group">
-            <label>Jam Mulai:</label>
             <div class="checkbox-options">
                 <div class="checkbox-option">
-                    <input type="radio" id="selesai" name="jam_mulai" value="selesai">
+                    <input type="radio" id="selesai" name="status_pelaksanaan" value="selesai">
                     <label for="selesai">Selesai</label>
                 </div>
                 <div class="checkbox-option">
-                    <input type="radio" id="belum_selesai" name="jam_mulai" value="belum_selesai">
+                    <input type="radio" id="belum_selesai" name="status_pelaksanaan" value="belum_selesai">
                     <label for="belum_selesai">Belum Selesai</label>
                 </div>
                 <div class="checkbox-option">
-                    <input type="radio" id="belum_selesai_ditunda" name="jam_mulai" value="belum_selesai_ditunda">
+                    <input type="radio" id="belum_selesai_ditunda" name="status_pelaksanaan" value="belum_selesai_ditunda">
                     <label for="belum_selesai_ditunda">Belum Selesai ditunda shift berikutnya</label>
                 </div>
                 <div class="checkbox-option">
-                    <input type="radio" id="tidak_bisa" name="jam_mulai" value="tidak_bisa">
+                    <input type="radio" id="tidak_bisa" name="status_pelaksanaan" value="tidak_bisa">
                     <label for="tidak_bisa">Tidak bisa dilaksanakan</label>
                 </div>
             </div>
         </div>
 
         <div class="textarea-field">
-            <label>Catatan/Keterangan:</label>
+            <label>Catatan/Keterangan :</label>
             <textarea name="catatan" placeholder="Tambahkan catatan atau keterangan..."></textarea>
         </div>
 
         <div class="textarea-field">
-            <label>Usulan:</label>
+            <label>Usulan :</label>
             <textarea name="usulan" placeholder="Masukkan usulan atau saran..."></textarea>
         </div>
 
         <div class="form-row">
-            <div class="form-field">
-                <label>Catatan Pemberi Tugas:</label>
+            <div class="form-field w-100">
+                <label>Catatan Pemberi Tugas :</label>
             </div>
         </div>
 
@@ -306,7 +346,7 @@
     </div>
 
     <script>
-        // Auto-fill current date
+        // Auto-fill current date and time
         document.addEventListener('DOMContentLoaded', function() {
             const today = new Date().toISOString().split('T')[0];
             document.querySelector('input[name="tanggal"]').value = today;
@@ -323,13 +363,13 @@
             window.print();
         }
         
-        // Add print button if needed
+        // Add print button
         const printBtn = document.createElement('button');
         printBtn.textContent = 'Print Form';
         printBtn.style.margin = '20px auto';
         printBtn.style.display = 'block';
         printBtn.style.padding = '10px 20px';
-        printBtn.style.backgroundColor = '#1e3a8a';
+        printBtn.style.backgroundColor = '#255A9B';
         printBtn.style.color = 'white';
         printBtn.style.border = 'none';
         printBtn.style.borderRadius = '5px';
