@@ -45,12 +45,12 @@
         <!-- Header Halaman -->
         <header class="bg-white shadow-md rounded-lg p-4 mb-6 flex items-center justify-between">
             <div class="flex items-center">
-                <a href="../index.html" class="p-2 rounded-md hover:bg-gray-200" aria-label="Kembali ke Dashboard">
+                <a href="../index.html#cnsd-content" class="p-2 rounded-md hover:bg-gray-200" aria-label="Kembali ke Dashboard">
                     <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 </a>
                 <h1 class="text-xl md:text-2xl font-bold text-gray-800 ml-4">Kesiapan Fasilitas CNSD</h1>
             </div>
-            <img src="https://placehold.co/40x40/FFFFFF/255A9B?text=A" alt="Logo AirNav" class="w-10 h-10 object-contain">
+            <img src="../img/airnav_logo.png" alt="Logo AirNav" class="w-10 h-10 object-contain">
         </header>
 
         <!-- Main Content -->
@@ -85,7 +85,7 @@
         <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl">
             <!-- Modal Header -->
             <div class="flex justify-between items-center p-4 border-b">
-                <h3 class="text-lg font-semibold text-gray-800">DAILY CNSA FORM</h3>
+                <h3 class="text-lg font-semibold text-gray-800">DAILY CNSD FORM</h3>
                 <button id="close-modal-button" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
@@ -152,16 +152,23 @@
         document.addEventListener('DOMContentLoaded', function() {
             // --- DATA CONTOH & ELEMEN DOM ---
             const reportData = [
-                { date: "7/28/2025", mantek: "Islamuddin Ali", acknowledge: "Danang Prambodo" },
-                { date: "7/28/2025", mantek: "Danang Prambodo", acknowledge: "" },
-                { date: "7/27/2025", mantek: "MULIAWARMAN HASIBUAN", acknowledge: "" },
+                
             ];
             const technicianList = ["", "Islamuddin Ali", "Danang Prambodo", "MULIAWARMAN HASIBUAN", "Budi Santoso", "Ani Wijaya"];
             const equipmentNames = [
-                'VHF ADC Primary', 'VHF ADC Backup Portable (Tower)', 'VHF A/G Portable (Standby)', 
-                'VHF ADC Secondary', 'VHF APP Primary', 'VHF APP Secondary', 'VHF-ER UPLIA (Ex VHF TMA))', 
-                'VHF-ER UPLIA', 'VHF Emergency', 'HF-ER Ndara CWP', 'HF Ndara SSB VERTEX', 'HF SSB G/G KENWOOD',
-                'VCSS', 'Voice Recorder', 'ATIS', 'DVOR', 'DME', 'AMSC'
+                'VHF GND Main (p) 118.9','VHF GND Main (s) 119.15','VHF ADC Main (p) 118.3', 'VHF ADC Main (s) 118.1', 'VHF APP Direc Main (p) 123.2','VHF APP Direc Main (s) 124.5', 'VHF APP West Main (p) 125.1', 'VHF APP West Main (s) 123.55',  
+                'VHF APP East Main (p) 124.0','VHF APP East Main (s) 122.85','VHF CDU (p) 121.65','VHF CDU (s) 121.85', 'VHF-ER Makassar (p) 123.9', 'VHF-ER Makassar (s) 125.9', 'VHF-ER UPKN 134.1', 'VHF-ER UBLI 125.7', 'VHF ATIS 128.2','VHF Emergency 121.5',
+                'VHF GND Backup (p) 118.9', 'VHF GND Backup (s) 119.15', 'VHF ADC Backup (p) 118.3', 'VHF ADC Backup (s) 118.1', 'VHF APP Direc Backup (p) 123.2', 'VHF APP West Backup (p) 125.1', 'VHF APP East Main (p) 124.0',
+                'Server Recorder A', 'Server Recorder B', 'PC Recorder Playback', 'NTP Server & Gps', 'ATIS Server A', 'ATIS Server B', 'PC Client Oprator', 'Server AMSC A', 'Server AMSC B', 'Control & Spv console A', 'Control & Spv console B',
+                'Komputer ADPS', 'BO 1 WARRZPZE', 'BO 2 WARRYMYO', 'METEO 1 WARRYMYF', 'METEO 2 WARRYMYO', 'INFORMASI WARRYIYX', 
+                'VCCS - GATE X2 - 01', 'VCCS - GATE X2 - 02', 'VCCS - GATE X2 - 03', 'VCCS - GATE X2 - 04', 'VCCS - GPIF 1-4', 'VCCS - ERIF 1-10', 'VCCS - BCA 1-5', 'VCCS - BCB 1-9', 'CWP1', 'CWP2', 'CWP3', 'CWP4', 'CWP5', 'CWP6', 'CWP7', 'CWP8', 'CWP9', 'CWP10', 'CWP11 (CDU)', 'CWP12',
+                'DVOR', 'DME', 'ILS - Localizer', 'ILS - Glide Path', 'ILS - T-DME', 'MSSR - RMM 1 & 2', 'MSSR - LCMS 1 & 2', 'MSSR - SMP 1 & 2', 'MSSR- RDP 1 & 2', 'ADSB',
+                'ATC - Komputer Server FDP 1 & 2', 'ATC - Komputer Server SDP 1 & 2', 'ATC- Komputer Server FDP RBP', 'ATC - Recording & Playback System', 'ATC - Komputer Client ASD-1 Director', 'ATC - Komputer Client ASD-2 West Sector', 'ATC - Komputer Client ASD-3 East Sector', 'ATC - Komputer Client ASD-4 Supervisor FIR',
+                'ATC - Komputer Client ASD-5 Tower', 'ATC - Komputer Client ASD-6 Suvervisor VFR', 'ATC - Komputer Client ASD-7 MCC', 'ATC - Komputer Client FDD-1 Director', 'ATC - Komputer Client FDD-2 West Sector', 'ATC - Komputer Client FDD-3 East Sector', 'ATC - Komputer Client ASD-4 FDO', 'ATC - Komputer Client FDD-5 Tower', 
+                'ATC - Komputer Client FDD-6 Briefing Office', 'ATC - Komputer Client Data Spesialis', 'ATC - Komputer Client SMC', 'ATC - Komputer Client Playback System',
+                'ASMGCS - SERVER CSP 01', 'ASMGCS - SERVER CSP 02', 'ASMGCS - SERVER COP 01', 'ASMGCS - SERVER COP 02', 'ASMGCS - SERVER WSP', 'ASMGCS - SERVER ANS',
+                'ASMGCS - DP Maintenance', 'ASMGCS - DP 01 Tower', 'ASMGCS - DP 02 Ground', 'ASMGCS - DP 03 Sup Tower', 'ASMGCS - DP Director', 
+
             ];
 
             const listElement = document.getElementById('report-list');
