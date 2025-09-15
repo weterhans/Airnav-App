@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perum LPPNPI - Work Order CNSD</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Arial', sans-serif; }
+        .no-print { display: block; }
+        
+        /* Form Styling */
+        .wo-container {
+            background-color: white;
+            border: 2px solid #000;
+            max-width: 850px;
+            margin: 20px auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            color: #000;
+        }
+        .wo-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 2px solid #000;
+            padding: 10px;
+        }
+        .logo-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 2px solid #000;
+            padding-right: 15px;
+            margin-right: 15px;
+            min-width: 100px;
+        }
+        .wo-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .logo-text {
+            font-weight: bold;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .wo-title-container {
+            flex-grow: 1;
+            text-align: center;
+        }
+        .wo-title {
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .wo-row { display: flex; border-bottom: 1.5px solid #000; }
+        .wo-field {
+            padding: 8px;
+            border-right: 1.5px solid #000;
+            display: flex;
+            flex-direction: column;
+        }
+        .wo-field:last-child { border-right: none; }
+        
+        .field-inline {
+            flex-direction: row;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .wo-field .field-inline label {
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+
+        .wo-field label { font-weight: bold; margin-bottom: 4px; font-size: 12px; }
+        .wo-field input[type="text"], 
+        .wo-field input[type="date"], 
+        .wo-field input[type="time"],
+        .wo-field select,
+        .wo-field textarea {
+            border: none;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            padding: 2px 0;
+            background-color: transparent;
+        }
+
+        .wo-field textarea { resize: vertical; min-height: 60px; }
+        #shift-dinas-textarea { min-height: 70px; }
+
+        .wo-signature-area {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 120px;
+            text-align: center;
+        }
+        .wo-signature-area img {
+            height: 50px;
+            width: 100%;
+            margin: 5px 0;
+            object-fit: contain;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .wo-signature-area select {
+            font-weight: bold;
+            text-align: center;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            padding: 4px;
+            width: 90%;
+            margin-top: 5px;
+        }
+        
+        .checkbox-options { display: flex; flex-wrap: wrap; gap: 20px; align-items: center; padding-top: 5px; }
+        .checkbox-option { display: flex; align-items: center; gap: 6px; }
+        .checkbox-option input[type="checkbox"] { width: 16px; height: 16px; }
+        .checkbox-option label { font-weight: normal; margin-bottom: 0; }
+        
+        .three-column-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 1.5px solid #000; }
+        .grid-header { font-weight: bold; text-align: center; padding: 8px; border-right: 1.5px solid #000; background-color: #f3f4f6; }
+        .grid-header:last-child { border-right: none; }
+
+        @media print {
+            body { margin: 0; background-color: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            .wo-container { box-shadow: none; border: 1.5px solid #000; margin: 0; max-width: 100%; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    
+    <div id="wo-cnsd-content" class="p-4 md:p-6">
+        <div class="flex items-center mb-6 no-print">
+            <h1 class="text-2xl font-bold text-gray-800 ml-4">Work Orders CNSD</h1>
+        </div>
+        
+        <div class="mb-6 flex flex-wrap gap-4 no-print">
+            <button id="create-new-wo" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Buat Work Order Baru</button>
+            <button id="view-wo-list" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Lihat Daftar WO</button>
+        </div>
+
+        <div id="wo-form-container" class="hidden">
+            <form id="maintenance-form">
+                <div class="wo-container">
+                    <!-- HEADER -->
+                    <div class="wo-header">
+                        <div class="logo-area">
+                            <img src="../img\airnav_logo.png" alt="AirNav Logo" class="wo-logo">
+                            <div class="logo-text">Cabang Surabaya</div>
+                        </div>
+                        <div class="wo-title-container">
+                            <div class="wo-title">MAINTENANCE REQUEST & WORK ORDER</div>
+                        </div>
+                    </div>
+                    
+                    <!-- INFO SECTION -->
+                    <div class="wo-row" style="justify-content: center;">
+                        <div class="wo-field field-inline" style="width: 20; border-right: none; padding-top: 2px; padding-bottom: 2px;">
+                            <label for="tertuju">Tertuju: </label>
+                            <input type="text" id="tertuju" name="tertuju" value="CNSD" readonly style="background-color: transparent; width: 20 ; font-weight: bold;">
+                        </div>
+                    </div>
+                    <div class="wo-row">
+                        <div class="wo-field" style="flex-basis: 60%; border-right: 1.5px solid #000; align-items: flex-start">
+                            <label for="shift_select" class="whitespace-nowrap">Shift / Dinas / Nama :<select id="shift_select" name="shift" class="font-bold text-blue-600 p-0 w-full bg-white" style="border: none; border-bottom: 1px solid #ccc; border-radius: 4px 4px 0 0;"></select></label>
+                                                     
+                            <textarea name="shift_dinas_nama" id="shift-dinas-textarea" placeholder="Masukkan nama pelaksana (contoh: Joko, Andi, Johan)" class="mt-2"></textarea>
+                        </div>
+                        <div class="wo-field" style="flex-basis: 60%; border-right: none; display: flex; flex-direction: column; justify-content: start;">
+                           <div class="wo-field field-inline" style="border: none; padding-bottom: 4px;">
+                                <label for="tanggal">Tanggal:</label>
+                                <input type="date" id="tanggal" name="tanggal">
+                           </div>
+                           <div class="wo-field field-inline" style="border: none; padding-top: 4px;">
+                                <label for="jam_display">Jam:</label>
+                                <input type="text" id="jam_display" name="jam_display" readonly style="font-weight: bold; background-color: #e9ecef;">
+                           </div>
+                        </div>
+                    </div>
+
+                    <div class="wo-row">
+                        <div class="wo-field" style="width: 100%;">
+                            <label for="deskripsi">Deskripsi:</label>
+                            <textarea name="deskripsi" id="deskripsi" placeholder="Deskripsikan masalah atau pekerjaan..."></textarea>
+                        </div>
+                    </div>
+                    
+                    <!-- OUTPUT SECTION -->
+                    <div class="wo-row">
+                        <div class="wo-field" style="width: 100%;">
+                            <label>Output:</label>
+                            <div class="checkbox-options">
+                                <div class="checkbox-option"><input type="checkbox" id="out_lembar_meter" name="output" value="lembar_meter"><label for="out_lembar_meter">Lembar Meter Reading</label></div>
+                                <div class="checkbox-option"><input type="checkbox" id="out_status_peralatan" name="output" value="status_peralatan"><label for="out_status_peralatan">Status Peralatan</label></div>
+                                <div class="checkbox-option"><input type="checkbox" id="out_pencatatan_logbook" name="output" value="pencatatan_logbook"><label for="out_pencatatan_logbook">Pencatatan Logbook</label></div>
+                                <div class="checkbox-option">
+                                    <input type="checkbox" id="out_lainnya_check" name="output_check" value="lainnya_check">
+                                    <input type="text" id="out_lainnya_text" name="output_lainnya" placeholder="Lainnya..." style="border-bottom: 1px dotted #000; width: 150px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- APPROVAL SIGNATURES -->
+                    <div class="three-column-grid">
+                        <div class="grid-header">Manager Teknik</div>
+                        <div class="grid-header">Supervisor</div>
+                        <div class="grid-header">Pelaksana</div>
+                    </div>
+                    <div class="wo-row">
+                        <div class="wo-field wo-signature-area" style="width: 33.33%;">
+                            <img id="approval_manager_sig" src="" alt="Tanda Tangan Manager">
+                            <select name="approval_manager" id="approval_manager_select"></select>
+                        </div>
+                        <div class="wo-field wo-signature-area" style="width: 33.33%;">
+                            <img id="approval_supervisor_sig" src="" alt="Tanda Tangan Supervisor">
+                            <select name="approval_supervisor" id="approval_supervisor_select"></select>
+                        </div>
+                        <div class="wo-field wo-signature-area" style="width: 33.34%;">
+                           <img id="approval_pelaksana_sig" src="" alt="Tanda Tangan Pelaksana">
+                           <select name="approval_pelaksana" id="approval_pelaksana_select"></select>
+                        </div>
+                    </div>
+                    
+                    <!-- PELAKSANAAN SECTION -->
+                    <div class="wo-row" style="background-color: #f3f4f6; text-align: center; font-weight: bold;"><div class="w-full p-2">Pelaksanaan</div></div>
+                     <div class="wo-row">
+                        <div class="wo-field field-inline" style="flex-basis: 50%;">
+                            <label for="jam_mulai">Jam Mulai:</label>
+                            <input type="time" id="jam_mulai" name="jam_mulai">
+                        </div>
+                        <div class="wo-field field-inline" style="flex-basis: 50%;">
+                             <label for="jam_selesai">Jam Selesai:</label>
+                            <input type="time" id="jam_selesai" name="jam_selesai">
+                        </div>
+                    </div>
+                    <div class="wo-row">
+                        <div class="wo-field" style="width: 100%;">
+                            <div class="checkbox-options">
+                                <div class="checkbox-option"><input type="radio" id="status_selesai" name="status_pelaksanaan" value="selesai"><label for="status_selesai">Selesai</label></div>
+                                <div class="checkbox-option"><input type="radio" id="status_belum_selesai" name="status_pelaksanaan" value="belum_selesai"><label for="status_belum_selesai">Belum Selesai</label></div>
+                                <div class="checkbox-option"><input type="radio" id="status_lanjut_shift" name="status_pelaksanaan" value="lanjut_shift"><label for="status_lanjut_shift">Belum Selesai dilanjut shift berikutnya</label></div>
+                                <div class="checkbox-option"><input type="radio" id="status_tidak_bisa" name="status_pelaksanaan" value="tidak_bisa"><label for="status_tidak_bisa">Tidak bisa dilaksanakan</label></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="wo-row"><div class="wo-field" style="width: 100%;"><label>Catatan/Kendala:</label><textarea name="catatan_kendala" placeholder="..."></textarea></div></div>
+                    <div class="wo-row"><div class="wo-field" style="width: 100%;"><label>Usulan:</label><textarea name="usulan" placeholder="..."></textarea></div></div>
+                    <div class="wo-row"><div class="wo-field" style="width: 100%;"><label>Catatan Pemberi Tugas:</label><textarea name="catatan_pemberi_tugas" placeholder="..."></textarea></div></div>
+
+                    <!-- VERIFICATION SIGNATURES -->
+                     <div class="three-column-grid">
+                        <div class="grid-header">Manager Teknik</div>
+                        <div class="grid-header">Supervisor</div>
+                        <div class="grid-header">Pelaksana</div>
+                    </div>
+                    <div class="wo-row" style="border-bottom: none;">
+                       <div class="wo-field wo-signature-area" style="width: 33.33%;">
+                            <img id="verify_manager_sig" src="" alt="Tanda Tangan Manager">
+                            <select name="verify_manager" id="verify_manager_select"></select>
+                        </div>
+                        <div class="wo-field wo-signature-area" style="width: 33.33%;">
+                            <img id="verify_supervisor_sig" src="" alt="Tanda Tangan Supervisor">
+                            <select name="verify_supervisor" id="verify_supervisor_select"></select>
+                        </div>
+                        <div class="wo-field wo-signature-area" style="width: 33.34%;">
+                            <img id="verify_pelaksana_sig" src="" alt="Tanda Tangan Pelaksana">
+                            <select name="verify_pelaksana" id="verify_pelaksana_select"></select>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div class="flex justify-center gap-4 mt-6 no-print">
+                <button type="button" id="save-wo" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Simpan</button>
+                <button type="button" id="print-wo" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg">Print Form</button>
+                <button type="button" id="cancel-wo" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Batal</button>
+            </div>
+        </div>
+        
+        <div id="wo-list-container"></div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        
+        const setupPersonnelDatabase = () => {
+            const defaultPersonnel = [
+                { id: 1, name: 'Andi Wibowo', role: 'Manager', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCA0MEExMDAgODAgMCAwIDAgMTkwIDQwIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNSAzMEExMDAgODAgMCAwIDEgMTgwIDMwIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
+                { id: 2, name: 'Agus Dhermawan', role: 'Manager', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCAzNEMxMDAuNCAxOS43IDEzNS4xIDQyLjEgMTkwIDM1IiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==' },
+                { id: 3, name: 'Nur Hakim', role: 'Supervisor', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCA0NEM1MS45IDIxLjQgMTU0LjUgNjAuMyAxOTAgMzIiIHN0cm9rZT0iYmxhY2siIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
+                { id: 4, name: '-', role: 'Supervisor', signature: '-' },
+                { id: 5, name: 'Joko', role: 'Pelaksana', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCAyNUM3My44IDU0LjcgODYuMSAxMS4xIDE5MCAzNCIgc3Ryb2rZT0iYmxhY2siIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
+                { id: 6, name: 'Andi', role: 'Pelaksana', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCA0NEMxMDAuNCAxOS43IDEzNS4xIDQyLjEgMTkwIDM1IiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==' },
+                { id: 7, name: 'Johan', role: 'Pelaksana', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCAzN0M0Ni4yIDU2LjggMTM2LjUgNS44IDE5MCAzNCIgc3Ryb2rZT0iYmxhY2siIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
+            ];
+            if (!localStorage.getItem('personnelData')) {
+                localStorage.setItem('personnelData', JSON.stringify(defaultPersonnel));
+            }
+        };
+        
+        setupPersonnelDatabase();
+        const personnelData = JSON.parse(localStorage.getItem('personnelData'));
+        const shiftData = {
+            'PAGI': '07.00 - 13.00',
+            'SIANG': '13.00 - 19.00',
+            'MALAM': '19.00 - 07.00'
+        };
+
+        const createNewWoBtn = document.getElementById('create-new-wo');
+        const viewWoListBtn = document.getElementById('view-wo-list');
+        const woFormContainer = document.getElementById('wo-form-container');
+        const woListContainer = document.getElementById('wo-list-container');
+        const maintenanceForm = document.getElementById('maintenance-form');
+        const saveWoBtn = document.getElementById('save-wo');
+        const printWoBtn = document.getElementById('print-wo');
+        const cancelWoBtn = document.getElementById('cancel-wo');
+        const shiftSelect = document.getElementById('shift_select');
+        const jamDisplay = document.getElementById('jam_display');
+
+        const signatureSelects = {
+            approval_manager: document.getElementById('approval_manager_select'),
+            approval_supervisor: document.getElementById('approval_supervisor_select'),
+            approval_pelaksana: document.getElementById('approval_pelaksana_select'),
+            verify_manager: document.getElementById('verify_manager_select'),
+            verify_supervisor: document.getElementById('verify_supervisor_select'),
+            verify_pelaksana: document.getElementById('verify_pelaksana_select'),
+        };
+
+        let workOrders = JSON.parse(localStorage.getItem('workOrdersCNSD') || '[]');
+        let woCounter = parseInt(localStorage.getItem('woCounterCNSD') || '1');
+
+        const getShiftByTime = (date) => {
+            const hour = date.getHours();
+            if (hour >= 7 && hour < 13) return 'PAGI';
+            if (hour >= 13 && hour < 19) return 'SIANG';
+            return 'MALAM';
+        };
+
+        const populateShiftDropdown = () => {
+            shiftSelect.innerHTML = Object.keys(shiftData).map(shift => 
+                `<option value="${shift}">${shift}</option>`
+            ).join('');
+        };
+        
+        const populateSignatureDropdowns = () => {
+            const managers = personnelData.filter(p => p.role === 'Manager');
+            const supervisors = personnelData.filter(p => p.role === 'Supervisor');
+            const pelaksana = personnelData.filter(p => p.role === 'Pelaksana');
+
+            const populate = (selectElement, personnelList) => {
+                selectElement.innerHTML = '<option value="">-- Pilih Nama --</option>';
+                personnelList.forEach(p => {
+                    selectElement.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+                });
+            };
+            
+            populate(signatureSelects.approval_manager, managers);
+            populate(signatureSelects.verify_manager, managers);
+            populate(signatureSelects.approval_supervisor, supervisors);
+            populate(signatureSelects.verify_supervisor, supervisors);
+            populate(signatureSelects.approval_pelaksana, pelaksana);
+            populate(signatureSelects.verify_pelaksana, pelaksana);
+        };
+        
+        const updateSignatureImage = (selectElement, imgElementId) => {
+            const selectedId = selectElement.value;
+            const person = personnelData.find(p => p.id == selectedId);
+            const imgElement = document.getElementById(imgElementId);
+            imgElement.src = person ? person.signature : '';
+        };
+
+        const showWoForm = (isEditing = false) => {
+            woFormContainer.classList.remove('hidden');
+            woListContainer.classList.add('hidden');
+            if (!isEditing) {
+                maintenanceForm.reset();
+                Object.values(signatureSelects).forEach(sel => sel.value = "");
+                ['approval_manager_sig', 'approval_supervisor_sig', 'approval_pelaksana_sig', 'verify_manager_sig', 'verify_supervisor_sig', 'verify_pelaksana_sig'].forEach(id => document.getElementById(id).src = '');
+                
+                const now = new Date();
+                maintenanceForm.tanggal.value = now.toISOString().split('T')[0];
+                
+                const currentShift = getShiftByTime(now);
+                shiftSelect.value = currentShift;
+                jamDisplay.value = shiftData[currentShift];
+            }
+        };
+
+        const showWoList = () => {
+            woFormContainer.classList.add('hidden');
+            woListContainer.classList.remove('hidden');
+            renderWoTable();
+        };
+        
+        const getStatusText = (status) => ({
+            'selesai': 'Selesai', 'belum_selesai': 'Belum Selesai', 
+            'lanjut_shift': 'Lanjut Shift', 'tidak_bisa': 'Tidak Bisa Dilaksanakan'
+        }[status] || 'Baru');
+
+        const renderWoTable = () => {
+            if (workOrders.length === 0) {
+                woListContainer.innerHTML = '<div class="bg-white p-6 rounded-lg shadow text-center text-gray-500">Belum ada work order yang dibuat.</div>';
+                return;
+            }
+            woListContainer.innerHTML = `
+                <div class="bg-white rounded-lg shadow">
+                    <div class="p-6 border-b"><h3 class="text-lg font-semibold">Daftar Work Order</h3></div>
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. WO</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Tanggal</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Deskripsi</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${workOrders.map(wo => `
+                                    <tr class="hover:bg-gray-50">
+                                        <td class="px-6 py-4 whitespace-nowrap">${wo.id}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">${wo.tanggal}</td>
+                                        <td class="px-6 py-4 max-w-sm truncate" title="${wo.deskripsi || ''}">${wo.deskripsi || '-'}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">${getStatusText(wo.status_pelaksanaan)}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            <button onclick="editWorkOrder('${wo.id}')" class="text-indigo-600 hover:text-indigo-900 mr-4">Edit</button>
+                                            <button onclick="deleteWorkOrder('${wo.id}')" class="text-red-600 hover:text-red-900">Hapus</button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+        };
+
+        const saveWorkOrder = () => {
+            const formData = new FormData(maintenanceForm);
+            let woData = Object.fromEntries(formData.entries());
+            woData.output = Array.from(maintenanceForm.querySelectorAll('input[name="output"]:checked')).map(cb => cb.value);
+            
+            const editingId = maintenanceForm.dataset.editingId;
+
+            if (editingId) {
+                const woIndex = workOrders.findIndex(w => w.id === editingId);
+                if (woIndex !== -1) {
+                    workOrders[woIndex] = { ...workOrders[woIndex], ...woData };
+                }
+            } else {
+                woData.id = `WO-CNSD-${woCounter.toString().padStart(4, '0')}`;
+                workOrders.push(woData);
+                localStorage.setItem('woCounterCNSD', ++woCounter);
+            }
+
+            localStorage.setItem('workOrdersCNSD', JSON.stringify(workOrders));
+            alert('Work Order berhasil disimpan!');
+            showWoList();
+        };
+        
+        window.editWorkOrder = (woId) => {
+            const wo = workOrders.find(w => w.id === woId);
+            if (wo) {
+                maintenanceForm.reset();
+                for(const key in wo) {
+                    if (key === 'output' && Array.isArray(wo[key])) {
+                        wo[key].forEach(value => {
+                            const checkbox = document.getElementById(`out_${value}`);
+                            if(checkbox) checkbox.checked = true;
+                        });
+                    } else if (maintenanceForm.elements[key]) {
+                        const element = maintenanceForm.elements[key];
+                        if(element.type === 'radio') {
+                             document.querySelector(`input[name="${key}"][value="${wo[key]}"]`).checked = true;
+                        } else {
+                             element.value = wo[key];
+                        }
+                    }
+                }
+                
+                if (wo.shift) {
+                    shiftSelect.value = wo.shift;
+                    jamDisplay.value = shiftData[wo.shift] || '';
+                }
+
+                Object.keys(signatureSelects).forEach(key => {
+                    if(wo[key]) {
+                        signatureSelects[key].value = wo[key];
+                        updateSignatureImage(signatureSelects[key], `${key}_sig`);
+                    }
+                });
+
+                maintenanceForm.dataset.editingId = woId;
+                saveWoBtn.textContent = 'Update';
+                showWoForm(true);
+            }
+        };
+        
+        window.deleteWorkOrder = (woId) => {
+            if (confirm('Apakah Anda yakin ingin menghapus work order ini?')) {
+                workOrders = workOrders.filter(w => w.id !== woId);
+                localStorage.setItem('workOrdersCNSD', JSON.stringify(workOrders));
+                renderWoTable();
+            }
+        };
+
+        createNewWoBtn.addEventListener('click', () => {
+            maintenanceForm.dataset.editingId = '';
+            saveWoBtn.textContent = 'Simpan';
+            showWoForm();
+        });
+        viewWoListBtn.addEventListener('click', showWoList);
+        saveWoBtn.addEventListener('click', saveWorkOrder);
+        printWoBtn.addEventListener('click', () => window.print());
+        cancelWoBtn.addEventListener('click', () => {
+            if (confirm('Batal membuat/mengedit? Perubahan tidak akan disimpan.')) showWoList();
+        });
+
+        shiftSelect.addEventListener('change', (e) => {
+            jamDisplay.value = shiftData[e.target.value] || '';
+        });
+
+        Object.keys(signatureSelects).forEach(key => {
+            signatureSelects[key].addEventListener('change', (e) => updateSignatureImage(e.target, `${key}_sig`));
+        });
+
+        populateShiftDropdown();
+        populateSignatureDropdowns();
+        showWoList();
+    });
+    </script>
+</body>
+</html>
+
