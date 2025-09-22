@@ -25,27 +25,36 @@
             border-bottom: 2px solid #000;
             padding: 10px;
         }
+        
         .logo-area {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            justify-content: center;
             border-right: 2px solid #000;
-            padding-right: 15px;
+            padding: 0 15px;
             margin-right: 15px;
-            min-width: 100px;
         }
         .wo-logo {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            object-fit: cover;
+            width: 50px;
+            height: 50px;
+            border-radius: 0;
+            object-fit: contain;
         }
-        .logo-text {
+        .logo-text-container {
+            display: flex;
+            flex-direction: column;
+            margin-left: 10px;
+        }
+        .logo-text-main {
             font-weight: bold;
-            font-size: 12px;
-            margin-top: 5px;
+            font-size: 14px;
+            white-space: nowrap;
         }
+        .logo-text-sub {
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
         .wo-title-container {
             flex-grow: 1;
             text-align: center;
@@ -140,6 +149,9 @@
     
     <div id="wo-cnsd-content" class="p-4 md:p-6">
         <div class="flex items-center mb-6 no-print">
+            <a href="../index.html" class="flex items-center text-black-600 hover:text-black-800 font-semibold p-2 rounded-md hover:bg-gray-200">
+                <svg class="w-6 h-6 mr-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            </a>
             <h1 class="text-2xl font-bold text-gray-800 ml-4">Work Orders CNSD</h1>
         </div>
         
@@ -154,8 +166,11 @@
                     <!-- HEADER -->
                     <div class="wo-header">
                         <div class="logo-area">
-                            <img src="../img\airnav_logo.png" alt="AirNav Logo" class="wo-logo">
-                            <div class="logo-text">Cabang Surabaya</div>
+                            <img src="/img/airnav.ico" alt="AirNav Logo" class="wo-logo" onerror="this.onerror=null;this.src='https://placehold.co/50x50/FFFFFF/255A9B?text=A';">
+                            <div class="logo-text-container">
+                                <span class="logo-text-main">PERUM LPPNPI</span>
+                                <span class="logo-text-sub">Cabang Surabaya</span>
+                            </div>
                         </div>
                         <div class="wo-title-container">
                             <div class="wo-title">MAINTENANCE REQUEST & WORK ORDER</div>
@@ -166,7 +181,7 @@
                     <div class="wo-row" style="justify-content: center;">
                         <div class="wo-field field-inline" style="width: 20; border-right: none; padding-top: 2px; padding-bottom: 2px;">
                             <label for="tertuju">Tertuju: </label>
-                            <input type="text" id="tertuju" name="tertuju" value="CNSD" readonly style="background-color: transparent; width: 20 ; font-weight: bold;">
+                            <input type="text" id="tertuju" name="tertuju" value="CNSD" readonly style="background-color: transparent; width: auto; font-weight: bold;">
                         </div>
                     </div>
                     <div class="wo-row">
@@ -175,7 +190,7 @@
                                                      
                             <textarea name="shift_dinas_nama" id="shift-dinas-textarea" placeholder="Masukkan nama pelaksana (contoh: Joko, Andi, Johan)" class="mt-2"></textarea>
                         </div>
-                        <div class="wo-field" style="flex-basis: 60%; border-right: none; display: flex; flex-direction: column; justify-content: start;">
+                        <div class="wo-field" style="flex-basis: 40%; border-right: none; display: flex; flex-direction: column; justify-content: start;">
                            <div class="wo-field field-inline" style="border: none; padding-bottom: 4px;">
                                 <label for="tanggal">Tanggal:</label>
                                 <input type="date" id="tanggal" name="tanggal">
@@ -294,21 +309,24 @@
         
         const setupPersonnelDatabase = () => {
             const defaultPersonnel = [
-                { id: 1, name: 'Andi Wibowo', role: 'Manager', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCA0MEExMDAgODAgMCAwIDAgMTkwIDQwIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNSAzMEExMDAgODAgMCAwIDEgMTgwIDMwIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
-                { id: 2, name: 'Agus Dhermawan', role: 'Manager', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCAzNEMxMDAuNCAxOS43IDEzNS4xIDQyLjEgMTkwIDM1IiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==' },
-                { id: 3, name: 'Nur Hakim', role: 'Supervisor', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCA0NEM1MS45IDIxLjQgMTU0LjUgNjAuMyAxOTAgMzIiIHN0cm9rZT0iYmxhY2siIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
-                { id: 4, name: '-', role: 'Supervisor', signature: '-' },
-                { id: 5, name: 'Joko', role: 'Pelaksana', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCAyNUM3My44IDU0LjcgODYuMSAxMS4xIDE5MCAzNCIgc3Ryb2rZT0iYmxhY2siIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
-                { id: 6, name: 'Andi', role: 'Pelaksana', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCA0NEMxMDAuNCAxOS43IDEzNS4xIDQyLjEgMTkwIDM1IiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==' },
-                { id: 7, name: 'Johan', role: 'Pelaksana', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCAzN0M0Ni4yIDU2LjggMTM2LjUgNS44IDE5MCAzNCIgc3Ryb2rZT0iYmxhY2siIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
+                { id: 1, name: 'Agus Dhermawan', role: 'Manager', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCA0MEExMDAgODAgMCAwIDAgMTkwIDQwIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lYJ2FwPSJyb3VuZCIvPjxwYXRoIGQ9Ik0xNSAzMEExMDAgODAgMCAwIDEgMTgwIDMwIiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjEuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
+                { id: 2, name: 'Andi Wibowo', role: 'Manager', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCAzNEMxMDAuNCAxOS43IDEzNS4xIDQyLjEgMTkwIDM1IiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==' },
+                { id: 3, name: 'Efried N.P.', role: 'Manager', signature: '-' },
+                { id: 4, name: '-', role: 'Manager', signature: '-' },
+                { id: 5, name: 'Netty Septa C.', role: 'Manager', signature: '-' },
+                { id: 6, name: 'Moch. Ichsan', role: 'Supervisor', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCA0NEM1MS45IDIxLjQgMTU0LjUgNjAuMyAxOTAgMzIiIHN0cm9rZT0iYmxhY2siIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
+                { id: 7, name: 'Nur Hukim', role: 'Supervisor', signature: '-' },
+                { id: 8, name: 'Aditya Huzairi P.', role: 'Supervisor', signature: '-'},
+                { id: 9, name: '-', role: 'Supervisor', signature: '-'},
+                { id: 10, name: 'Khoirul M.A.', role: 'Pelaksana', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCAyNUM3My44IDU0LjcgODYuMSAxMS4xIDE5MCAzNCIgc3Ryb2rZT0iYmxhY2siIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
+                { id: 11, name: 'Argo Pragolo', role: 'Pelaksana', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCA0NEMxMDAuNCAxOS43IDEzNS4xIDQyLjEgMTkwIDM1IiBzdHJva2U9ImJsYWNrIiBmaWxsPSJub25lIiBzdHJva2Utd2lkdGg9IjIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjwvc3ZnPg==' },
+                { id: 12, name: 'Tria Sabda Utama', role: 'Pelaksana', signature: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyMDAgNjAiIHdpZHRoPSIyMDAiIGhlaWdodD0iNjAiPjxwYXRoIGQ9Ik0xMCAzN0M0Ni4yIDU2LjggMTM2LjUgNS44IDE5MCAzNCIgc3Ryb2rZT0iYmxhY2siIGZpbGw9Im5vbmUiIHN0cm9rZS13aWR0aD0iMiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+' },
             ];
-            if (!localStorage.getItem('personnelData')) {
-                localStorage.setItem('personnelData', JSON.stringify(defaultPersonnel));
-            }
+            localStorage.setItem('personnelDataCNSD', JSON.stringify(defaultPersonnel));
         };
         
         setupPersonnelDatabase();
-        const personnelData = JSON.parse(localStorage.getItem('personnelData'));
+        const personnelData = JSON.parse(localStorage.getItem('personnelDataCNSD'));
         const shiftData = {
             'PAGI': '07.00 - 13.00',
             'SIANG': '13.00 - 19.00',
@@ -464,8 +482,18 @@
             }
 
             localStorage.setItem('workOrdersCNSD', JSON.stringify(workOrders));
-            alert('Work Order berhasil disimpan!');
-            showWoList();
+            
+            const saveButton = document.getElementById('save-wo');
+            const originalText = saveButton.textContent;
+            saveButton.textContent = 'Tersimpan!';
+            saveButton.classList.remove('bg-green-600', 'hover:bg-green-700');
+            saveButton.classList.add('bg-green-500');
+            setTimeout(() => {
+                saveButton.textContent = originalText;
+                saveButton.classList.add('bg-green-600', 'hover:bg-green-700');
+                saveButton.classList.remove('bg-green-500');
+                showWoList();
+            }, 1500);
         };
         
         window.editWorkOrder = (woId) => {
@@ -481,7 +509,9 @@
                     } else if (maintenanceForm.elements[key]) {
                         const element = maintenanceForm.elements[key];
                         if(element.type === 'radio') {
-                             document.querySelector(`input[name="${key}"][value="${wo[key]}"]`).checked = true;
+                             if(document.querySelector(`input[name="${key}"][value="${wo[key]}"]`)) {
+                                document.querySelector(`input[name="${key}"][value="${wo[key]}"]`).checked = true;
+                             }
                         } else {
                              element.value = wo[key];
                         }
@@ -507,11 +537,9 @@
         };
         
         window.deleteWorkOrder = (woId) => {
-            if (confirm('Apakah Anda yakin ingin menghapus work order ini?')) {
-                workOrders = workOrders.filter(w => w.id !== woId);
-                localStorage.setItem('workOrdersCNSD', JSON.stringify(workOrders));
-                renderWoTable();
-            }
+            workOrders = workOrders.filter(w => w.id !== woId);
+            localStorage.setItem('workOrdersCNSD', JSON.stringify(workOrders));
+            renderWoTable();
         };
 
         createNewWoBtn.addEventListener('click', () => {
@@ -523,15 +551,33 @@
         saveWoBtn.addEventListener('click', saveWorkOrder);
         printWoBtn.addEventListener('click', () => window.print());
         cancelWoBtn.addEventListener('click', () => {
-            if (confirm('Batal membuat/mengedit? Perubahan tidak akan disimpan.')) showWoList();
+            showWoList();
         });
 
         shiftSelect.addEventListener('change', (e) => {
             jamDisplay.value = shiftData[e.target.value] || '';
         });
 
+        // --- SINKRONISASI TANDA TANGAN UNTUK CNSD ---
         Object.keys(signatureSelects).forEach(key => {
-            signatureSelects[key].addEventListener('change', (e) => updateSignatureImage(e.target, `${key}_sig`));
+            signatureSelects[key].addEventListener('change', (e) => {
+                const selectElement = e.target;
+                const imgId = `${key}_sig`;
+                
+                updateSignatureImage(selectElement, imgId);
+
+                if (key.startsWith('approval_')) {
+                    const role = key.split('_')[1];
+                    const verifySelectKey = `verify_${role}`;
+                    const verifyImgId = `verify_${role}_sig`;
+                    
+                    if (signatureSelects[verifySelectKey]) {
+                        const verifySelectElement = signatureSelects[verifySelectKey];
+                        verifySelectElement.value = selectElement.value;
+                        updateSignatureImage(verifySelectElement, verifyImgId);
+                    }
+                }
+            });
         });
 
         populateShiftDropdown();
@@ -541,4 +587,3 @@
     </script>
 </body>
 </html>
-

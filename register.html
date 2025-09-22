@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrasi - Perum LPPNPI</title>
+    <title>Registrasi - Terhubung dengan Supabase</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- 1. Memuat Library Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <script>
         // Konfigurasi warna kustom AirNav
         tailwind.config = {
@@ -14,35 +18,29 @@
                     colors: {
                         'airnav-blue': '#255A9B',
                         'airnav-red': '#D92D20',
-                        'indigo-600': '#255A9B', // Menggunakan warna biru AirNav untuk tombol
+                        'indigo-600': '#255A9B',
                     }
                 }
             }
         }
     </script>
     <style>
-        /* Custom styles for the page */
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        /* Style untuk canvas tanda tangan */
+        body { font-family: 'Inter', sans-serif; }
         #signature-pad {
-            border: 2px solid #e5e7eb; /* border-gray-200 */
-            border-radius: 0.5rem; /* rounded-lg */
+            border: 2px solid #e5e7eb;
+            border-radius: 0.5rem;
             cursor: crosshair;
-            touch-action: none; /* Mencegah scrolling di area canvas pada perangkat mobile */
+            touch-action: none;
         }
     </style>
 </head>
 <body class="bg-airnav-blue">
 
     <div class="min-h-screen flex flex-col items-center justify-center p-4">
-        <!-- Card Registrasi dengan class untuk animasi fade-in -->
         <div id="register-card" class="w-full max-w-md bg-white rounded-2xl shadow-lg p-8 opacity-0 transition-opacity duration-1000 ease-in-out">
             <h1 class="text-2xl font-bold text-center text-gray-900 mb-2">Registrasi Akun Baru</h1>
             <p class="text-center text-gray-500 mb-8">Silakan isi data diri Anda</p>
             
-            <!-- Form Registrasi -->
             <form id="register-form" class="space-y-4">
                 <div>
                     <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
@@ -56,8 +54,6 @@
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <input type="email" id="email" name="email" required class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent" placeholder="Masukkan alamat email">
                 </div>
-                
-                <!-- Kolom Password dengan Toggle -->
                 <div class="relative">
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                     <input type="password" id="password" name="password" required class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent pr-10" placeholder="Buat password">
@@ -66,8 +62,6 @@
                         <svg id="eye-slash-icon" class="h-5 w-5 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.336 10c-1.546-3.418-5.044-6-9.336-6a10.014 10.014 0 00-4.33 1.015L3.707 2.293zm11.758 9.342a4 4 0 01-5.656-5.656l-1.415-1.415a6 6 0 00-1.01 7.485l1.01-1.01a4 4 0 014.646-4.646l1.415 1.415zm-3.83-3.83a2.5 2.5 0 00-3.536 3.536l1.415 1.415a2.5 2.5 0 003.536-3.536l-1.415-1.415z" clip-rule="evenodd" /><path d="M10 4a10.014 10.014 0 016.586 2.414l-1.473 1.473A8.015 8.015 0 0010 6a8.015 8.015 0 00-5.114 1.887L3.414 6.414A10.014 10.014 0 0110 4z" /></svg>
                     </button>
                 </div>
-
-                <!-- Kolom Konfirmasi Password dengan Toggle -->
                 <div class="relative">
                     <label for="confirm-password" class="block text-sm font-medium text-gray-700">Konfirmasi Password</label>
                     <input type="password" id="confirm-password" name="confirm-password" required class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent pr-10" placeholder="Ulangi password">
@@ -76,22 +70,17 @@
                         <svg id="confirm-eye-slash-icon" class="h-5 w-5 text-gray-400 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.336 10c-1.546-3.418-5.044-6-9.336-6a10.014 10.014 0 00-4.33 1.015L3.707 2.293zm11.758 9.342a4 4 0 01-5.656-5.656l-1.415-1.415a6 6 0 00-1.01 7.485l1.01-1.01a4 4 0 014.646-4.646l1.415 1.415zm-3.83-3.83a2.5 2.5 0 00-3.536 3.536l1.415 1.415a2.5 2.5 0 003.536-3.536l-1.415-1.415z" clip-rule="evenodd" /><path d="M10 4a10.014 10.014 0 016.586 2.414l-1.473 1.473A8.015 8.015 0 0010 6a8.015 8.015 0 00-5.114 1.887L3.414 6.414A10.014 10.014 0 0110 4z" /></svg>
                     </button>
                 </div>
-
-                <!-- Area Tanda Tangan -->
                 <div>
                     <label for="signature-pad" class="block text-sm font-medium text-gray-700">Tanda Tangan</label>
                     <canvas id="signature-pad" class="w-full h-32 mt-1 bg-white"></canvas>
                     <button type="button" id="clear-signature" class="text-sm text-gray-600 hover:text-airnav-blue mt-2">Bersihkan</button>
                 </div>
-
                 <div>
-                    <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <button type="submit" id="register-button" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-blue-800 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Register
                     </button>
                 </div>
             </form>
-            
-            <!-- Link kembali ke Login -->
             <div class="text-center mt-6">
                 <p class="text-sm text-gray-500">
                     Sudah punya akun? 
@@ -104,20 +93,40 @@
     </div>
 
     <script>
+        // 2. Konfigurasi Koneksi ke Supabase
+        const { createClient } = supabase;
+
+        // GANTI DENGAN URL & ANON KEY PROYEK SUPABASE ANDA
+        const SUPABASE_URL = 'https://qiewfizruqbmvktpgpwb.supabase.co'; 
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpZXdmaXpydXFibXZrdHBncHdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzEwMDYsImV4cCI6MjA3MzUwNzAwNn0.H6GFhFuS_D61Apjvmfbof9snnodF1IjFTwHDAOnryik';
+
+        // Membuat koneksi (client) ke Supabase
+        const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        // Fungsi bantuan untuk mengubah data URL (dari canvas) menjadi File
+        function dataURLtoFile(dataurl, filename) {
+            let arr = dataurl.split(','),
+                mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]),
+                n = bstr.length,
+                u8arr = new Uint8Array(n);
+            while(n--){
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, {type:mime});
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const registerCard = document.getElementById('register-card');
-
-            // *** ANIMASI FADE-IN ***
             setTimeout(() => {
                 registerCard.classList.remove('opacity-0');
-            }, 100); // Delay kecil untuk memastikan transisi berjalan lancar
+            }, 100);
 
+            // --- Bagian Canvas Tanda Tangan (Tidak ada perubahan) ---
             const canvas = document.getElementById('signature-pad');
             const ctx = canvas.getContext('2d');
             let isDrawing = false;
-            let lastX = 0;
-            let lastY = 0;
-
+            let lastX = 0, lastY = 0;
             function resizeCanvas() {
                 const ratio = Math.max(window.devicePixelRatio || 1, 1);
                 canvas.width = canvas.offsetWidth * ratio;
@@ -126,31 +135,10 @@
             }
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
-
-            ctx.strokeStyle = '#000000';
-            ctx.lineWidth = 2;
-            ctx.lineJoin = 'round';
-            ctx.lineCap = 'round';
-
-            function getMousePos(canvasDom, mouseEvent) {
-                const rect = canvasDom.getBoundingClientRect();
-                return { x: mouseEvent.clientX - rect.left, y: mouseEvent.clientY - rect.top };
-            }
-            function getTouchPos(canvasDom, touchEvent) {
-                const rect = canvasDom.getBoundingClientRect();
-                return { x: touchEvent.touches[0].clientX - rect.left, y: touchEvent.touches[0].clientY - rect.top };
-            }
-
-            function draw(e) {
-                if (!isDrawing) return;
-                let pos = e.type.startsWith('touch') ? getTouchPos(canvas, e) : getMousePos(canvas, e);
-                ctx.beginPath();
-                ctx.moveTo(lastX, lastY);
-                ctx.lineTo(pos.x, pos.y);
-                ctx.stroke();
-                [lastX, lastY] = [pos.x, pos.y];
-            }
-
+            ctx.strokeStyle = '#000000'; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+            function getMousePos(canvasDom, mouseEvent) { const rect = canvasDom.getBoundingClientRect(); return { x: mouseEvent.clientX - rect.left, y: mouseEvent.clientY - rect.top }; }
+            function getTouchPos(canvasDom, touchEvent) { const rect = canvasDom.getBoundingClientRect(); return { x: touchEvent.touches[0].clientX - rect.left, y: touchEvent.touches[0].clientY - rect.top }; }
+            function draw(e) { if (!isDrawing) return; let pos = e.type.startsWith('touch') ? getTouchPos(canvas, e) : getMousePos(canvas, e); ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(pos.x, pos.y); ctx.stroke(); [lastX, lastY] = [pos.x, pos.y]; }
             canvas.addEventListener('mousedown', (e) => { isDrawing = true; const pos = getMousePos(canvas, e); [lastX, lastY] = [pos.x, pos.y]; });
             canvas.addEventListener('mousemove', draw);
             canvas.addEventListener('mouseup', () => isDrawing = false);
@@ -158,56 +146,98 @@
             canvas.addEventListener('touchstart', (e) => { e.preventDefault(); isDrawing = true; const pos = getTouchPos(canvas, e); [lastX, lastY] = [pos.x, pos.y]; });
             canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
             canvas.addEventListener('touchend', () => isDrawing = false);
-
-            const clearButton = document.getElementById('clear-signature');
-            clearButton.addEventListener('click', () => {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-            });
+            document.getElementById('clear-signature').addEventListener('click', () => { ctx.clearRect(0, 0, canvas.width, canvas.height); });
             
-            const passwordInput = document.getElementById('password');
-            const confirmPasswordInput = document.getElementById('confirm-password');
-
+            // --- 3. Mengubah Logika Pengiriman Form ---
             const registerForm = document.getElementById('register-form');
-            registerForm.addEventListener('submit', (e) => {
+            const registerButton = document.getElementById('register-button');
+
+            registerForm.addEventListener('submit', async (e) => {
                 e.preventDefault();
+                registerButton.disabled = true;
+                registerButton.textContent = 'Memproses...';
+
+                const username = document.getElementById('username').value;
+                const fullName = document.getElementById('fullname').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+                const confirmPassword = document.getElementById('confirm-password').value;
                 
-                if (passwordInput.value !== confirmPasswordInput.value) {
+                if (password !== confirmPassword) {
                     alert('Password dan Konfirmasi Password tidak cocok.');
-                    return; 
+                    registerButton.disabled = false;
+                    registerButton.textContent = 'Register';
+                    return;
                 }
-                
                 const signatureData = canvas.toDataURL();
                 const blank = document.createElement('canvas');
-                blank.width = canvas.width;
-                blank.height = canvas.height;
+                blank.width = canvas.width; blank.height = canvas.height;
                 if (canvas.toDataURL() === blank.toDataURL()) {
                     alert('Tanda tangan tidak boleh kosong.');
+                    registerButton.disabled = false;
+                    registerButton.textContent = 'Register';
                     return;
                 }
 
-                console.log('Username:', document.getElementById('username').value);
-                console.log('Nama Lengkap:', document.getElementById('fullname').value);
-                console.log('Email:', document.getElementById('email').value);
-                console.log('Password:', passwordInput.value);
-                console.log('Data Tanda Tangan:', signatureData);
-                
-                alert('Registrasi berhasil! (Cek data di console)');
+                try {
+                    // A. Mendaftarkan pengguna baru (Authentication)
+                    const { data: authData, error: authError } = await _supabase.auth.signUp({
+                        email: email,
+                        password: password,
+                    });
+
+                    if (authError) throw authError;
+                    if (!authData.user) throw new Error('Registrasi berhasil, namun data pengguna tidak diterima. Cek email verifikasi Anda.');
+                    
+                    const user = authData.user;
+
+                    // B. Mengunggah gambar tanda tangan (Storage)
+                    const fileName = `public/signature-${user.id}-${Date.now()}.png`;
+                    const signatureFile = dataURLtoFile(signatureData, fileName);
+
+                    const { data: uploadData, error: storageError } = await _supabase.storage
+                        .from('signatures')
+                        .upload(fileName, signatureFile);
+
+                    if (storageError) throw storageError;
+
+                    // C. Mendapatkan URL publik dari gambar yang diunggah
+                    const { data: urlData } = _supabase.storage
+                        .from('signatures')
+                        .getPublicUrl(fileName);
+
+                    const signaturePublicUrl = urlData.publicUrl;
+
+                    // D. Memasukkan data ke tabel 'profiles'
+                    const { error: profileError } = await _supabase.from('profiles').insert({
+                        id: user.id, // Kunci utama, sama dengan id pengguna
+                        full_name: fullName,
+                        username: username,
+                        signature_url: signaturePublicUrl // Simpan URL publiknya
+                    });
+
+                    if (profileError) throw profileError;
+
+                    alert('Registrasi berhasil dan data telah disimpan! Silakan cek email Anda untuk verifikasi.');
+                    // Opsional: Arahkan ke halaman login atau reset form
+                    registerForm.reset();
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+
+                } catch (error) {
+                    console.error('Error saat registrasi:', error);
+                    alert(`Terjadi kesalahan: ${error.message}`);
+                } finally {
+                    registerButton.disabled = false;
+                    registerButton.textContent = 'Register';
+                }
             });
 
+            // --- Bagian Toggle Password (Tidak ada perubahan) ---
             function setupPasswordToggle(toggleBtnId, passwordInputId, eyeIconId, eyeSlashIconId) {
-                const toggleButton = document.getElementById(toggleBtnId);
-                const input = document.getElementById(passwordInputId);
-                const eyeIcon = document.getElementById(eyeIconId);
-                const eyeSlashIcon = document.getElementById(eyeSlashIconId);
-
-                toggleButton.addEventListener('click', function() {
-                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
-                    input.setAttribute('type', type);
-                    eyeIcon.classList.toggle('hidden');
-                    eyeSlashIcon.classList.toggle('hidden');
-                });
+                const toggleButton = document.getElementById(toggleBtnId); const input = document.getElementById(passwordInputId); const eyeIcon = document.getElementById(eyeIconId); const eyeSlashIcon = document.getElementById(eyeSlashIconId);
+                toggleButton.addEventListener('click', function() { const type = input.getAttribute('type') === 'password' ? 'text' : 'password'; input.setAttribute('type', type); eyeIcon.classList.toggle('hidden'); eyeSlashIcon.classList.toggle('hidden'); });
             }
-
             setupPasswordToggle('toggle-password', 'password', 'eye-icon', 'eye-slash-icon');
             setupPasswordToggle('toggle-confirm-password', 'confirm-password', 'confirm-eye-icon', 'confirm-eye-slash-icon');
         });
@@ -215,3 +245,4 @@
 
 </body>
 </html>
+
