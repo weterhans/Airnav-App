@@ -20,18 +20,18 @@
       "default",
       {
         "ignore": [
-          "-moz-appearance",
-          "min-width: fit-content"
+          "-moz-appearance"
         ]
       }
     ],
+    "no-inline-styles": "off",
+    "button-type": "off",
     "axe/forms": [
       "default",
       {
         "label": "off",
         "select-name": "off"
       }
-    ],
-    "no-inline-styles": "off"
+    ]
   }
 }

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
 
-        if (sessionStorage.getItem('loggedInUser')) {
+        if (localStorage.getItem('loggedInUser')) {
             splashScreen.style.display = 'none';
             mainContent.classList.remove('opacity-0');
             const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
@@ -108,7 +108,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Renderer: Menerima hasil dari main process:', result);
 
                 if (result && result.success) {
-                    sessionStorage.setItem('loggedInUser', JSON.stringify(result.user));
+                    localStorage.setItem('loggedInUser', JSON.stringify(result.user));
                     const currentPath = window.location.href.substring(0, window.location.href.lastIndexOf('/'));
                     window.location.href = currentPath + '/index.html';
                 } else {

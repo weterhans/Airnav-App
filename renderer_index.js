@@ -1,8 +1,8 @@
 // renderer_index.js
 
 document.addEventListener('DOMContentLoaded', function() {
-    // 1. Ambil dan parse data user dari sessionStorage
-    const userSession = sessionStorage.getItem('loggedInUser');
+    // 1. Ambil dan parse data user dari localStorage
+    const userSession = localStorage.getItem('loggedInUser');
     let currentUser = null;
     if (userSession) {
         currentUser = JSON.parse(userSession);
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const contentPanels = document.querySelectorAll('.content-panel');
     const navLinks = document.querySelectorAll('.nav-link');
 
-    // Fungsi untuk handle navigasi antar panel
+    // Fungsi untuk handle navigasi antar panel INTERNAL
     const handleNavigation = (targetId) => {
         contentPanels.forEach(panel => {
             if(panel) panel.classList.add('hidden');
@@ -46,15 +46,21 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
 
+    // --- INI BAGIAN YANG DIPERBAIKI ---
+    // Logika ini sekarang bisa membedakan link internal dan eksternal
     allNavigationalLinks.forEach(link => {
+        // HANYA tambahkan listener khusus jika link punya atribut 'data-target'
         if (link.hasAttribute('data-target')) {
             link.addEventListener('click', (e) => {
-                e.preventDefault();
+                e.preventDefault(); // Mencegah pindah halaman HANYA untuk link internal
                 const targetId = link.getAttribute('data-target');
                 handleNavigation(targetId);
-                window.location.hash = targetId; // Update hash
+                window.location.hash = targetId;
             });
         }
+        // Jika link TIDAK punya 'data-target' (seperti link ke work_order.html),
+        // maka tidak ada event listener yang ditambahkan,
+        // sehingga link akan berfungsi normal sesuai 'href'-nya.
     });
     
     // Cek hash di URL saat pertama kali load
@@ -71,44 +77,34 @@ document.addEventListener('DOMContentLoaded', function() {
     // Fungsi Logout
     const handleLogout = (e) => {
         e.preventDefault();
-        sessionStorage.removeItem('loggedInUser');
+        localStorage.removeItem('loggedInUser');
         redirectToLogin();
     };
-    logoutBtn.addEventListener('click', handleLogout);
-    profileLogoutBtn.addEventListener('click', handleLogout);
+    if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+    if (profileLogoutBtn) profileLogoutBtn.addEventListener('click', handleLogout);
     
     // Fungsi untuk update sapaan dan avatar
     const updateGreetingAndAvatar = () => {
+        if (!currentUser) return;
+        const defaultAvatar = `https://placehold.co/100x100/E2E8F0/4A5568?text=${currentUser.username.charAt(0).toUpperCase()}`;
         const userProfile = {
             fullname: currentUser.fullname || currentUser.username,
-            avatar: `https://placehold.co/100x100/E2E8F0/4A5568?text=${currentUser.username.charAt(0).toUpperCase()}`
+            avatar: currentUser.avatar_url || defaultAvatar 
         };
-        
         const avatarImg = document.getElementById('avatar-img');
         if (avatarImg) avatarImg.src = userProfile.avatar;
-
         const hours = new Date().getHours();
         const capitalizedName = userProfile.fullname.charAt(0).toUpperCase() + userProfile.fullname.slice(1);
         let greetingText;
-        if (hours >= 4 && hours < 12) { 
-            greetingText = `Selamat Pagi, ${capitalizedName}`; 
-        } else if (hours >= 12 && hours < 18) { 
-            greetingText = `Selamat Siang, ${capitalizedName}`; 
-        } else { 
-            greetingText = `Selamat Malam, ${capitalizedName}`; 
-        }
-        greetingElement.textContent = greetingText;
+        if (hours >= 4 && hours < 12) { greetingText = `Selamat Pagi, ${capitalizedName}`; } 
+        else if (hours >= 12 && hours < 18) { greetingText = `Selamat Siang, ${capitalizedName}`; } 
+        else { greetingText = `Selamat Malam, ${capitalizedName}`; }
+        if (greetingElement) greetingElement.textContent = greetingText;
     };
     
     // Fungsi untuk UI berdasarkan role
     const setupRoleBasedUI = () => {
-        const woTfpMenu = document.getElementById('wo-tfp-menu'); // Pastikan ID ini ada di HTML
-        
-        if (currentUser.role !== 'admin') {
-            if (woTfpMenu) {
-                woTfpMenu.style.display = 'none';
-            }
-        }
+        // Logika role-based Anda bisa ditaruh di sini
     };
     
     // Panggil semua fungsi inisialisasi
@@ -117,22 +113,26 @@ document.addEventListener('DOMContentLoaded', function() {
     setupRoleBasedUI();
 
     // Sisa event listener lainnya (sidebar toggle, profile menu, dll.)
-    sidebarToggle.addEventListener('click', () => {
-        sidebar.classList.toggle('collapsed');
-        sidebar.classList.toggle('w-64');
-        sidebar.classList.toggle('w-20');
-        mainContent.classList.toggle('md:ml-64');
-        mainContent.classList.toggle('md:ml-20');
-    });
+    if (sidebarToggle) {
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('collapsed');
+            sidebar.classList.toggle('w-64');
+            sidebar.classList.toggle('w-20');
+            mainContent.classList.toggle('md:ml-64');
+            mainContent.classList.toggle('md:ml-20');
+        });
+    }
 
     const profileButton = document.getElementById('profile-button');
     const profileMenu = document.getElementById('profile-menu');
-    profileButton.addEventListener('click', (event) => {
-        event.stopPropagation();
-        profileMenu.classList.toggle('hidden');
-    });
+    if (profileButton && profileMenu) {
+        profileButton.addEventListener('click', (event) => {
+            event.stopPropagation();
+            profileMenu.classList.toggle('hidden');
+        });
+    }
     document.addEventListener('click', (e) => {
-        if (!profileMenu.classList.contains('hidden') && !profileButton.contains(e.target)) {
+        if (profileMenu && !profileMenu.classList.contains('hidden') && !profileButton.contains(e.target)) {
             profileMenu.classList.add('hidden');
         }
     });

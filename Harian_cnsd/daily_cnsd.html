@@ -152,7 +152,9 @@
         document.addEventListener('DOMContentLoaded', function() {
             // --- DATA CONTOH & ELEMEN DOM ---
             const reportData = [
-                
+                { date: "7/28/2025", mantek: "-", acknowledge: "-" },
+                { date: "7/28/2025", mantek: "-", acknowledge: "-" },
+                { date: "7/27/2025", mantek: "-", acknowledge: "-" },
             ];
             const technicianList = ["", "-", "-", "-", "-", "-"];
             const equipmentNames = [
@@ -162,13 +164,7 @@
                 'Server Recorder A', 'Server Recorder B', 'PC Recorder Playback', 'NTP Server & Gps', 'ATIS Server A', 'ATIS Server B', 'PC Client Oprator', 'Server AMSC A', 'Server AMSC B', 'Control & Spv console A', 'Control & Spv console B',
                 'Komputer ADPS', 'BO 1 WARRZPZE', 'BO 2 WARRYMYO', 'METEO 1 WARRYMYF', 'METEO 2 WARRYMYO', 'INFORMASI WARRYIYX', 
                 'VCCS - GATE X2 - 01', 'VCCS - GATE X2 - 02', 'VCCS - GATE X2 - 03', 'VCCS - GATE X2 - 04', 'VCCS - GPIF 1-4', 'VCCS - ERIF 1-10', 'VCCS - BCA 1-5', 'VCCS - BCB 1-9', 'CWP1', 'CWP2', 'CWP3', 'CWP4', 'CWP5', 'CWP6', 'CWP7', 'CWP8', 'CWP9', 'CWP10', 'CWP11 (CDU)', 'CWP12',
-                'DVOR', 'DME', 'ILS - Localizer', 'ILS - Glide Path', 'ILS - T-DME', 'MSSR - RMM 1 & 2', 'MSSR - LCMS 1 & 2', 'MSSR - SMP 1 & 2', 'MSSR- RDP 1 & 2', 'ADSB',
-                'ATC - Komputer Server FDP 1 & 2', 'ATC - Komputer Server SDP 1 & 2', 'ATC- Komputer Server FDP RBP', 'ATC - Recording & Playback System', 'ATC - Komputer Client ASD-1 Director', 'ATC - Komputer Client ASD-2 West Sector', 'ATC - Komputer Client ASD-3 East Sector', 'ATC - Komputer Client ASD-4 Supervisor FIR',
-                'ATC - Komputer Client ASD-5 Tower', 'ATC - Komputer Client ASD-6 Suvervisor VFR', 'ATC - Komputer Client ASD-7 MCC', 'ATC - Komputer Client FDD-1 Director', 'ATC - Komputer Client FDD-2 West Sector', 'ATC - Komputer Client FDD-3 East Sector', 'ATC - Komputer Client ASD-4 FDO', 'ATC - Komputer Client FDD-5 Tower', 
-                'ATC - Komputer Client FDD-6 Briefing Office', 'ATC - Komputer Client Data Spesialis', 'ATC - Komputer Client SMC', 'ATC - Komputer Client Playback System',
-                'ASMGCS - SERVER CSP 01', 'ASMGCS - SERVER CSP 02', 'ASMGCS - SERVER COP 01', 'ASMGCS - SERVER COP 02', 'ASMGCS - SERVER WSP', 'ASMGCS - SERVER ANS',
-                'ASMGCS - DP Maintenance', 'ASMGCS - DP 01 Tower', 'ASMGCS - DP 02 Ground', 'ASMGCS - DP 03 Sup Tower', 'ASMGCS - DP Director', 
-
+                'DVOR', 'DME', 'ILS - Localizer', 'ILS - Glide Path', 'ILS - T-DME', 'MSSR - RMM 1 & 2', 'MSSR - LCMS 1 & 2', 'MSSR - SMP 1 & 2', 'MSSR- RDP 1 & 2', 'ADSB',  
             ];
 
             const listElement = document.getElementById('report-list');
