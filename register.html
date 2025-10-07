@@ -54,6 +54,14 @@
                     <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
                     <input type="email" id="email" name="email" required class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent" placeholder="Masukkan alamat email">
                 </div>
+                <div>
+                <label for="jabatan" class="block text-sm font-medium text-gray-700">Jabatan</label>
+                    <select id="jabatan" name="role" required class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent">
+                        <option value="Teknisi">Teknisi</option>
+                        <option value="Supervisor">Supervisor</option>
+                        <option value="Manager">Manager</option>
+                    </select>
+                </div>
                 <div class="relative">
                     <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
                     <input type="password" id="password" name="password" required class="mt-1 block w-full bg-gray-50 border border-gray-300 rounded-lg shadow-sm py-2 px-3 text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-transparent pr-10" placeholder="Buat password">
@@ -92,156 +100,16 @@
         </div>
     </div>
 
-    <script>
-        // 2. Konfigurasi Koneksi ke Supabase
-        const { createClient } = supabase;
+    <div id="custom-alert" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 hidden">
+    <div class="bg-white rounded-2xl shadow-lg p-8 w-full max-w-sm text-center">
+        <p id="alert-message" class="text-gray-700 mb-6">Ini adalah pesan notifikasi.</p>
+        <button id="alert-close-btn" class="bg-indigo-600 hover:bg-blue-800 text-white font-medium py-2 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+            OK
+        </button>
+    </div>
+</div>
 
-        // GANTI DENGAN URL & ANON KEY PROYEK SUPABASE ANDA
-        const SUPABASE_URL = 'https://qiewfizruqbmvktpgpwb.supabase.co'; 
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFpZXdmaXpydXFibXZrdHBncHdiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc5MzEwMDYsImV4cCI6MjA3MzUwNzAwNn0.H6GFhFuS_D61Apjvmfbof9snnodF1IjFTwHDAOnryik';
-
-        // Membuat koneksi (client) ke Supabase
-        const _supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-        // Fungsi bantuan untuk mengubah data URL (dari canvas) menjadi File
-        function dataURLtoFile(dataurl, filename) {
-            let arr = dataurl.split(','),
-                mime = arr[0].match(/:(.*?);/)[1],
-                bstr = atob(arr[1]),
-                n = bstr.length,
-                u8arr = new Uint8Array(n);
-            while(n--){
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new File([u8arr], filename, {type:mime});
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const registerCard = document.getElementById('register-card');
-            setTimeout(() => {
-                registerCard.classList.remove('opacity-0');
-            }, 100);
-
-            // --- Bagian Canvas Tanda Tangan (Tidak ada perubahan) ---
-            const canvas = document.getElementById('signature-pad');
-            const ctx = canvas.getContext('2d');
-            let isDrawing = false;
-            let lastX = 0, lastY = 0;
-            function resizeCanvas() {
-                const ratio = Math.max(window.devicePixelRatio || 1, 1);
-                canvas.width = canvas.offsetWidth * ratio;
-                canvas.height = canvas.offsetHeight * ratio;
-                canvas.getContext('2d').scale(ratio, ratio);
-            }
-            window.addEventListener('resize', resizeCanvas);
-            resizeCanvas();
-            ctx.strokeStyle = '#000000'; ctx.lineWidth = 2; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
-            function getMousePos(canvasDom, mouseEvent) { const rect = canvasDom.getBoundingClientRect(); return { x: mouseEvent.clientX - rect.left, y: mouseEvent.clientY - rect.top }; }
-            function getTouchPos(canvasDom, touchEvent) { const rect = canvasDom.getBoundingClientRect(); return { x: touchEvent.touches[0].clientX - rect.left, y: touchEvent.touches[0].clientY - rect.top }; }
-            function draw(e) { if (!isDrawing) return; let pos = e.type.startsWith('touch') ? getTouchPos(canvas, e) : getMousePos(canvas, e); ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(pos.x, pos.y); ctx.stroke(); [lastX, lastY] = [pos.x, pos.y]; }
-            canvas.addEventListener('mousedown', (e) => { isDrawing = true; const pos = getMousePos(canvas, e); [lastX, lastY] = [pos.x, pos.y]; });
-            canvas.addEventListener('mousemove', draw);
-            canvas.addEventListener('mouseup', () => isDrawing = false);
-            canvas.addEventListener('mouseout', () => isDrawing = false);
-            canvas.addEventListener('touchstart', (e) => { e.preventDefault(); isDrawing = true; const pos = getTouchPos(canvas, e); [lastX, lastY] = [pos.x, pos.y]; });
-            canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); });
-            canvas.addEventListener('touchend', () => isDrawing = false);
-            document.getElementById('clear-signature').addEventListener('click', () => { ctx.clearRect(0, 0, canvas.width, canvas.height); });
-            
-            // --- 3. Mengubah Logika Pengiriman Form ---
-            const registerForm = document.getElementById('register-form');
-            const registerButton = document.getElementById('register-button');
-
-            registerForm.addEventListener('submit', async (e) => {
-                e.preventDefault();
-                registerButton.disabled = true;
-                registerButton.textContent = 'Memproses...';
-
-                const username = document.getElementById('username').value;
-                const fullName = document.getElementById('fullname').value;
-                const email = document.getElementById('email').value;
-                const password = document.getElementById('password').value;
-                const confirmPassword = document.getElementById('confirm-password').value;
-                
-                if (password !== confirmPassword) {
-                    alert('Password dan Konfirmasi Password tidak cocok.');
-                    registerButton.disabled = false;
-                    registerButton.textContent = 'Register';
-                    return;
-                }
-                const signatureData = canvas.toDataURL();
-                const blank = document.createElement('canvas');
-                blank.width = canvas.width; blank.height = canvas.height;
-                if (canvas.toDataURL() === blank.toDataURL()) {
-                    alert('Tanda tangan tidak boleh kosong.');
-                    registerButton.disabled = false;
-                    registerButton.textContent = 'Register';
-                    return;
-                }
-
-                try {
-                    // A. Mendaftarkan pengguna baru (Authentication)
-                    const { data: authData, error: authError } = await _supabase.auth.signUp({
-                        email: email,
-                        password: password,
-                    });
-
-                    if (authError) throw authError;
-                    if (!authData.user) throw new Error('Registrasi berhasil, namun data pengguna tidak diterima. Cek email verifikasi Anda.');
-                    
-                    const user = authData.user;
-
-                    // B. Mengunggah gambar tanda tangan (Storage)
-                    const fileName = `public/signature-${user.id}-${Date.now()}.png`;
-                    const signatureFile = dataURLtoFile(signatureData, fileName);
-
-                    const { data: uploadData, error: storageError } = await _supabase.storage
-                        .from('signatures')
-                        .upload(fileName, signatureFile);
-
-                    if (storageError) throw storageError;
-
-                    // C. Mendapatkan URL publik dari gambar yang diunggah
-                    const { data: urlData } = _supabase.storage
-                        .from('signatures')
-                        .getPublicUrl(fileName);
-
-                    const signaturePublicUrl = urlData.publicUrl;
-
-                    // D. Memasukkan data ke tabel 'profiles'
-                    const { error: profileError } = await _supabase.from('profiles').insert({
-                        id: user.id, // Kunci utama, sama dengan id pengguna
-                        full_name: fullName,
-                        username: username,
-                        signature_url: signaturePublicUrl // Simpan URL publiknya
-                    });
-
-                    if (profileError) throw profileError;
-
-                    alert('Registrasi berhasil dan data telah disimpan! Silakan cek email Anda untuk verifikasi.');
-                    // Opsional: Arahkan ke halaman login atau reset form
-                    registerForm.reset();
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-
-                } catch (error) {
-                    console.error('Error saat registrasi:', error);
-                    alert(`Terjadi kesalahan: ${error.message}`);
-                } finally {
-                    registerButton.disabled = false;
-                    registerButton.textContent = 'Register';
-                }
-            });
-
-            // --- Bagian Toggle Password (Tidak ada perubahan) ---
-            function setupPasswordToggle(toggleBtnId, passwordInputId, eyeIconId, eyeSlashIconId) {
-                const toggleButton = document.getElementById(toggleBtnId); const input = document.getElementById(passwordInputId); const eyeIcon = document.getElementById(eyeIconId); const eyeSlashIcon = document.getElementById(eyeSlashIconId);
-                toggleButton.addEventListener('click', function() { const type = input.getAttribute('type') === 'password' ? 'text' : 'password'; input.setAttribute('type', type); eyeIcon.classList.toggle('hidden'); eyeSlashIcon.classList.toggle('hidden'); });
-            }
-            setupPasswordToggle('toggle-password', 'password', 'eye-icon', 'eye-slash-icon');
-            setupPasswordToggle('toggle-confirm-password', 'confirm-password', 'confirm-eye-icon', 'confirm-eye-slash-icon');
-        });
-    </script>
+<script src="./renderer_register.js"></script> </body>
 
 </body>
 </html>
