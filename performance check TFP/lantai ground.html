@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Check AOB Lantai Ground - AirNav Indonesia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Times New Roman','Times New Roman';
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #003366;
+            padding-bottom: 15px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #0066cc 0%, #003366 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .company-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #003366;
+        }
+        
+        .header-info {
+            text-align: right;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+            color: #003366;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 11px;
+        }
+        
+        th, td {
+            border: 1px solid #000;
+            padding: 6px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #d3d3d3;
+            font-weight: bold;
+        }
+        
+        .gray-row {
+            background-color: #c0c0c0;
+        }
+        
+        .left-align {
+            text-align: left;
+            padding-left: 10px;
+        }
+        
+        .input-field {
+            width: 95%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            padding: 2px;
+        }
+        
+        .input-field:focus {
+            outline: 1px solid #003366;
+            background: #ffffcc;
+        }
+        
+        .footer-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 11px;
+        }
+        
+        .footer-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px;
+            border: 1px solid #000;
+        }
+        
+        .footer-label {
+            font-weight: bold;
+        }
+        
+        .technician-section {
+            margin-top: 15px;
+        }
+        
+        .tech-table td {
+            padding: 10px;
+        }
+        
+        .note {
+            font-size: 10px;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        
+        @media print {
+            body {
+                padding: 0;
+                background: white;
+            }
+            .container {
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo-section">
+                <img src="../img/airnav.png" alt="AirNav Indonesia" style="width: 120px; height: auto; object-fit: contain;">
+                <div class="company-name">AirNav Indonesia</div>
+            </div>
+            <div class="header-info">
+                <div><strong>Perum LPPNPI</strong></div>
+                <div><strong>Cabang Surabaya</strong></div>
+                <div><strong>Teknik Fasilitas Penunjang</strong></div>
+            </div>
+        </div>
+
+        <!-- Title -->
+        <div class="title">Performance Check AOB Lantai Ground</div>
+
+        <!-- Main Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2">No.</th>
+                    <th rowspan="2">Parameter</th>
+                    <th colspan="2">Panel COS (A 03)</th>
+                    <th colspan="2">Panel ATS (A 12)</th>
+                    <th colspan="2">UPS GAMA</th>
+                    <th rowspan="2">Nama Fasilitas</th>
+                    <th rowspan="2">Kondisi</th>
+                    <th rowspan="2">Keterangan</th>
+                </tr>
+                <tr>
+                    <th>Input</th>
+                    <th>Output</th>
+                    <th>Input</th>
+                    <th>Output</th>
+                    <th>Input</th>
+                    <th>Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="left-align">L1 - N (Volt)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">Catu Daya Listrik</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="left-align">L2 - N (Volt)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">Penerangan</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="left-align">L3 - N (Volt)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">UPS GAMA</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="left-align">N - G (Volt)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">AC 01 (Split Wall) Eq</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field" value="A"></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td class="left-align">L1 - L2 (Volt)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">AC 02 (Split Wall) Eq</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field" value="A"></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td class="left-align">L1 - L3 (Volt)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td class="left-align">AC 03 (Split Wall) Eq</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field" value="A"></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td class="left-align">L2 - L3 (Volt)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td class="left-align">AC 04 (Split Wall) Eq</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field" value="A"></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td class="left-align">L1 (Ampere)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">AC 05 (Split Wall) Gd 21</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field" value="A"></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td class="left-align">L2 (Ampere)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">AC 06 (Split Wall) MCC</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field" value="A"></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td class="left-align">L3 (Ampere)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">AC 07 (Split Wall) MCC</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field" value="A"></td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td class="left-align">N (Ampere)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">AC 08 (Split Wall) ARO</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field" value="A"></td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td class="left-align">Frekuensi (Hz)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">Exhaust Fan Gudang</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td class="left-align">Power Factor (Cos θ)</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">Exhaust Fan Toilet L/P</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td class="left-align">Tegangan Battery (Volt)</td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">Exhaust Fan MCC Room</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td class="left-align">Arus Battery (Ampere)</td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">Exhaust Fan Pantry</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td class="left-align">Kapasitas Battery (Ah)</td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">Papan Nama AirNav</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td class="left-align">Suhu Battery (°C)</td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td class="left-align">Atap</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td class="left-align">Mode *</td>
+                    <td colspan="2">Auto / Manual</td>
+                    <td colspan="2">Auto / Manual</td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td class="left-align">Plafond</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td class="left-align">Suplai Aktif *</td>
+                    <td colspan="2">PLN / UPS</td>
+                    <td colspan="2">PLN 1 / PLN 2</td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td class="left-align">Dinding</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td class="left-align">KWH Meter</td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td colspan="2"><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td class="left-align">Pintu</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td class="left-align">Suhu Eq. Room (°C)</td>
+                    <td colspan="2"><input type="text" class="input-field"></td>
+                    <td colspan="2"><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td class="left-align">Door Lock</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>22</td>
+                    <td class="left-align">Suhu Ruang ARO (°C)</td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td colspan="2" class="gray-row"><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Waktu Pelaksanaan -->
+        <table>
+            <tr>
+                <td colspan="2" style="background-color: #d3d3d3;"><strong>Waktu Pelaksanaan</strong></td>
+                <td><strong>Hari:</strong></td>
+                <td><input type="text" class="input-field" value=""></td>
+                <td><strong>Tanggal:</strong></td>
+                <td><input type="text" class="input-field" value=""></td>
+                <td><strong>Jam:</strong></td>
+                <td><input type="text" class="input-field" value=""></td>
+            </tr>
+        </table>
+
+        <!-- Technician Section -->
+        <div class="technician-section">
+            <table class="tech-table">
+                <tr>
+                    <th>No.</th>
+                    <th>Pelaksana Teknisi</th>
+                    <th>Paraf</th>
+                    <th>Supervisor</th>
+                    <th colspan="2">MANAGER TEKNIK </th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td></td>
+                    <td rowspan="4"></td>
+                    <td rowspan="4"></td>
+                    <td rowspan="4" colspan="2"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td></td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Note -->
+        <div class="note">
+            (*) Coret yang tidak perlu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kondisi : (√) Baik / Normal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (x) Tidak Baik / Tidak Normal
+        </div>
+    </div>
+
+    <script>
+        // Auto-populate date
+        const today = new Date();
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        
+        // Print functionality
+        function printForm() {
+            window.print();
+        }
+        
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'p') {
+                e.preventDefault();
+                printForm();
+            }
+        });
+    </script>
+</body>
+</html>

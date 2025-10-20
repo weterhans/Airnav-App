@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Meter Reading - AirNav Indonesia (Form C-3)</title>
+<style>
+  /* Basic page */
+  @page { size: A4; margin: 20mm; }
+  body {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #000;
+    margin: 0;
+    padding: 20px;
+  }
+  table { border-collapse: collapse; width: 100%; }
+  td, th {
+    border: 1px solid #000;
+    padding: 4px 5px;
+    vertical-align: middle;
+  }
+  .no-border { border: none !important; }
+
+  /* Header */
+  .logo { width: 110px; display:block; }
+  .header-right {
+    background-color: #1f4e79;
+    color: #fff;
+    padding: 8px;
+    font-size: 12px;
+  }
+  .title {
+    text-align: center;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 6px 0;
+  }
+
+  /* recorder box */
+  .recorder {
+    background-color: #3b6b36;
+    color: #fff;
+    font-weight: 700;
+    text-align: center;
+  }
+
+  /* table colors */
+  .thead-green { background-color: #c6e0b4; font-weight: 700; text-align: center; }
+  .section-green { background-color: #d9ead3; font-weight: 700; padding: 6px; }
+  .us-cell { background-color: #ff4c4c; color: #fff; font-weight: 700; text-align:center; }
+
+  /* inputs */
+  input[type="text"], select{
+    width: 96%;
+    border: none;
+    padding: 2px 4px;
+    font-size: 12px;
+    background: transparent;
+  }
+  input[type="text"]:focus, select:focus {
+    outline: 1px dashed #2b78d0;
+    background: #fff;
+  }
+
+  select {
+    width: 100%;
+    cursor: pointer;
+  }
+
+  .info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #000;
+  }
+
+  /* small helpers */
+  .center { text-align:center; }
+  .bold { font-weight:700; }
+
+  /* Print Button */
+  .print-button {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 12px 30px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+  }
+
+  .print-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+  }
+
+  .btn-save-table {
+    background-color: #FF9800;
+  }
+
+  .btn-save-table:hover {
+    background-color: #e68900;
+  }
+
+  .btn-cancel {
+    background-color: #f44336;
+  }
+
+  .btn-cancel:hover {
+    background-color: #da190b;
+  }
+
+  .button-container {
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  /* print tweaks */
+  @media print {
+    input[type="text"], select { 
+      background: transparent; 
+      border: none;
+    
+    }
+    body { margin: 0; padding: 0; }
+    .print-button {
+      display: none !important;
+    }
+    .info-row {
+      border: 1px solid #000;
+    }
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+    
+    body {
+      font-size: 9px;
+    }
+    
+    th, td {
+      padding: 3px 5px;
+      font-size: 9px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<table style="margin-bottom:4px;">
+  <tr>
+    <td colspan="2" style="width:30%; vertical-align: top; border-right:none;">
+      <img src="../img/airnav.png" alt="AirNav Indonesia" class="logo">
+      <div style="margin-top:3px; font-weight:700; font-size:11px;">AirNav Indonesia</div>
+    </td>
+    <td colspan="2" style="width:40%; text-align:center; vertical-align:middle; border-left:none; border-right:none;">
+      <div style="border-top:3px solid #000; border-bottom:3px solid #000; padding:5px 0; margin:0 10px;">
+        <div class="title">METER READING</div>
+      </div>
+    </td>
+    <td style="width:70%; vertical-align: top; text-align:left; border-left:none;">
+      <div style="font-size:10px; line-height:1.4;">
+        <div style="font-weight:700;">Perum LPPNPI</div>
+        <div style="font-weight:700;">KANTOR CABANG SURABAYA</div>
+        <div>Telp: (031)8688456 Fax: (031)8688536</div>
+        <div>email: sub@airnavindonesia.co.id</div>
+        <div>Web: www.airnavindonesia.co.id</div>
+      </div>
+    </td>
+  </tr>
+</table>
+
+<!-- SUBHEADER / IDENTITAS -->
+<table style="margin-top:2px;">
+  <tr>
+    <td style="width:10%; font-weight:700;">LOKASI</td>
+    <td style="width:30%">: CABANG SURABAYA</td>
+    <td class="recorder" style="width:38%;">RECORDER</td>
+    <td style="width:22%; text-align:center;">
+      <div style="color:#1f4e79; font-weight:700; font-size:11px;">FAS CNS &amp; A</div>
+      <div style="font-weight:700; font-size:12px;">FORM C-3</div>
+    </td>
+  </tr>
+</table>
+
+<div class="info-row">
+  <strong>TGL/JAM :</strong>
+  <div style="flex: 1; display: flex; gap: 10px; align-items: center;">
+    <input type="date" id="tanggal" style="width: 130px;">
+    <select id="shift" style="width: 160px;">
+      <option value="pagi">Pagi (07:00-13:00)</option>
+      <option value="siang">Siang (13:00-19:00)</option>
+      <option value="malam">Malam (19:00-07:00)</option>
+    </select>
+  </div>
+</div>
+
+<table style="margin-top:2px;">
+  <tr>
+    <td style="width:10%; font-weight:700;">MERK</td>
+    <td style="width:30%">: ATIS - UHER</td>
+    <td style="width:10%; font-weight:700;">TYPE</td>
+    <td style="width:30%">: VC - MDx</td>
+    <td style="width:8%; font-weight:700;">S N</td>
+    <td style="width:12%">: 51</td>
+  </tr>
+</table>
+
+<!-- A. PERALATAN -->
+<div class="section-green" style="margin-top:8px;">A. PERALATAN</div>
+
+<table style="margin-top:4px;">
+  <tr>
+    <th style="width:3%" class="thead-green">NO</th>
+    <th style="width:33%" class="thead-green">PEMBACAAN METER READING</th>
+    <th style="width:18%" class="thead-green">NOMINAL</th>
+    <th style="width:11%" class="thead-green">HASIL PEMERIKSAAN<br></th>
+    <th style="width:11%" class="thead-green">HASIL PEMERIKSAAN<br></th>
+    <th style="width:24%" class="thead-green">KETERANGAN</th>
+  </tr>
+
+  <!-- 1 KVM -->
+  <tr>
+    <td class="center" rowspan="2">1</td>
+    <td><span class="bold">KVM</span></td>
+    <td class="center"><span class="bold">Standart</span></td>
+    <td class="center"><input type="text"></td>
+    <td class="center"><input type="text"></td>
+    <td><input type="text"></td>  
+  </tr>
+  <tr>
+    <td>All Status Indikator</td>
+    <td class="center">Normal / Alrm</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="Normal">Normal</option>
+        <option value="Alrm">Alrm</option>
+      </select>
+    </td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="Normal">Normal</option>
+        <option value="Alrm">Alrm</option>
+      </select>
+    </td>
+    <td><input type="text"></td>
+  </tr>
+
+  <!-- 2 SERVER -->
+  <tr>
+    <td class="center" rowspan="3">2</td>
+    <td><span class="bold">SERVER</span></td>
+    <td rowspan="3" class="center">√ / –</td>
+    <td class="center"><input type="text"></td>
+    <td class="center"><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td>Main Server</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td>Standby server</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td><input type="text"></td>
+  </tr>
+
+  <!-- 3 POWER -->
+  <tr>
+    <td class="center" rowspan="3">3</td>
+    <td><span class="bold">POWER</span></td>
+    <td rowspan="3"></td>
+    <td class="center"><input type="text"></td>
+    <td class="center"><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td>AC</td>
+    <td class="center"><input type="text"></td>
+    <td class="center"><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td>DC</td>
+    <td class="center"><input type="text"></td>
+    <td class="center"><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+
+  <!-- Channels 1-64 -->
+  <tr><td></td><td>Channel 1</td><td>Ground Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 2</td><td>Ground Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 3</td><td>Tower Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 4</td><td>Tower Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 5</td><td>Director Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 6</td><td>Director Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 7</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 8</td><td>East Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 9</td><td>West Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 10</td><td>West Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 11</td><td>Blora Primary 125.1MHz</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 12</td><td>DS DHQ/DO KEDIRI</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 13</td><td>MKS-ER Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 14</td><td>MKS-ER Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 15</td><td>ATIS</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 16</td><td>EMERGENCY</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 17</td><td>CDU FUNKE</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 18</td><td>CDU Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 19</td><td>CDU Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 20</td><td>Blora Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 21</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 22</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 23</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 24</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 25</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 26</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 27</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 28</td><td>DS Jogja</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 29</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 30</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 31</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 32</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 33</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 34</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 35</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
+  <tr><td></td><td>Channel 36</td><td>Telp TOWER 581</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 37</td><td>Telp TOWER 110</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 38</td><td>Telp APP 597</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 39</td><td>Telp APP 8655223</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 40</td><td>TRUNKING TOWER</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 41</td><td>Frequentis Control Tower</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 42</td><td>Frequentis Ass Tower</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 43</td><td>Frequentis Control GND</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 44</td><td>Frequentis Control CDU</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 45</td><td>Frequentis East Asst</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 46</td><td>Frequentis East Control</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 47</td><td>Frequentis West Asst</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 48</td><td>Frequentis West Controller</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 49</td><td>Frequentis Director Asst</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 50</td><td>Frequentis Director Control</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 51</td><td>Frequentis Supervisor APP</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 52</td><td>DS Banjarmasin</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 53</td><td>DS Pangkalbun (Pangkabun)</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 54</td><td>DS JAKARTA</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 55</td><td>DS MKS-EAST</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 56</td><td>DS MKS-WEST</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 57</td><td>DS BALI</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 58</td><td>DS SEMARANG</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 59</td><td>DS BALI INFO</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 60</td><td>DS MALANG</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 61</td><td>DS YIA</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 62</td><td>DS MADIUN</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 63</td><td>EAST SECONDARY</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td></td><td>Channel 64</td><td>DS UPG PKN</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
+</table>
+
+<!-- B. LINGKUNGAN KERJA -->
+<div class="section-green" style="margin-top:12px;">B. LINGKUNGAN KERJA</div>
+<table style="margin-top:4px;">
+  <tr>
+    <th style="width:2%" class="thead-green">NO</th>
+    <th style="width:34%" class="thead-green">KEGIATAN</th>
+    <th style="width:15%" class="thead-green">NOMINAL</th>
+    <th style="width:15%" class="thead-green">HASIL</th>
+    <th style="width:10%" class="thead-green">KETERANGAN</th>
+  </tr>
+  <tr>
+    <td class="center">1</td>
+    <td>PEMERIKSAAN SUHU RUANGAN</td>
+    <td>&lt; 22 &deg;C</td>
+    <td class="center"><input type="text"></td>
+    <td class="center"><input type="text"></td>
+  </tr>
+  <tr>
+    <td class="center">2</td>
+    <td>PEMERIKSAAN AIR HUMIDITY</td>
+    <td class="center">√ / -</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td class="center"><input type="text"></td>
+  </tr>
+  <tr>
+    <td class="center">3</td>
+    <td>PEMERIKSAAN KEBERSIHAN RUANGAN</td>
+    <td class="center">√ / -</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td class="center"><input type="text"></td>
+  </tr>
+</table>
+
+<!-- TANDA TANGAN -->
+<table style="margin-top:12px;">
+  <tr class="thead-green">
+    <th colspan="3">TEKNISI</th>
+    <th>SUPERVISOR</th>
+    <th>MANAGER TEKNIK</th>
+  </tr>
+  <tr>
+    <td>No</td>
+    <td>Nama</td>
+    <td>Paraf</td>
+    <td rowspan="6" style="text-align:center; vertical-align:bottom;">
+      ( <input type="text" placeholder="Nama Supervisor" style="width:90%;"> )
+    </td>
+    <td rowspan="6" style="text-align:center; vertical-align:bottom;">
+      ( <input type="text" placeholder="Nama Manager Teknik" style="width:90%;"> )
+    </td>
+  </tr>
+  <tr><td>1</td><td><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td>2</td><td><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td>3</td><td><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td>4</td><td><input type="text"></td><td><input type="text"></td></tr>
+  <tr><td>5</td><td><input type="text"></td><td><input type="text"></td></tr>
+</table>
+
+<div class="button-container">
+  <button class="print-button btn-save-table" onclick="saveToTable()">📊 SAVE TO TABLE</button>
+  <button class="print-button" onclick="window.print()">🖨️ CETAK / PRINT</button>
+  <button class="print-button btn-cancel" onclick="batalForm()">❌ BATAL</button>
+</div>
+
+<script>
+  function setTanggalHariIni() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    document.getElementById('tanggal').value = yyyy + '-' + mm + '-' + dd;
+  }
+
+  function tentukanShiftOtomatis() {
+    const now = new Date();
+    const jam = now.getHours();
+    
+    if (jam >= 7 && jam < 13) {
+      return 'pagi';
+    } else if (jam >= 13 && jam < 19) {
+      return 'siang';
+    } else {
+      return 'malam';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', function() {
+    setTanggalHariIni();
+    const shiftOtomatis = tentukanShiftOtomatis();
+    document.getElementById('shift').value = shiftOtomatis;
+  });
+
+  // Fungsi Save to Table
+  function saveToTable() {
+    const tanggal = document.getElementById('tanggal').value;
+    const shift = document.getElementById('shift').options[document.getElementById('shift').selectedIndex].text;
+    
+    if (!tanggal) {
+      alert('⚠️ Mohon isi tanggal terlebih dahulu!');
+      return;
+    }
+
+    // Kumpulkan semua data input dan select
+    const allInputs = document.querySelectorAll('input[type="text"]');
+    const allSelects = document.querySelectorAll('select:not(#shift)');
+    
+    const formData = {
+      timestamp: new Date().toLocaleString('id-ID'),
+      tanggal: tanggal,
+      shift: shift,
+      dataCount: allInputs.length + allSelects.length,
+      filledCount: 0
+    };
+
+    // Hitung jumlah field yang terisi
+    allInputs.forEach(input => {
+      if (input.value.trim() !== '') formData.filledCount++;
+    });
+    allSelects.forEach(select => {
+      if (select.value !== '') formData.filledCount++;
+    });
+
+    // Simpan ke memori (array)
+    if (!window.savedRecords) {
+      window.savedRecords = [];
+    }
+    
+    window.savedRecords.push(formData);
+    
+    alert(`✅ Data berhasil disimpan!\n\n` +
+          `Tanggal: ${tanggal}\n` +
+          `Shift: ${shift}\n` +
+          `Field terisi: ${formData.filledCount}/${formData.dataCount}\n` +
+          `Total record tersimpan: ${window.savedRecords.length}`);
+    
+    console.log('Data tersimpan:', formData);
+    console.table(window.savedRecords);
+  }
+
+  // Fungsi Batal (Reset form)
+  function batalForm() {
+    if (confirm('⚠️ Apakah Anda yakin ingin membatalkan dan mengosongkan semua form?\n\nSemua data yang belum disimpan akan hilang!')) {
+      // Reset semua input text
+      document.querySelectorAll('input[type="text"]').forEach(input => {
+        input.value = '';
+      });
+
+      // Reset semua select (kecuali shift)
+      document.querySelectorAll('select:not(#shift)').forEach(select => {
+        select.selectedIndex = 0;
+      });
+
+      // Reset tanggal dan shift ke default
+      setTanggalHariIni();
+      const shiftOtomatis = tentukanShiftOtomatis();
+      document.getElementById('shift').value = shiftOtomatis;
+
+      alert('✅ Form berhasil direset!\n\nSemua data telah dikosongkan.');
+    }
+  }
+
+  // Tambahan: Fungsi untuk melihat data yang tersimpan
+  function lihatDataTersimpan() {
+    if (!window.savedRecords || window.savedRecords.length === 0) {
+      alert('📋 Belum ada data yang tersimpan.');
+      return;
+    }
+    
+    console.table(window.savedRecords);
+    alert(`📊 Total data tersimpan: ${window.savedRecords.length} record\n\nLihat detail di Console (F12)`);
+  }
+</script>
+
+</body>
+</html>

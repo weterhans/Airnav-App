@@ -36,8 +36,7 @@
 </head>
 <body class="bg-gray-100">
 
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <!-- Header Halaman -->
+    <div class="p-4 sm:p-6 lg:p-8">
         <header class="bg-white shadow-md rounded-lg p-4 mb-6 flex items-center justify-between">
             <div class="flex items-center">
                 <a href="../index.html#cnsd-content" class="p-2 rounded-md hover:bg-gray-200" aria-label="Kembali ke Dashboard">
@@ -48,9 +47,7 @@
             <img src="../img/airnav_logo.png" alt="Logo AirNav" class="w-10 h-10 object-contain" onerror="this.onerror=null;this.src='https://placehold.co/40x40/FFFFFF/255A9B?text=A';">
         </header>
 
-        <!-- Main Content -->
         <main class="bg-white p-6 rounded-lg shadow-md">
-            <!-- Aksi Tambah Kegiatan -->
             <div class="mb-6 flex justify-end">
                 <button id="add-activity-button" class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-airnav-blue transition-colors text-sm font-medium flex items-center gap-2">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
@@ -58,7 +55,6 @@
                 </button>
             </div>
             
-            <!-- Tabel Kegiatan -->
             <div class="overflow-x-auto">
                 <table class="w-full min-w-max text-sm text-left text-gray-600">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-100">
@@ -76,12 +72,12 @@
                             <th scope="col" class="px-4 py-3">Teknisi</th>
                             <th scope="col" class="px-4 py-3">Waktu Terputus</th>
                             <th scope="col" class="px-4 py-3">Lampiran</th>
+                            <th scope="col" class="px-4 py-3">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="activity-table-body">
-                        <!-- Data dari database akan diisi di sini -->
-                         <tr id="empty-row" class="text-center">
-                           <td colspan="13" class="py-10 px-4 text-gray-500">
+                        <tr id="empty-row" class="text-center">
+                           <td colspan="14" class="py-10 px-4 text-gray-500">
                                 <p>Belum ada data kegiatan.</p>
                                 <p class="text-sm">Silakan tambahkan kegiatan baru.</p>
                            </td>
@@ -92,18 +88,16 @@
         </main>
     </div>
 
-    <!-- Modal Tambah Kegiatan -->
     <div id="add-activity-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
         <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl">
-            <!-- Modal Header -->
             <div class="flex justify-between items-center p-4 border-b">
-                <h3 class="text-lg font-semibold text-gray-800">Tambah Kegiatan Baru</h3>
+                <h3 id="modal-title" class="text-lg font-semibold text-gray-800">Tambah Kegiatan Baru</h3>
                 <button id="close-modal-button" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
-            <!-- Modal Body -->
             <form id="activity-form" class="modal-body p-6 space-y-4">
+                <input type="hidden" id="activity-db-id" name="id">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                         <label for="activity-code" class="block text-sm font-medium text-gray-700">Kode</label>
@@ -117,6 +111,10 @@
                             <option value="Siang">Siang</option>
                             <option value="Malam">Malam</option>
                         </select>
+                    </div>
+                    <div>
+                        <label for="activity-date" class="block text-sm font-medium text-gray-700">Tanggal</label>
+                        <input type="date" id="activity-date" name="activity-date" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500" required>
                     </div>
                     <div>
                         <label for="activity-start-time" class="block text-sm font-medium text-gray-700">Waktu Mulai</label>
@@ -160,94 +158,51 @@
                 <div>
                     <label class="block text-sm font-medium text-gray-700">Teknisi</label>
                     <div id="technician-dropdowns" class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2">
-                        <!-- Dropdown teknisi akan di-generate oleh JavaScript -->
+                        </div>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700">Lampiran</label>
+                    <div id="attachment-container" class="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                        <div id="existing-attachment-preview" class="contents"></div>
+                        
+                        <div id="new-attachment-preview" class="contents"></div>
+
+                        <label for="activity-attachment" class="flex flex-col items-center justify-center w-full h-24 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <svg class="w-8 h-8 mb-2 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 16">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 13h3a3 3 0 0 0 0-6h-.025A5.56 5.56 0 0 0 16 6.5 5.5 5.5 0 0 0 5.207 5.021C5.137 5.017 5.071 5 5 5a4 4 0 0 0 0 8h2.167M10 15V6m0 0L8 8m2-2 2 2"/>
+                                </svg>
+                                <p class="text-xs text-gray-500"><span class="font-semibold">Tambah file</span></p>
+                            </div>
+                            <input id="activity-attachment" name="activity-attachment[]" type="file" class="sr-only" multiple accept="image/*">
+                        </label>
                     </div>
                 </div>
-                 <div>
-                    <label for="activity-attachment" class="block text-sm font-medium text-gray-700">Lampiran</label>
-                    <input type="file" id="activity-attachment" name="activity-attachment[]" multiple class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"/>
-                    <p class="text-xs text-gray-500 mt-1">Anda bisa memilih lebih dari satu file (gambar/foto).</p>
-                </div>
             </form>
-            <!-- Modal Footer -->
             <div class="flex justify-end items-center p-4 border-t bg-gray-50 rounded-b-lg">
                 <button id="cancel-button" type="button" class="bg-white text-gray-700 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 text-sm font-medium mr-2">Batal</button>
                 <button type="submit" form="activity-form" class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-airnav-blue transition-colors text-sm font-medium">Simpan Kegiatan</button>
             </div>
         </div>
     </div>
+
+    <div id="image-lightbox" class="fixed inset-0 bg-black bg-opacity-80 z-[100] flex items-center justify-center p-4 hidden">
+        <div class="relative max-w-4xl max-h-full">
+            <img id="lightbox-image" src="" alt="Image Preview" class="w-auto h-auto max-w-full max-h-[90vh] object-contain">
+            <button id="close-lightbox-button" class="absolute -top-2 -right-2 text-white bg-red-600 rounded-full p-2 hover:bg-red-700 transition-colors" aria-label="Tutup preview">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+    </div>
     
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // --- Elemen-elemen ---
-            const addActivityButton = document.getElementById('add-activity-button');
-            const addActivityModal = document.getElementById('add-activity-modal');
-            const closeModalButton = document.getElementById('close-modal-button');
-            const cancelButton = document.getElementById('cancel-button');
-            const activityForm = document.getElementById('activity-form');
-            const activityCodeInput = document.getElementById('activity-code');
-            const technicianDropdownsContainer = document.getElementById('technician-dropdowns');
+    <script src="./renderer_kegiatan_cnsd.js"></script>
 
-             // --- DATA CONTOH (Harusnya diambil dari database) ---
-            const technicianList = [
-                "Moch. Ichsan","Khoirul M.A.", "Argo Pragolo", "Amirzah Ridho W.", "Tria Sabda Utama",
-                "Febri Dwi C", "M. Yusuf Triono", "Dani Ridzal", "Nur Shella Firdaus",
-                "Saiful Bahris", "Erazuardi Zulfahmi"
-            ];
-            
-            // --- Fungsi untuk generate dropdown teknisi ---
-            const createTechnicianDropdowns = () => {
-                technicianDropdownsContainer.innerHTML = '';
-                for (let i = 1; i <= 5; i++) {
-                    const select = document.createElement('select');
-                    select.name = `teknisi-${i}`;
-                    select.className = 'block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm';
-                    
-                    const defaultOption = document.createElement('option');
-                    defaultOption.value = '';
-                    defaultOption.textContent = `Pilih Teknisi ${i}` + (i > 1 ? ' (Opsional)' : '');
-                    select.appendChild(defaultOption);
-                    
-                    technicianList.forEach(name => {
-                        const option = document.createElement('option');
-                        option.value = name;
-                        option.textContent = name;
-                        select.appendChild(option);
-                    });
-                    
-                    technicianDropdownsContainer.appendChild(select);
-                }
-            };
-            
-            // --- Logika Modal ---
-            const openModal = () => {
-                const timestamp = Date.now();
-                activityCodeInput.value = `KG-${timestamp.toString().slice(-6)}`;
-                addActivityModal.classList.remove('hidden');
-            };
-            const closeModal = () => addActivityModal.classList.add('hidden');
-
-            addActivityButton.addEventListener('click', openModal);
-            closeModalButton.addEventListener('click', closeModal);
-            cancelButton.addEventListener('click', closeModal);
-            addActivityModal.addEventListener('click', (event) => {
-                if (event.target === addActivityModal) closeModal();
-            });
-
-            // --- Logika Navigasi Baris Tabel ---
-            const rows = document.querySelectorAll('.clickable-row');
-            rows.forEach(row => {
-                row.addEventListener('click', () => {
-                    const href = row.dataset.href;
-                    if (href) window.location.href = href;
-                });
-            });
-
-            // --- Inisialisasi ---
-            createTechnicianDropdowns();
-        });
-    </script>
-
+    <div id="toast-notification" class="hidden fixed top-5 right-5 z-[100] flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x divide-gray-200 rounded-lg shadow-lg space-x transition-opacity duration-300" role="alert">
+        <div id="toast-icon" class="text-2xl">
+            </div>
+        <div id="toast-message" class="pl-4 text-sm font-normal">
+            </div>
+    </div>
+    
 </body>
 </html>
-

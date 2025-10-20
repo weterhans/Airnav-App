@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>METER READING AMSC</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 11px;
+    color: #000;
+    padding: 15px;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  th, td {
+    border: 1px solid #000;
+    padding: 4px 6px;
+    text-align: left;
+    vertical-align: middle;
+  }
+
+  /* Header */
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+  }
+
+  .header-left {
+    width: 30%;
+  }
+
+  .header-left img {
+    width: 80px;
+    display: block;
+  }
+
+  .header-left-text {
+    color: #0b5394;
+    font-weight: bold;
+    font-size: 11px;
+    margin-top: 4px;
+  }
+
+  .header-right {
+    text-align: left;
+    width: 35%;
+    border: 2px solid #000;
+    padding: 6px;
+    font-size: 10px;
+    line-height: 1.4;
+  }
+
+  .header-right b {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 2px;
+  }
+
+  .header-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+    margin: 8px 0;
+    border: 2px solid #000;
+    padding: 6px;
+  }
+
+  /* table colors */
+  .thead-green { background-color: #c6e0b4; font-weight: 700; text-align: center; }
+  .section-green { background-color: #d9ead3; font-weight: 700; padding: 6px; }
+  .us-cell { background-color: #ff4c4c; color: #fff; font-weight: 700; text-align:center; }
+
+  /* Info Section */
+  .info-section {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+   select {
+    width: 100%;
+    cursor: pointer;
+  }
+
+    .info-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+    padding: 8px;
+    border: 1px solid #000;
+  }
+
+  /* small helpers */
+  .center { text-align:center; }
+  .bold { font-weight:700; }
+
+
+  .info-table {
+    width: 32%;
+    border-collapse: collapse;
+  }
+
+  .info-table td {
+    border: 1px solid #000;
+    padding: 4px 6px;
+    font-weight: bold;
+    font-size: 10px;
+  }
+
+  .info-amsc {
+    width: 32%;
+    background-color: #cfe2f3;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
+    border: 2px solid #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Table Styles */
+  .header-biru {
+    background-color: #cfe2f3;
+    font-weight: bold;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  .baris-hijau {
+    background-color: #b6d7a8;
+    font-weight: bold;
+    text-align: left;
+    font-size: 10px;
+  }
+
+  .header-hijau {
+    background-color: #b6d7a8;
+    font-weight: bold;
+    text-align: center;
+    font-size: 10px;
+  }
+
+  .nominal-grey {
+    background-color: #d9d9d9;
+    text-align: center;
+  }
+
+  .center {
+    text-align: center;
+  }
+
+  input[type="text"] {
+    width: 95%;
+    border: none;
+    background: transparent;
+    font-size: 10px;
+    padding: 2px;
+    text-align: center;
+  }
+
+  input[type="text"]:focus {
+    outline: 1px solid #2196F3;
+    background: #fff;
+  }
+
+  /* Print Button */
+  .print-button {
+    display: inline-block;
+    margin: 10px 5px;
+    padding: 10px 30px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+    transition: all 0.3s;
+  }
+
+  .print-button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+  }
+
+  .btn-save-table {
+    background-color: #FF9800;
+  }
+
+  .btn-save-table:hover {
+    background-color: #e68900;
+  }
+
+  .btn-cancel {
+    background-color: #f44336;
+  }
+
+  .btn-cancel:hover {
+    background-color: #da190b;
+  }
+
+  .button-container {
+    text-align: center;
+    margin: 20px 0;
+  }
+
+/* print tweaks */
+  @media print {
+    input[type="text"], select { 
+      background: transparent; 
+      border: none;
+    
+    }
+    body { margin: 0; padding: 0; }
+    .print-button {
+      display: none !important;
+    }
+    .info-row {
+      border: 1px solid #000;
+    }
+    @page {
+      size: A4;
+      margin: 10mm;
+    }
+    
+    body {
+      font-size: 9px;
+    }
+    
+    th, td {
+      padding: 3px 5px;
+      font-size: 9px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header-container">
+  <div class="header-left">
+    <img src="../img/airnav.png" alt="AirNav Indonesia">
+    <div class="header-left-text">FAS CNS & OTOMASI</div>
+  </div>
+  <div class="header-right">
+    <b>Perum LPPNPI</b>
+    KANTOR CABANG SURABAYA<br>
+    Telp. (031)8688456 Fax: (031) 8688536<br>
+    email: sub@airnavindonesia.co.id<br>
+    Web: www.airnavindonesia.co.id
+  </div>
+</div>
+
+<div class="header-title">METER READING</div>
+
+<!-- INFO SECTION -->
+<div class="info-section">
+  <table style="margin-top: 4px; border-collapse: collapse; width: 100%;">
+  <tr>
+    <td style="width: 15%;"><b>LOKASI</b></td>
+    <td style="width: 2%;">:</td>
+    <td>KANTOR CABANG SURABAYA</td>
+  </tr>
+  <tr>
+    <td><b>TGL & JAM</b></td>
+    <td>:</td>
+    <td>
+      <input type="date" id="tanggal" style="width: 150px;">
+      <select id="shift" style="width: 200px; margin-left: 5px;">
+        <option value="pagi">Pagi (07:00–13:00)</option>
+        <option value="siang">Siang (13:00–19:00)</option>
+        <option value="malam">Malam (19:00–07:00)</option>
+      </select>
+    </td>
+  </tr>
+</table>
+  <div class="info-amsc">AMSC</div>
+
+  <table class="info-table">
+    <tr>
+      <td style="width:30%">MERK</td>
+      <td>: ELSA</td>
+    </tr>
+    <tr>
+      <td>TYPE</td>
+      <td>: 1003Qi+</td>
+    </tr>
+    <tr>
+      <td>S/N</td>
+      <td>: -</td>
+    </tr>
+  </table>
+</div>
+
+<!-- 1. FRONT PANEL -->
+<table>
+  <tr class="header-biru">
+    <th rowspan="2" style="width:5%">NO</th>
+    <th rowspan="2" style="width:35%">PEMBACAAN METER READING</th>
+    <th rowspan="2" style="width:15%">NOMINAL</th>
+    <th colspan="2" style="width:25%">HASIL</th>
+    <th rowspan="2" style="width:20%">KETERANGAN</th>
+  </tr>
+  <tr class="header-biru">
+    <th style="width:12.5%">A</th>
+    <th style="width:12.5%">B</th>
+  </tr>
+
+  <tr class="baris-hijau">
+    <td class="center">1</td>
+    <td><b>FRONT PANEL</b></td>
+    <td class="center"><b>Standart</b></td>
+    <td></td>
+    <td></td>
+    <td></td>
+  </tr>
+
+  <tr>
+    <td></td>
+    <td>All Status Indikator</td>
+   <td class="center">Normal / Alrm</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="Normal">Normal</option>
+        <option value="Alrm">Alrm</option>
+      </select>
+    </td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="Normal">Normal</option>
+        <option value="Alrm">Alrm</option>
+      </select>
+    </td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Operatinol Server</td>
+    <td class="center">√ / –</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td><input type="text"></td>
+   </tr> 
+  
+  <tr>
+    <td></td>
+    <td>Signal selector</td>
+    <td class="center">√ / –</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td><input type="text"></td>
+   </tr> 
+  <tr>
+    <td></td>
+    <td>Change Over</td>
+    <td class="center">√ / –</td>
+ <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td><input type="text"></td>
+   </tr> 
+  <tr>
+    <td></td>
+    <td>Clock Signal</td>
+    <td class="center">OK / NOT</td>
+ <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="OK">OK</option>
+        <option value="NOT">NOT</option>
+      </select>
+    </td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="OK">NOT</option>
+        <option value="OK">NOT</option>
+      </select>
+    </td>
+    <td><input type="text"></td>
+   </tr> 
+</table>
+
+<!-- 2. POWER SUPPLY UNIT -->
+<table>
+  <tr class="baris-hijau">
+    <td class="center" style="width:5%">2</td>
+    <td style="width:35%"><b>POWER SUPPLY UNIT</b></td>
+    <td class="center" style="width:15%"><b>Standart</b></td>
+    <td colspan="2" class="center" style="width:25%"><b>HASIL</b></td>
+    <td style="width:20%"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>+ 60 V</td>
+    <td class="nominal-grey"></td>
+    <td colspan="2"><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>- 60 V</td>
+    <td class="nominal-grey"></td>
+    <td colspan="2"><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>+ 12 V</td>
+    <td class="nominal-grey"></td>
+    <td colspan="2"><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>+ 5 V</td>
+    <td class="nominal-grey"></td>
+    <td colspan="2"><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>- 12 V</td>
+    <td class="nominal-grey"></td>
+    <td colspan="2"><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+</table>
+
+<!-- 3. CHANNEL AMSC -->
+<table>
+  <tr class="baris-hijau">
+    <td class="center" style="width:5%">3</td>
+    <td style="width:35%"><b>CHANNEL AMSC</b></td>
+    <td class="center" style="width:15%"><b>ADDRESS</b></td>
+    <td class="center" style="width:12.5%"><b>STATUS</b></td>
+    <td class="center" style="width:12.5%"><b>CCT</b></td>
+    <td style="width:20%"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 1</td>
+    <td class="center">TO MKS</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 2</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 3</td>
+    <td class="center">WARD</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="AMHS Kediri"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 4</td>
+    <td class="center">WARRAODB</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 5</td>
+    <td class="center">WARRASMB</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="ASMGCS"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 6</td>
+    <td class="center">WARRZPZE</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="ARO"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 7</td>
+    <td class="center">WARRAWOS</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="Awos"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 8</td>
+    <td class="center">WARRBILL</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 9</td>
+    <td class="center">WARRWARA</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="Malang"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 10</td>
+    <td class="center">WARRYMYE</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 11</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="Meteo"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 12</td>
+    <td class="center">WARRATIS</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 13</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 14</td>
+    <td class="center">WARRCOMX</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 15</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 16</td>
+    <td class="center">TO MKS</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 17</td>
+    <td class="center"></td>
+    <td><input type="text" value="U/S"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="ALTRN CH01"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 18</td>
+    <td class="center">WARRAODB</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 19</td>
+    <td class="center"></td>
+    <td><input type="text" value="U/S"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="ALTRN CH04"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 20</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 21</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 22</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 23</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 24</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 25</td>
+    <td class="center">WARRASMG</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 26</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 27</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 28</td>
+    <td class="center">WARRZEZA</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 29</td>
+    <td class="center">WARRYFYA</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="SPV Correction ARO"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 30</td>
+    <td class="center">WARRYFYB</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="SPV Correction Lt.2 AMSC"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 31</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="Teleprinter Monitor 1"></td>
+  </tr>
+  <tr>
+    <td></td>
+    <td>Channel 32</td>
+    <td class="center"></td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+    <td><input type="text" value="Teleprinter Monitor 2"></td>
+  </tr>
+</table>
+
+<!-- B. LINGKUNGAN KERJA -->
+<div class="section-green" style="margin-top:12px;">B. LINGKUNGAN KERJA</div>
+<table style="margin-top:4px;">
+  <tr>
+    <th style="width:2%" class="thead-green">NO</th>
+    <th style="width:34%" class="thead-green">KEGIATAN</th>
+    <th style="width:15%" class="thead-green">NOMINAL</th>
+    <th style="width:15%" class="thead-green">HASIL</th>
+    <th style="width:10%" class="thead-green">KETERANGAN</th>
+  </tr>
+  <tr>
+    <td class="center">1</td>
+    <td>PEMERIKSAAN SUHU RUANGAN</td>
+    <td>&lt; 22 &deg;C</td>
+    <td class="center"><input type="text"></td>
+    <td class="center"><input type="text"></td>
+  </tr>
+  <tr>
+    <td class="center">2</td>
+    <td>PEMERIKSAAN AIR HUMIDITY</td>
+    <td class="center">√ / -</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td class="center"><input type="text"></td>
+  </tr>
+  <tr>
+    <td class="center">3</td>
+    <td>PEMERIKSAAN KEBERSIHAN RUANGAN</td>
+    <td class="center">√ / -</td>
+    <td class="center">
+      <select>
+        <option value="">-- Pilih --</option>
+        <option value="√">√</option>
+        <option value="–">–</option>
+      </select>
+    </td>
+    <td class="center"><input type="text"></td>
+  </tr>
+</table>
+
+<!-- TANDA TANGAN -->
+<table>
+  <tr class="header-hijau">
+    <th colspan="3">TEKNISI</th>
+    <th>SUPERVISOR</th>
+    <th>MANAGER TEKNIK</th>
+  </tr>
+  <tr>
+    <td class="center" style="width:5%">No</td>
+    <td class="center" style="width:25%">Nama</td>
+    <td class="center" style="width:20%">Paraf</td>
+    <td rowspan="6" style="width:25%; text-align:center; vertical-align:bottom; padding-bottom:15px;">
+      ( <input type="text" placeholder="Nama Supervisor" style="border:none; border-bottom:1px solid #000; width:85%; text-align:center;"> )
+    </td>
+    <td rowspan="6" style="width:25%; text-align:center; vertical-align:bottom; padding-bottom:15px;">
+      ( <input type="text" placeholder="Nama Manager Teknik" style="border:none; border-bottom:1px solid #000; width:85%; text-align:center;"> )
+    </td>
+  </tr>
+  <tr>
+    <td class="center">1</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td class="center">2</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td class="center">3</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td class="center">4</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+  <tr>
+    <td class="center">5</td>
+    <td><input type="text"></td>
+    <td><input type="text"></td>
+  </tr>
+</table>
+
+<div class="button-container">
+  <button class="print-button btn-save-table" onclick="saveToTable()">📊 SAVE TO TABLE</button>
+  <button class="print-button" onclick="window.print()">🖨️ CETAK / PRINT</button>
+  <button class="print-button btn-cancel" onclick="batalForm()">❌ BATAL</button>
+</div>
+
+<script>
+  function setTanggalHariIni() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    document.getElementById('tanggal').value = yyyy + '-' + mm + '-' + dd;
+  }
+
+  function tentukanShiftOtomatis() {
+    const now = new Date();
+    const jam = now.getHours();
+    
+    if (jam >= 7 && jam < 13) {
+      return 'pagi';
+    } else if (jam >= 13 && jam < 19) {
+      return 'siang';
+    } else {
+      return 'malam';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', function() {
+    setTanggalHariIni();
+    const shiftOtomatis = tentukanShiftOtomatis();
+    document.getElementById('shift').value = shiftOtomatis;
+  });
+
+  // Fungsi Save to Table
+  function saveToTable() {
+    const tanggal = document.getElementById('tanggal').value;
+    const shift = document.getElementById('shift').options[document.getElementById('shift').selectedIndex].text;
+    
+    if (!tanggal) {
+      alert('⚠️ Mohon isi tanggal terlebih dahulu!');
+      return;
+    }
+
+    // Kumpulkan semua data input dan select
+    const allInputs = document.querySelectorAll('input[type="text"]');
+    const allSelects = document.querySelectorAll('select:not(#shift)');
+    
+    const formData = {
+      timestamp: new Date().toLocaleString('id-ID'),
+      tanggal: tanggal,
+      shift: shift,
+      dataCount: allInputs.length + allSelects.length,
+      filledCount: 0
+    };
+
+    // Hitung jumlah field yang terisi
+    allInputs.forEach(input => {
+      if (input.value.trim() !== '') formData.filledCount++;
+    });
+    allSelects.forEach(select => {
+      if (select.value !== '') formData.filledCount++;
+    });
+
+    // Simpan ke memori (array)
+    if (!window.savedRecords) {
+      window.savedRecords = [];
+    }
+    
+    window.savedRecords.push(formData);
+    
+    alert(`✅ Data berhasil disimpan!\n\n` +
+          `Tanggal: ${tanggal}\n` +
+          `Shift: ${shift}\n` +
+          `Field terisi: ${formData.filledCount}/${formData.dataCount}\n` +
+          `Total record tersimpan: ${window.savedRecords.length}`);
+    
+    console.log('Data tersimpan:', formData);
+    console.table(window.savedRecords);
+  }
+
+  // Fungsi Batal (Reset form)
+  function batalForm() {
+    if (confirm('⚠️ Apakah Anda yakin ingin membatalkan dan mengosongkan semua form?\n\nSemua data yang belum disimpan akan hilang!')) {
+      // Reset semua input text
+      document.querySelectorAll('input[type="text"]').forEach(input => {
+        input.value = '';
+      });
+
+      // Reset semua select (kecuali shift)
+      document.querySelectorAll('select:not(#shift)').forEach(select => {
+        select.selectedIndex = 0;
+      });
+
+      // Reset tanggal dan shift ke default
+      setTanggalHariIni();
+      const shiftOtomatis = tentukanShiftOtomatis();
+      document.getElementById('shift').value = shiftOtomatis;
+
+      alert('✅ Form berhasil direset!\n\nSemua data telah dikosongkan.');
+    }
+  }
+
+  // Tambahan: Fungsi untuk melihat data yang tersimpan
+  function lihatDataTersimpan() {
+    if (!window.savedRecords || window.savedRecords.length === 0) {
+      alert('📋 Belum ada data yang tersimpan.');
+      return;
+    }
+    
+    console.table(window.savedRecords);
+    alert(`📊 Total data tersimpan: ${window.savedRecords.length} record\n\nLihat detail di Console (F12)`);
+  }
+</script>
+
+</body>
+</html>

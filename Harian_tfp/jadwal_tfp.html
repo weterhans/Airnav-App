@@ -32,7 +32,7 @@
 </head>
 <body class="bg-gray-100">
 
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+    <div class="p-4 sm:p-6 lg:p-8">
         <!-- Header Halaman -->
         <header class="bg-white shadow-md rounded-lg p-4 mb-6 flex items-center justify-between">
             <div class="flex items-center">
@@ -68,14 +68,16 @@
                             <th scope="col" class="px-4 py-3">Teknisi 3</th>
                             <th scope="col" class="px-4 py-3">Teknisi 4</th>
                             <th scope="col" class="px-4 py-3">Teknisi 5</th>
+                            <th scope="col" class="px-4 py-3">Teknisi 6</th>
                             <th scope="col" class="px-4 py-3">Kode</th>
-                            <th scope="col" class="px-4 py-3 rounded-r-lg">Grup</th>
+                            <th scope="col" class="px-4 py-3">Grup</th>
+                            <th scope="col" class="px-4 py-3 rounded-r-lg">Aksi</th>
                         </tr>
                     </thead>
                     <tbody id="schedule-table-body">
                         <!-- Data jadwal dari database akan dimasukkan di sini melalui JavaScript -->
                         <tr id="empty-row" class="text-center">
-                           <td colspan="11" class="py-10 px-4 text-gray-500">
+                           <td colspan="13" class="py-10 px-4 text-gray-500">
                                 <p>Tidak ada data jadwal untuk ditampilkan.</p>
                                 <p class="text-sm">Silakan tambahkan jadwal baru.</p>
                            </td>
@@ -91,13 +93,14 @@
         <div class="bg-white rounded-lg shadow-xl w-full max-w-lg">
             <!-- Modal Header -->
             <div class="flex justify-between items-center p-4 border-b">
-                <h3 class="text-lg font-semibold text-gray-800">Tambah Jadwal Baru</h3>
+                <h3 id="modal-title" class="text-lg font-semibold text-gray-800">Tambah Jadwal Baru</h3>
                 <button id="close-modal-button" class="text-gray-400 hover:text-gray-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                 </button>
             </div>
             <!-- Modal Body -->
             <form id="schedule-form" class="modal-body p-6 space-y-4">
+                <input type="hidden" id="schedule-db-id" name="id">
                 <div>
                     <label for="schedule-id" class="block text-sm font-medium text-gray-700">ID Jadwal</label>
                     <input type="text" id="schedule-id" name="schedule-id" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 bg-gray-50" required>
@@ -130,108 +133,7 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const addScheduleButton = document.getElementById('add-schedule-button');
-            const addScheduleModal = document.getElementById('add-schedule-modal');
-            const closeModalButton = document.getElementById('close-modal-button');
-            const cancelButton = document.getElementById('cancel-button');
-            const scheduleForm = document.getElementById('schedule-form');
-            const scheduleIdInput = document.getElementById('schedule-id');
-            const scheduleDateInput = document.getElementById('schedule-date');
-            const technicianDropdownsContainer = document.getElementById('technician-dropdowns');
-
-            // --- DATA CONTOH (Harusnya diambil dari database) ---
-            const technicianList = [
-                "Iqbal Mustika", "Fajar Nugroho", "Bian Prasetia H.", "Sofi Dwi Hidayati",
-                "Yoga Arifal P", "Karang Samudra", "M. Feizar Noor", "Fajar Kusuma W.",
-                "Dwi Prasetyo Adi", "Andhika Bhaskara J.", "Agustina Anggreini"
-            ];
-            
-            // --- Fungsi untuk generate dropdown teknisi ---
-            const createTechnicianDropdowns = () => {
-                technicianDropdownsContainer.innerHTML = ''; // Kosongkan dulu
-                for (let i = 1; i <= 5; i++) {
-                    const select = document.createElement('select');
-                    select.name = `teknisi-${i}`;
-                    select.className = 'block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm';
-
-                    // Opsi default
-                    const defaultOption = document.createElement('option');
-                    defaultOption.value = '';
-                    defaultOption.textContent = `Pilih Teknisi ${i}` + (i > 1 ? ' (Opsional)' : '');
-                    select.appendChild(defaultOption);
-                    
-                    // Isi dengan daftar teknisi
-                    technicianList.forEach(name => {
-                        const option = document.createElement('option');
-                        option.value = name;
-                        option.textContent = name;
-                        select.appendChild(option);
-                    });
-                    
-                    technicianDropdownsContainer.appendChild(select);
-                }
-            };
-
-            // --- Logika Modal ---
-            const openModal = () => {
-                // Generate ID otomatis berdasarkan timestamp
-                const timestamp = Date.now();
-                const autoId = `TFP-${timestamp.toString().slice(-6)}`;
-                scheduleIdInput.value = autoId;
-
-                // Set tanggal hari ini secara otomatis
-                const today = new Date();
-                const yyyy = today.getFullYear();
-                const mm = String(today.getMonth() + 1).padStart(2, '0'); // Januari adalah 0
-                const dd = String(today.getDate()).padStart(2, '0');
-                scheduleDateInput.value = `${yyyy}-${mm}-${dd}`;
-                
-                addScheduleModal.classList.remove('hidden');
-            };
-
-            const closeModal = () => addScheduleModal.classList.add('hidden');
-
-            addScheduleButton.addEventListener('click', openModal);
-            closeModalButton.addEventListener('click', closeModal);
-            cancelButton.addEventListener('click', closeModal);
-
-            addScheduleModal.addEventListener('click', function(event) {
-                if (event.target === addScheduleModal) {
-                    closeModal();
-                }
-            });
-
-            // --- Logika Form Submit ---
-            scheduleForm.addEventListener('submit', function(event) {
-                event.preventDefault(); 
-                
-                const formData = new FormData(scheduleForm);
-                const teknisi = [];
-                for(let i=1; i<=5; i++){
-                    const teknisiName = formData.get(`teknisi-${i}`);
-                    if(teknisiName) {
-                        teknisi.push(teknisiName);
-                    }
-                }
-
-                console.log('Form Disubmit:');
-                console.log('ID Jadwal:', formData.get('schedule-id'));
-                console.log('Tanggal:', formData.get('schedule-date'));
-                console.log('Dinas:', formData.get('schedule-shift'));
-                console.log('Teknisi:', teknisi);
-
-                alert('Data jadwal baru telah disimpan! (Cek console log untuk detail)');
-                
-                scheduleForm.reset();
-                closeModal();
-            });
-
-            // --- Inisialisasi ---
-            createTechnicianDropdowns(); // Panggil fungsi untuk membuat dropdown saat halaman dimuat
-        });
-    </script>
+    <script src="./renderer_jadwal_tfp.js"></script>
 
 </body>
 </html>

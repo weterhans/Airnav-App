@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>METER READING - REPRODUCER ATIS</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      font-size: 11px;
+      color: #000;
+      padding: 20px;
+      background: #fff;
+    }
+
+    .container {
+      max-width: 210mm;
+      margin: 0 auto;
+      border: 2px solid #000;
+    }
+
+    .header-section {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px;
+      border-bottom: 2px solid #000;
+    }
+
+    .header-left {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .logo {
+      width: 70px;
+      height: 70px;
+      flex-shrink: 0;
+    }
+
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .header-title {
+      font-size: 13px;
+    }
+
+    .header-title .company {
+      font-size: 16px;
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+
+    .header-right {
+      text-align: right;
+      font-size: 10px;
+      line-height: 1.5;
+    }
+
+    .header-right .title {
+      font-weight: bold;
+      margin-bottom: 2px;
+    }
+
+    .title-section {
+      background: #e6e6e6;
+      padding: 8px;
+      text-align: center;
+      border-bottom: 2px solid #000;
+    }
+
+    .title-section h1 {
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .info-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-bottom: 2px solid #000;
+    }
+
+    .info-left {
+      padding: 10px;
+      border-right: 2px solid #000;
+    }
+
+    .info-right {
+      padding: 10px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .info-row {
+      margin-bottom: 5px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .equipment-section {
+      display: flex;
+      gap: 20px;
+      padding: 8px 10px;
+      border-bottom: 2px solid #000;
+    }
+
+    .equipment-item {
+      display: flex;
+      gap: 5px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      border: 1px solid #000;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      background-color: #a8d3e6;
+      text-align: center;
+      font-weight: bold;
+      font-size: 11px;
+    }
+
+    .section-header {
+      background-color: #dbe5f1;
+      font-weight: bold;
+      padding: 6px 8px;
+    }
+
+    .subsection-green {
+      background-color: #c5d9a4;
+      font-weight: bold;
+    }
+
+    .col-no {
+      width: 5%;
+      text-align: center;
+    }
+
+    .col-pemeriksaan {
+      width: 40%;
+    }
+
+    .col-nominal {
+      width: 20%;
+      text-align: center;
+    }
+
+    .col-reading {
+      width: 17%;
+    }
+
+    .col-keterangan {
+      width: 18%;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    select {
+      width: 100%;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 11px;
+      font-family: Arial, sans-serif;
+      padding: 2px;
+    }
+
+    input[type="date"],
+    select {
+      border: 1px solid #ccc;
+      padding: 3px;
+      background: white;
+    }
+
+    .center {
+      text-align: center;
+    }
+
+    .footer-table {
+      border-top: 2px solid #000;
+    }
+
+    .footer-table th {
+      background-color: #dbe5f1;
+      padding: 8px;
+    }
+
+    .footer-cell {
+      height: 100px;
+      vertical-align: top;
+      padding: 10px;
+    }
+
+    .print-button {
+      display: inline-block;
+      margin: 10px 5px;
+      padding: 12px 30px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+      transition: all 0.3s;
+    }
+
+    .print-button:hover {
+      background-color: #45a049;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    }
+
+    .btn-save-folder {
+      background-color: #2196F3;
+    }
+
+    .btn-save-folder:hover {
+      background-color: #0b7dda;
+    }
+
+    .btn-save-table {
+      background-color: #FF9800;
+    }
+
+    .btn-save-table:hover {
+      background-color: #e68900;
+    }
+
+    .btn-cancel {
+      background-color: #f44336;
+    }
+
+    .btn-cancel:hover {
+      background-color: #da190b;
+    }
+
+    .button-container {
+      text-align: center;
+      margin: 20px 0;
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 5mm;
+      }
+
+      body {
+        padding: 0;
+        margin: 0;
+        font-size: 9px;
+      }
+
+      .print-button {
+        display: none !important;
+      }
+
+      .button-container {
+        display: none !important;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 100%;
+        border: 1.5px solid #000;
+        page-break-inside: avoid;
+        page-break-after: avoid;
+      }
+
+      .header-section {
+        padding: 8px 10px;
+      }
+
+      .header-left {
+        gap: 10px;
+      }
+
+      .logo {
+        width: 55px;
+        height: 55px;
+      }
+
+      .header-title {
+        font-size: 10px;
+      }
+
+      .header-title .company {
+        font-size: 13px;
+      }
+
+      .header-right {
+        font-size: 9px;
+        line-height: 1.4;
+      }
+
+      .title-section {
+        padding: 6px;
+      }
+
+      .title-section h1 {
+        font-size: 14px;
+      }
+
+      .info-section {
+        font-size: 9px;
+      }
+
+      .info-left, .info-right {
+        padding: 8px 10px;
+      }
+
+      .info-row {
+        margin-bottom: 4px;
+        gap: 6px;
+      }
+
+      .equipment-section {
+        padding: 6px 10px;
+        gap: 15px;
+      }
+
+      .equipment-item {
+        gap: 4px;
+        font-size: 9px;
+      }
+
+      table {
+        font-size: 9px;
+        margin-bottom: 0;
+      }
+
+      th, td {
+        padding: 3px 5px;
+        font-size: 9px;
+        line-height: 1.3;
+      }
+
+      th {
+        font-size: 9px;
+      }
+
+      .section-header {
+        padding: 4px 6px;
+      }
+
+      input[type="text"],
+      input[type="date"],
+      select {
+        font-size: 9px;
+        padding: 2px 3px;
+        border: none !important;
+      }
+
+      .footer-cell {
+        height: 70px;
+        padding: 8px;
+      }
+
+      * {
+        page-break-inside: avoid;
+      }
+
+      tr {
+        page-break-inside: avoid;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+
+<div class="container">
+  <div class="header-section">
+    <div class="header-left">
+      <div class="logo">
+        <img src="../img/airnav.png" alt="AirNav Logo">
+      </div>
+      <div class="header-title">
+        <div class="company">AirNav Indonesia</div>
+        <div>FAS CNS & OTOMASI</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="title">Perum LPPNPI<br>KANTOR CABANG SURABAYA</div>
+      <div>Telp: (031)8683456 Fax: (031) 8583536</div>
+      <div>email: sub@airnavindonesia.co.id</div>
+      <div>Web: www.airnavindonesia.co.id</div>
+    </div>
+  </div>
+
+  <div class="title-section">
+    <h1>METER READING</h1>
+  </div>
+
+  <div class="info-section">
+    <div class="info-left">
+      <div class="info-row">
+        <strong>LOKASI :</strong>
+        <input type="text" value="CABANG SURABAYA" style="flex: 1;">
+      </div>
+      <div class="info-row">
+        <strong>TGL/JAM :</strong>
+        <div style="flex: 1; display: flex; gap: 10px; align-items: center;">
+          <input type="date" id="tanggal" style="width: 130px;">
+          <select id="shift" style="width: 160px;">
+            <option value="pagi">Pagi (07:00-13:00)</option>
+            <option value="siang">Siang (13:00-19:00)</option>
+            <option value="malam">Malam (19:00-07:00)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="info-right">
+      <div style="margin-bottom: 5px;">REPRODUCER ATIS</div>
+      <input type="text" style="text-align: center; font-size: 12px;">
+    </div>
+  </div>
+
+  <div class="equipment-section">
+    <div class="equipment-item">
+      <strong>MERK :</strong>
+      <input type="text" value="TERMA" style="width: 100px;">
+    </div>
+    <div class="equipment-item">
+      <strong>TYPE :</strong>
+      <input type="text" style="width: 100px;">
+    </div>
+    <div class="equipment-item">
+      <strong>S N :</strong>
+      <input type="text" style="width: 100px;">
+    </div>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="col-no">NO</th>
+        <th class="col-pemeriksaan">PEMERIKSAAN</th>
+        <th class="col-nominal">NOMINAL</th>
+        <th class="col-reading">READING</th>
+        <th class="col-keterangan">KETERANGAN</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td colspan="5" class="section-header">A TERMA RCM</td>
+      </tr>
+      <tr>
+        <td class="center">1</td>
+        <td class="subsection-green">REMOTE CONTROL AND MONITORING</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- System Status</td>
+        <td class="center">Dual</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- Main Server</td>
+        <td class="center">ATIS A / B</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- ATIS_A Status</td>
+        <td class="center">OK / NO</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- ATIS_B Status</td>
+        <td class="center">OK / NO</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+
+      <tr>
+        <td colspan="2" class="section-header">A TERMA ATIS PLUS SYSTEM</td>
+        <td class="center" style="background: #dbe5f1; font-weight: bold;">NOMINAL</td>
+        <td colspan="2" class="center" style="background: #dbe5f1; font-weight: bold;">Reading</td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td class="subsection-green">ATIS</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="center">1</td>
+        <td>- System Time</td>
+        <td class="center">Time</td>
+        <td><input type="text" placeholder=": :"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- Last Update System</td>
+        <td class="center">Time</td>
+        <td><input type="text" placeholder=": :"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- Runway In Use</td>
+        <td class="center">10 / 28</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- CNNH</td>
+        <td class="center">Dual</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- Info</td>
+        <td class="center">Freq Tower</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- ATIS_A</td>
+        <td class="center">Main / Stby</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- ATIS_B</td>
+        <td class="center">Main / Stby</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+
+      <tr>
+        <td></td>
+        <td class="subsection-green">ADMIN</td>
+        <td></td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td class="center">2</td>
+        <td>- Speech Rate</td>
+        <td class="center" style="font-size: 10px;">100 word/minute</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- Atis Time Out</td>
+        <td class="center">Minutes</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- Update Mode</td>
+        <td class="center" style="font-size: 10px;">Automatic/Manual</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- Speech Type</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>- Voice Update</td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+        <td><input type="text"></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <table>
+    <tr>
+      <th colspan="3">TEKNISI</th>
+      <th>SUPERVISOR</th>
+      <th>MANAGER TEKNIK</th>
+    </tr>
+    <tr>
+      <td>No</td>
+      <td>Nama</td>
+      <td>Paraf</td>
+      <td rowspan="6" style="text-align:center; vertical-align:bottom; padding-bottom: 15px;">
+        <div style="height: 90px;"></div>
+        ( <input type="text" placeholder="Nama Supervisor" style="border:none; border-bottom:1px solid #000; width:85%; text-align:center;"> )
+      </td>
+      <td rowspan="6" style="text-align:center; vertical-align:bottom; padding-bottom: 15px;">
+        <div style="height: 90px;"></div>
+        ( <input type="text" placeholder="Nama Manager Teknik" style="border:none; border-bottom:1px solid #000; width:85%; text-align:center;"> )
+      </td>
+    </tr>
+    <tr><td>1</td><td><input type="text"></td><td><input type="text"></td></tr>
+    <tr><td>2</td><td><input type="text"></td><td><input type="text"></td></tr>
+    <tr><td>3</td><td><input type="text"></td><td><input type="text"></td></tr>
+    <tr><td>4</td><td><input type="text"></td><td><input type="text"></td></tr>
+    <tr><td>5</td><td><input type="text"></td><td><input type="text"></td></tr>
+  </table>
+</div>
+
+<div class="button-container">
+  <button class="print-button btn-save-table" onclick="saveToTable()">📊 SAVE TO TABLE</button>
+  <button class="print-button" onclick="window.print()">🖨️ CETAK / PRINT</button>
+  <button class="print-button btn-cancel" onclick="batalForm()">❌ BATAL</button>
+</div>
+
+<script>
+  function setTanggalHariIni() {
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    const dd = String(today.getDate()).padStart(2, '0');
+    document.getElementById('tanggal').value = yyyy + '-' + mm + '-' + dd;
+  }
+
+  function tentukanShiftOtomatis() {
+    const now = new Date();
+    const jam = now.getHours();
+    
+    if (jam >= 7 && jam < 13) {
+      return 'pagi';
+    } else if (jam >= 13 && jam < 19) {
+      return 'siang';
+    } else {
+      return 'malam';
+    }
+  }
+
+  window.addEventListener('DOMContentLoaded', function() {
+    setTanggalHariIni();
+    const shiftOtomatis = tentukanShiftOtomatis();
+    document.getElementById('shift').value = shiftOtomatis;
+  });
+
+  // Fungsi Save to Folder (Download sebagai HTML)
+  function saveToFolder() {
+    // Kumpulkan semua data dari form
+    const formData = {
+      tanggal: document.getElementById('tanggal').value,
+      shift: document.getElementById('shift').options[document.getElementById('shift').selectedIndex].text,
+      lokasi: document.querySelector('.info-left input[type="text"]').value
+    };
+
+    // Clone container untuk disimpan
+    const container = document.querySelector('.container').cloneNode(true);
+    
+    // Buat file HTML lengkap
+    const htmlContent = `
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Meter Reading - ${formData.tanggal} - ${formData.shift}</title>
+  <style>${document.querySelector('style').textContent}</style>
+</head>
+<body>
+  ${container.outerHTML}
+</body>
+</html>`;
+
+    // Download file
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `MeterReading_ATIS_${formData.tanggal}_${formData.shift.split(' ')[0]}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    alert('✅ File berhasil disimpan ke folder Downloads!');
+  }
+
+  // Fungsi Save to Table (Simpan ke localStorage sebagai tabel)
+  function saveToTable() {
+    // Kumpulkan data form
+    const formData = {
+      timestamp: new Date().toLocaleString('id-ID'),
+      tanggal: document.getElementById('tanggal').value,
+      shift: document.getElementById('shift').options[document.getElementById('shift').selectedIndex].text,
+      lokasi: document.querySelector('.info-left input[type="text"]').value,
+      reproducerAtis: document.querySelectorAll('.info-right input[type="text"]')[0].value,
+      merk: document.querySelectorAll('.equipment-item input[type="text"]')[0].value,
+      type: document.querySelectorAll('.equipment-item input[type="text"]')[1].value,
+      sn: document.querySelectorAll('.equipment-item input[type="text"]')[2].value
+    };
+
+    // Ambil data yang sudah ada di localStorage
+    let savedData = JSON.parse(localStorage.getItem('meterReadingData') || '[]');
+    
+    // Tambah data baru
+    savedData.push(formData);
+    
+    // Simpan kembali ke localStorage
+    localStorage.setItem('meterReadingData', JSON.stringify(savedData));
+
+    alert('✅ Data berhasil disimpan ke tabel!\n\nTotal data tersimpan: ' + savedData.length + ' record');
+    
+    // Tampilkan data di console untuk verifikasi
+    console.table(savedData);
+  }
+
+  // Fungsi Batal (Reset form)
+  function batalForm() {
+    if (confirm('Apakah Anda yakin ingin membatalkan dan mengosongkan form?')) {
+      // Reset semua input text
+      document.querySelectorAll('input[type="text"]').forEach(input => {
+        if (input.value !== 'CABANG SURABAYA' && input.value !== 'TERMA') {
+          input.value = '';
+        }
+      });
+
+      // Reset tanggal dan shift ke default
+      setTanggalHariIni();
+      const shiftOtomatis = tentukanShiftOtomatis();
+      document.getElementById('shift').value = shiftOtomatis;
+
+      alert('✅ Form berhasil direset!');
+    }
+  }
+</script>
+
+</body>
+</html>

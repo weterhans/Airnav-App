@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metereding CNSD - Dashboard Metereding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'airnav-blue': '#255A9B',
+                        'airnav-red': '#D92D20',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="min-h-screen flex flex-col">
+        <!-- Header Baru Sesuai Snippet -->
+        <header class="bg-gray-50 pt-4 sticky top-0 z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                 <div class="bg-white shadow-md rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <a href="../performance.html" id="backButton" class="p-2 rounded-md hover:bg-gray-200" aria-label="Kembali ke Dashboard">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </a>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800 ml-4">Metereding CNSD</h1>
+                    </div>
+                    <img src="../img/airnav.ico" alt="Logo AirNav" class="w-10 h-10 object-contain">
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    
+                    <!-- Card 1: Kesiapan Peralatan -->
+                    <a href="KESIAPAN PERALATAN.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="../img/Gambar MER.jpg" alt="Kesiapan Peralatan" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">Kesiapan Peralatan</h3>
+                    </a>
+                    <a href="ASMGCS.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="" alt="ASMGCS" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">ASMGCS</h3>
+                    </a>
+                    <a href="DME.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="DME" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">DME</h3>
+                    </a>
+                    <a href="t-dme.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/JqjQRyQ/undraw_Save_to_bookmarks_re_8ajf_1.png" alt="T-DME" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">T-DME</h3>
+                    </a>
+                    <a href="tx.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="../img/TX.jpg" alt="TX" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">Transmitter (TX)</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="../img/Gambar Radar.jpg" alt="RADAR" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">RADAR</h3>
+                    </a>
+                    <a href="RECORDER.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="RECORDER" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">RECORDER</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="VCCS FREQ" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">VCCS FREQ</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="VCCS LES" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">VCCS LES</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="ATC SYS" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">ATC SYS</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="RX RADIO" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">RX RADIO</h3>
+                    </a>
+                    <a href="AMSC.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="AMSC" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">AMSC</h3>
+                    </a>
+                    <a href="REPRODUCER ATIS.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="ATIS" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">ATIS</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="MM" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">MM</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="../img/Gambar Glide Path.jpg" alt="GLIDE PATH NORMACH" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">GLIDE PATH NORMACH</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="../img/Gambar Glide Path.jpg" alt="GLIDE PATH MOPIENS" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">GLIDE PATH MOPIENS</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="../img/Gambar DVOR.jpg" alt="DVOR" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">DVOR</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="../img/Loc.jpg" alt="LOCALIZER MOPIENS" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">LOCALIZER MOPIENS</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="OUTER MARKER" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">OUTER MARKER</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="TX BLORA" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">TX BLORA</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="RX BLORA" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">RX BLORA</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="RECORDER NGLORAM" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">RECORDER NGLORAM</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="TX RADAR" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">TX RADAR</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                         <img src="https://i.ibb.co/yqg0NTz/undraw_Wireframing_re_qawp_1.png" alt="RX RADAR" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">RX RADAR</h3>
+                    </a>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="renderer_performancecnsd.js"></script>
+</body>
+</html>
+

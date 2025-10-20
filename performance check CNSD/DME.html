@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meter Reading - DME</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border: 3px solid #000;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 2px solid #000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #1e5a9e 0%, #2d7ab8 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .company-name {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .contact-info {
+            text-align: right;
+            font-size: 11px;
+            line-height: 1.4;
+        }
+
+        .contact-info h3 {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .sub-header {
+            background: #c0c0c0;
+            padding: 5px 15px;
+            font-weight: bold;
+            border-bottom: 2px solid #000;
+        }
+
+        .title {
+            text-align: center;
+            padding: 10px;
+            font-size: 20px;
+            font-weight: bold;
+            border-bottom: 2px solid #000;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border-bottom: 2px solid #000;
+        }
+
+        .info-item {
+            padding: 8px 15px;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+        }
+
+        .info-item:last-child {
+            border-right: none;
+        }
+
+        .info-item.full-width {
+            grid-column: 1 / -1;
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: bold;
+            display: inline-block;
+            min-width: 80px;
+        }
+
+        .dme-center {
+            text-align: center;
+            padding: 20px;
+            font-size: 48px;
+            font-weight: bold;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+        }
+
+        .form-type {
+            text-align: center;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            background: #d0d0d0;
+            border-bottom: 2px solid #000;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background: #b0b0b0;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .section-header {
+            background: #90ee90;
+            font-weight: bold;
+            padding: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            border: none;
+            background: transparent;
+            padding: 4px;
+        }
+
+        .work-environment {
+            margin-top: 10px;
+        }
+
+        .signature-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border-top: 2px solid #000;
+        }
+
+        .signature-box {
+            border-right: 1px solid #000;
+            padding: 10px;
+            min-height: 80px;
+        }
+
+        .signature-box:last-child {
+            border-right: none;
+        }
+
+        .signature-box h4 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .signature-row {
+            display: flex;
+            margin-bottom: 5px;
+            font-size: 11px;
+        }
+
+        .signature-row span {
+            min-width: 30px;
+        }
+
+        input[type="checkbox"] {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-section">
+                <img src="../img/airnav.png" alt="AirNav Indonesia" style="width: 100px; height: 100px; object-fit: contain;">
+                <div class="company-name">AirNav Indonesia</div>
+            </div>
+            <div class="contact-info">
+                <h3>Perum LPPNPI</h3>
+                <div><strong>KANTOR CABANG SURABAYA</strong></div>
+                <div>Telp. (031)8688456 Fax : (031) 8688536</div>
+                <div>email : sub@ airnavindonesia.co.id</div>
+                <div>Web : www.airnavindonesia.co.id</div>
+            </div>
+        </div>
+
+        <div class="sub-header">FAS CNS & OTOMASI</div>
+        
+        <div class="title">METER READING</div>
+
+        <div style="display: grid; grid-template-columns: 1fr auto 1fr; border-bottom: 2px solid #000;">
+            <div style="border-right: 2px solid #000; padding: 8px 15px;">
+                <div><span class="info-label">LOKASI</span>: SURABAYA</div>
+            </div>
+            <div style="padding: 20px 40px; font-size: 48px; font-weight: bold; border-right: 2px solid #000; text-align: center;">
+                DME
+            </div>
+            <div style="background: #d0d0d0; padding: 8px 15px; text-align: center;">
+                <div>FAS CNS & OTOMASI</div>
+                <div style="font-size: 20px; font-weight: bold; margin-top: 5px;">FORM N-5</div>
+            </div>
+        </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; border-bottom: 2px solid #000;">
+            <div style="border-right: 2px solid #000; padding: 8px 15px;">
+                <span class="info-label">TGL/JAM</span>: 
+                <input type="date" class="input-field" style="width:  140px; display: inline-block;">
+                 <select class="input-field" style="width: 120px; display: inline-block; border: 1px solid #999;">
+                        <option value="">Pilih Shift</option>
+                        <option value="07.00-13.00">07.00-13.00</option>
+                        <option value="13.00-19.00">13.00-19.00</option>
+                        <option value="19.00-07.00">19.00-07.00</option>
+                    </select>
+            </div>
+            <div style="padding: 8px 15px;">
+                <div style="display: flex; justify-content: space-between; gap: 20px;">
+                    <div style="flex: 1;">
+                        <div><span class="info-label">MERK</span>: INTERSCAN</div>
+                        <div><span class="info-label">TYPE</span>: LDB 102</div>
+                        <div><span class="info-label">S N</span>: __________</div>
+                    </div>
+                    <div style="border-left: 2px solid #000; padding-left: 15px;">
+                        <div>TX 1 : MAIN / STANDBY</div>
+                        <div>TX 2 : MAIN / STANDBY</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <tr>
+                <th style="width: 30px;">NO</th>
+                <th style="width: 250px;">PEMBACAAN METER READING</th>
+                <th style="width: 150px;">NOMINAL<br>Standart</th>
+                <th style="width: 100px;">HASIL<br>TX1</th>
+                <th style="width: 100px;">TX2</th>
+                <th>KETERANGAN</th>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background: #90ee90;">1</td>
+                <td colspan="5" class="section-header">FRONT PANEL</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">All Status Indikator</td>
+                <td>Normal / Alrm</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">Main Selected</td>
+                <td>√ / -</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">TX On AIR</td>
+                <td>√ / -</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">TX Stby</td>
+                <td>√ / -</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">Control Status</td>
+                <td>local / Remote</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background: #90ee90;">2</td>
+                <td colspan="5" class="section-header">PARAMETER</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">SPACING</td>
+                <td>12 ± 0.1 μs</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">DELAY</td>
+                <td>50 ± 0.5 μs</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">POWER OUTPUT</td>
+                <td>± 1 KW</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">EFFICIENCY</td>
+                <td>70 % - 100 %</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">TX. PULSE RATE</td>
+                <td>945 Hz</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">PULSE WIDTH</td>
+                <td>3.5 ± 0.5 μs</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">PULSE RISE TIME</td>
+                <td>2.5 ± 0.5 μs</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">PULSE FALL TIME</td>
+                <td>2.5 ± 0.5 μs</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background: #90ee90;">3</td>
+                <td colspan="5" class="section-header">POWER SUPPLY</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">DC CURRENT</td>
+                <td>3.5 A</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">DC VOLTAGE</td>
+                <td>26 - 27 Vdc</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold; background: #90ee90;">4</td>
+                <td colspan="5" class="section-header">BATTERY</td>
+            </tr>
+            <tr>
+                <td></td>
+                <td style="padding-left: 20px;">DC VOLTAGE</td>
+                <td>26 - 27 Vdc</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+        </table>
+
+        <div class="work-environment">
+            <table>
+                <tr>
+                    <th colspan="5" style="background: #90ee90;">LINGKUNGAN KERJA</th>
+                </tr>
+                <tr>
+                    <th style="width: 30px;">NO</th>
+                    <th>KEGIATAN</th>
+                    <th style="width: 100px;">Nominal</th>
+                    <th style="width: 150px;">HASIL<br>PEMERIKSAAN</th>
+                    <th>KETERANGAN</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>PEMERIKSAAN SUHU RUANGAN</td>
+                    <td>Max 22° C</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>PEMERIKSAAN AIR HUMIDITY</td>
+                    <td>√</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>PEMERIKSAAN KEBERSIHAN RUANGAN</td>
+                    <td>√</td>
+                    <td><input type="text" class="input-field"></td>
+                    <td><input type="text" class="input-field"></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="signature-section">
+            <div class="signature-box">
+                <h4>TEKNISI</h4>
+                <div class="signature-row">
+                    <span>No</span>
+                    <span style="flex: 1;">Nama</span>
+                    <span>Paraf</span>
+                </div>
+                <div class="signature-row">
+                    <span>1</span>
+                    <input type="text" class="input-field" style="flex: 1;">
+                    <input type="text" class="input-field" style="width: 50px;">
+                </div>
+                <div class="signature-row">
+                    <span>2</span>
+                    <input type="text" class="input-field" style="flex: 1;">
+                    <input type="text" class="input-field" style="width: 50px;">
+                </div>
+                <div class="signature-row">
+                    <span>3</span>
+                    <input type="text" class="input-field" style="flex: 1;">
+                    <input type="text" class="input-field" style="width: 50px;">
+                </div>
+                <div class="signature-row">
+                    <span>4</span>
+                    <input type="text" class="input-field" style="flex: 1;">
+                    <input type="text" class="input-field" style="width: 50px;">
+                </div>
+                <div class="signature-row">
+                    <span>5</span>
+                    <input type="text" class="input-field" style="flex: 1;">
+                    <input type="text" class="input-field" style="width: 50px;">
+                </div>
+            </div>
+            <div class="signature-box">
+                <h4>SUPERVISOR</h4>
+                <div style="height: 120px;"></div>
+            </div>
+            <div class="signature-box">
+                <h4>MANAGER TEKNIK</h4>
+                <div style="height: 120px;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set default date to current
+        document.addEventListener('DOMContentLoaded', function() {
+            const now = new Date();
+            const datetime = now.toISOString().slice(0, 16);
+            document.querySelector('input[type="datetime-local"]').value = datetime;
+        });
+    </script>
+</body>
+</html>

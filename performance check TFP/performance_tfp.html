@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metereding TFP - Dashboard Metereding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'airnav-blue': '#255A9B',
+                        'airnav-red': '#D92D20',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <div class="min-h-screen flex flex-col">
+        <!-- Header -->
+        <header class="bg-gray-50 pt-4 sticky top-0 z-10">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                 <div class="bg-white shadow-md rounded-lg p-4 flex items-center justify-between">
+                    <div class="flex items-center">
+                        <a href="../performance.html" id="backButton" class="p-2 rounded-md hover:bg-gray-200" aria-label="Kembali ke Dashboard">
+                            <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                        </a>
+                        <h1 class="text-xl md:text-2xl font-bold text-gray-800 ml-4">Metereding TFP</h1>
+                    </div>
+                    <img src="../img/airnav.ico" alt="Logo AirNav" class="w-10 h-10 object-contain">
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 py-6">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <!-- Cards Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                    <a href="lantai ground.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="https://i.ibb.co/L5T3hTf/undraw_Booking_re_gw4j_1.png" alt="AOB Lt. Ground" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">AOB Lt. Ground</h3>
+                    </a>
+                    <a href="aob 1 2.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="https://i.ibb.co/3W83sHq/undraw_Checklist_re_qw37_1.png" alt="AOB Lt. 1 & 2" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">AOB Lt. 1 & 2</h3>
+                    </a>
+                    <a href="tx.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="../img/Gambar TX.jpg" alt="TX" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">TX</h3>
+                    </a>
+                    <a href="loc.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="../img/Gambar Localizer.jpg" alt="Localizer" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">Localizer</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="https://i.ibb.co/3W83sHq/undraw_Checklist_re_qw37_1.png" alt="MM" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">MM</h3>
+                    </a>
+                    <a href="dvor.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="../img/Gambar DVOR.jpg" alt="DVOR" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">DVOR</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="https://i.ibb.co/3W83sHq/undraw_Checklist_re_qw37_1.png" alt="Outer Marker" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">Outer Marker</h3>
+                    </a>
+                    <a href="gp.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="../img/Gambar Glide Path.jpg" alt="GP" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">GP</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="https://i.ibb.co/3W83sHq/undraw_Checklist_re_qw37_1.png" alt="Tower" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">Tower</h3>
+                    </a>
+                    <a href="radar.html" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="../img/Gambar Radar.jpg" alt="Radar" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">Radar</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="https://i.ibb.co/3W83sHq/undraw_Checklist_re_qw37_1.png" alt="MLAT" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">MLAT</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="https://i.ibb.co/3W83sHq/undraw_Checklist_re_qw37_1.png" alt="UPS PILLER 150 KVA" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">UPS PILLER 150 KVA</h3>
+                    </a>
+                    <a href="#" class="card bg-white p-4 rounded-xl shadow-md text-center">
+                        <img src="https://i.ibb.co/3W83sHq/undraw_Checklist_re_qw37_1.png" alt="U. Coba Gagal Catu Daya MER" class="w-full h-32 object-contain mx-auto mb-4">
+                        <h3 class="font-semibold text-gray-800">U. Coba Gagal Catu Daya MER</h3>
+                    </a>
+
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="renderer_performancetfp.js"></script>
+</body>
+</html>

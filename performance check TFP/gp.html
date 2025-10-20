@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Check Fasilitas Penunjang Gedung Glide Path - AirNav Indonesia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1e90ff 0%, #00bfff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .logo::after {
+            content: 'AirNav';
+            position: absolute;
+            color: #1e90ff;
+            font-weight: bold;
+            font-size: 11px;
+            z-index: 1;
+        }
+
+        .company-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .header-info {
+            text-align: right;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 11px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 8px 6px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #d3d3d3;
+            color: black;
+            font-weight: bold;
+        }
+
+        .gray-cell {
+            background-color: #a9a9a9;
+        }
+
+        .left-align {
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .param-col {
+            width: 180px;
+        }
+
+        .no-col {
+            width: 35px;
+        }
+
+        .kondisi-col {
+            width: 70px;
+        }
+
+        .keterangan-col {
+            width: 150px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            padding: 4px;
+            font-size: 11px;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: 1px solid #1e90ff;
+            background: #f0f8ff;
+        }
+
+        .footer-section {
+            margin-top: 15px;
+        }
+
+        .footer-table th {
+            background-color: #d3d3d3;
+            color: white;
+            padding: 8px;
+            font-size: 11px;
+        }
+
+        .footer-table td {
+            padding: 8px;
+            font-size: 11px;
+        }
+
+        .signature-cell {
+            height: 70px;
+            vertical-align: bottom;
+        }
+
+        .legend {
+            margin-top: 10px;
+            font-size: 10px;
+            line-height: 1.6;
+        }
+
+        .dotted-line {
+            border-bottom: 1px dotted #666;
+            display: inline-block;
+            min-width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+                <div class="logo-section">
+                <img src="../img/airnav.png" alt="AirNav Indonesia" style="width: 120px; height: auto; object-fit: contain;">
+                <div class="company-name">AirNav Indonesia</div>
+            </div>
+            <div class="header-info">
+                <div><strong>Perum LPPNPI</strong></div>
+                <div>Cabang Surabaya</div>
+                <div>Teknik Fasilitas Penunjang</div>
+            </div>
+        </div>
+
+        <div class="title">Performance Check Fasilitas Penunjang Gedung Glide Path</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th class="no-col">No.</th>
+                    <th class="param-col">Parameter</th>
+                    <th>Panel GP 01</th>
+                    <th style="width: 180px;">Nama Fasilitas</th>
+                    <th class="kondisi-col">Kondisi</th>
+                    <th class="keterangan-col">Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="left-align">L1 - N ( Volt )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">Catu Daya Listrik</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="left-align">L2 - N ( Volt )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">Penerangan</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="left-align">L3 - N ( Volt )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">Obstacle Light</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="left-align">N - G ( Volt )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">AC 01 (Split Wall)</td>
+                    <td><input type="text"></td>
+                    <td>A</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td class="left-align">L1 - L2 ( Volt )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">AC 02 (Split Wall)</td>
+                    <td><input type="text"></td>
+                    <td>A</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td class="left-align">L1 - L3 ( Volt )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">Exhaust Fan</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td class="left-align">L2 - L3 ( Volt )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">Rumput</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td class="left-align">L1 ( Ampere )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">APAR/ Fire Extinguisher</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td class="left-align">L2 ( Ampere )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">Atap</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td class="left-align">L3 ( Ampere )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">Plafond</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td class="left-align">N ( Ampere )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">Dinding</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td class="left-align">Frekuensi ( Hz )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td class="left-align">Pintu</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td class="left-align">Power Factor ( Cos θ )</td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td class="left-align">Tegangan Battery ( Volt )</td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td class="left-align">Arus Battery ( Ampere )</td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td class="left-align">Kapasitas Battery ( Ah )</td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td class="left-align">Suhu Battery ( °C )</td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td class="left-align">Mode *</td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td class="left-align">Suplai Aktif *</td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td class="left-align">Suhu Ruangan ( °C )</td>
+                    <td><input type="number" step="0.1"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td class="left-align">KWH Meter</td>
+                    <td><input type="number"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Waktu Pelaksanaan -->
+        <table class="footer-section">
+            <tr>
+                <td colspan="2" style="background-color: #d3d3d3; font-weight: bold; width: 200px;">Waktu Pelaksanaan</td>
+                <td style="width: 60px;"><strong>Hari:</strong></td>
+                <td style="width: 150px;"><input type="text" class="input-field"></td>
+                <td style="width: 80px;"><strong>Tanggal:</strong></td>
+                <td style="width: 150px;"><input type="text" class="input-field"></td>
+                <td style="width: 60px;"><strong>Jam:</strong></td>
+                <td><input type="text" class="input-field" placeholder></td>
+            </tr>
+        </table>
+
+        <!-- Technician Section -->
+        <table class="footer-section">
+            <tr>
+                <th style="width: 30px;">No.</th>
+                <th style="width: 300px;">Pelaksana Teknisi</th>
+                <th style="width: 150px;">Paraf</th>
+                <th style="width: 400px;">Supervisor Teknik</th>
+                <th>Manager Teknik</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td rowspan="4"></td>
+                <td rowspan="4"></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+        </table>
+
+            <div class="legend">
+                <div class="note">
+            (*) Coret yang tidak perlu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kondisi : (√) Baik / Normal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (x) Tidak Baik / Tidak Normal
+        </div>
+        </div>
+    </div>
+</body>
+</html>

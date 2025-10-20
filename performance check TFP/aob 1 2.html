@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Check AOB Lantai 1 & 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #0066cc, #00ccff);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 10px;
+            text-align: center;
+        }
+        
+        .company-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #000;
+            margin-top: 10px;
+        }
+        
+        .header-right {
+            text-align: right;
+            font-size: 12px;
+            line-height: 1.5;
+            font-weight: bold;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10px 0 20px 0;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 11px;
+        }
+        th, td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+        }
+        th {
+            background-color: #d3d3d3;
+            color: #000;
+            padding: 8px 5px;
+            text-align: center;
+            border: 1px solid #000;
+            font-weight: bold;
+            height: 25px;
+        }
+        
+        
+        .row-num {
+            text-align: center;
+            font-weight: bold;
+            width: 30px;
+            background-color: #fff;
+        }
+        
+        .param-name {
+            text-align: left;
+            font-weight: 500;
+            width: 150px;
+        }
+        
+        .panel-cell {
+            background-color: #fff;
+            text-align: center;
+        }
+        
+        .gray-bg {
+            background-color: #d3d3d3;
+        }
+
+                .input-field {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            padding: 2px;
+            font-size: 10px;
+        }
+        
+        .input-field:focus {
+            outline: 1px solid #0066cc;
+            background: #ffffcc;
+        }
+        
+        .center-text {
+            text-align: center;
+        }
+        
+        .status-a {
+            text-align: center;
+            color: #000;
+        }
+        
+        .footer-table {
+            margin-top: 30px;
+        }
+        
+        .footer-header-row {
+            background-color: #d3d3d3;
+        }
+        
+        .signature-cell {
+            height: 50px;
+        }
+        
+        .note-section {
+            margin-top: 15px;
+            font-size: 11px;
+        }
+        
+        .note-line {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+                <div class="logo-section">
+                <img src="../img/airnav.png" alt="AirNav Indonesia" style="width: 120px; height: auto; object-fit: contain;">
+                <div class="company-name">AirNav Indonesia</div>
+            </div>
+            <div class="header-right">
+                <div>Perum LPPNPI</div>
+                <div>Cabang Surabaya</div>
+                <div>Teknik Fasilitas Penunjang</div>
+            </div>
+        </div>
+        
+        <!-- Title -->
+        <div class="title">Performance Check AOB Lantai 1 & 2</div>
+        
+        <!-- Main Table -->
+        <table>
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>Parameter</th>
+                    <th>Panel A 05<br>APP Room</th>
+                    <th>Panel A 06<br>APP Room</th>
+                    <th>Panel A 07<br>APP Room</th>
+                    <th>Panel A 08<br>Gedung Lt.1</th>
+                    <th>Panel A 22<br>Gedung Lt.1</th>
+                    <th>Panel A 09<br>AMSC Room</th>
+                    <th>Nama Fasilitas</th>
+                    <th>Kondisi</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="row-num">1</td>
+                    <td class="param-name">L 1 - N ( Volt )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>Catu Daya Listrik</td>
+                    <td class="status-a"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">2</td>
+                    <td class="param-name">L 2 - N ( Volt )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>Penerangan</td>
+                    <td class="status-a"></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">3</td>
+                    <td class="param-name">L 3 - N ( Volt )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 09 (Split Wall) GM</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">4</td>
+                    <td class="param-name">N - G ( Volt )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 10 (Split Wall) Sek.GM</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">5</td>
+                    <td class="param-name">L 1 - L 2 ( Volt )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 11 (Split Wall) ATS</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">6</td>
+                    <td class="param-name">L 1 - L 3 ( Volt )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 12 (Split Wall) Staf FAM</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">7</td>
+                    <td class="param-name">L 2 - L 3 ( Volt )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 13 (Split Wall) FAM</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">8</td>
+                    <td class="param-name">I 1 ( Ampere )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 14 (Split Wall) Rest APP</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">9</td>
+                    <td class="param-name">I 2 ( Ampere )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 15 (Split Wall) Kmr L</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">10</td>
+                    <td class="param-name">I 3 ( Ampere )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 16 (Split Wall) Kmr P</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">11</td>
+                    <td class="param-name">N ( Ampere )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 17 (Split Wall) Sms</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">12</td>
+                    <td class="param-name">Frekuensi ( Hz )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td>AC 18 (Standing Floor) APP</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">13</td>
+                    <td class="param-name">Power Factor ( Cos θ )</td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td>AC 19 (Standing Floor) APP</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">14</td>
+                    <td class="param-name">Tegangan Battery ( Volt )</td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td>AC 20 (Split Wall) AMSC</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">15</td>
+                    <td class="param-name">Arus Battery ( Ampere )</td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td>AC 21 (Split Wall) ATIS</td>
+                    <td class="status-a">A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">16</td>
+                    <td class="param-name">Kapasitas Battery ( Ah )</td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td>Exhaust Fan Gudang Lt 1</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">17</td>
+                    <td class="param-name">Suhu Battery ( °C )</td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td>Exhaust Fan Toilet L/P</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">18</td>
+                    <td class="param-name">Mode *</td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td>Exhaust Fan Pantry</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">19</td>
+                    <td class="param-name">Suplai Akif *</td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td>APAR/Fire Extinguisher</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">20</td>
+                    <td class="param-name">Suhu APP Room ( °C )</td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="panel-cell"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td>Atap</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="row-num">21</td>
+                    <td class="param-name">Suhu AMSC Room ( °C )</td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="gray-bg"></td>
+                    <td class="panel-cell"></td>
+                    <td>Plafond</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                    <td>Dinding</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                    <td>Pintu</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td colspan="8"></td>
+                    <td>Door Lock</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Waktu Pelaksanaan -->
+        <table class="footer-section">
+            <tr>
+                <td colspan="2" style="background-color: #d3d3d3; font-weight: bold; width: 200px;">Waktu Pelaksanaan</td>
+                <td style="width: 60px;"><strong>Hari:</strong></td>
+                <td style="width: 150px;"><input type="text" class="input-field"></td>
+                <td style="width: 80px;"><strong>Tanggal:</strong></td>
+                <td style="width: 150px;"><input type="text" class="input-field"></td>
+                <td style="width: 60px;"><strong>Jam:</strong></td>
+                <td><input type="text" class="input-field" placeholder></td>
+            </tr>
+        </table>
+
+        <!-- Technician Section -->
+        <table class="footer-section">
+            <tr>
+                <th style="width: 30px;">No.</th>
+                <th style="width: 300px;">Pelaksana Teknisi</th>
+                <th style="width: 150px;">Paraf</th>
+                <th style="width: 400px;">Supervisor Teknik</th>
+                <th>Manager Teknik</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td rowspan="4"></td>
+                <td rowspan="4"></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+        </table>
+
+            <div class="legend">
+                <div class="note">
+            (*) Coret yang tidak perlu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kondisi : (√) Baik / Normal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (x) Tidak Baik / Tidak Normal
+        </div>
+        </div>
+    </div>
+</body>
+</html>
+        
+        

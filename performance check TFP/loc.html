@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Check Gedung Localizer - AirNav Indonesia</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #1e90ff 0%, #00bfff 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .logo::before {
+            content: '';
+            position: absolute;
+            width: 60%;
+            height: 60%;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .logo::after {
+            content: 'AirNav';
+            position: absolute;
+            color: #1e90ff;
+            font-weight: bold;
+            font-size: 11px;
+            z-index: 1;
+        }
+
+        .company-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .header-info {
+            text-align: right;
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 10px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 6px 4px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #d3d3d3;
+            color: black;
+            font-weight: bold;
+        }
+
+        .gray-cell {
+            background-color: #a9a9a9;
+        }
+
+        .left-align {
+            text-align: left;
+            padding-left: 8px;
+        }
+
+        .param-col {
+            width: 140px;
+        }
+
+        .small-col {
+            width: 50px;
+        }
+
+        .medium-col {
+            width: 80px;
+        }
+
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            padding: 4px;
+            font-size: 10px;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus {
+            outline: 1px solid #1e90ff;
+            background: #f0f8ff;
+        }
+
+        .footer-section {
+            margin-top: 20px;
+        }
+
+        .footer-table {
+            width: 100%;
+        }
+
+        .footer-table th {
+            background-color: #d3d3d3;
+            color: white;
+            padding: 8px;
+        }
+
+        .footer-table td {
+            padding: 8px;
+        }
+
+        .signature-cell {
+            height: 60px;
+            vertical-align: bottom;
+        }
+
+        .no-border-right {
+            border-right: none;
+        }
+
+        .no-border-left {
+            border-left: none;
+        }
+
+        .dotted-input {
+            background: repeating-linear-gradient(
+                to right,
+                transparent,
+                transparent 2px,
+                #ccc 2px,
+                #ccc 3px
+            );
+            background-position: bottom;
+            background-size: 8px 1px;
+            background-repeat: repeat-x;
+            border: none;
+            padding: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo-section">
+                <img src="../img/airnav.png" alt="AirNav Indonesia" style="width: 120px; height: auto; object-fit: contain;">
+                <div class="company-name">AirNav Indonesia</div>
+            </div>
+            <div class="header-info">
+                <div><strong>Perum LPPNPI</strong></div>
+                <div>Cabang Surabaya</div>
+                <div>Teknik Fasilitas Penunjang</div>
+            </div>
+        </div>
+
+        <div class="title">Performance Check Gedung Localizer</div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th rowspan="2" style="width: 30px;">No.</th>
+                    <th rowspan="2" class="param-col">Parameter</th>
+                    <th rowspan="2" class="small-col">Panel<br>LZ 01</th>
+                    <th colspan="2">Panel COS (LZ 02)</th>
+                    <th rowspan="2" class="small-col">Panel<br>LZ 03</th>
+                    <th colspan="2">Panel COS (LZ 04)</th>
+                    <th rowspan="2" class="small-col">Panel MLAT<br>RU 04</th>
+                    <th rowspan="2" style="width: 140px;">Nama Fasilitas</th>
+                    <th rowspan="2" class="small-col">Kondisi</th>
+                    <th rowspan="2" style="width: 100px;">Keterangan</th>
+                </tr>
+                <tr>
+                    <th class="small-col">Input</th>
+                    <th class="small-col">Output</th>
+                    <th class="small-col">Input</th>
+                    <th class="small-col">Output</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="left-align">L1 - N ( Volt )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="left-align">Catu Daya Listrik</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="left-align">L2 - N ( Volt )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">Penerangan</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="left-align">L3 - N ( Volt )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">Obstacle Light</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="left-align">N - G ( Volt )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="left-align">UPS 15 KVA ( Socomed )</td>
+                    <td><input type="text"></td>
+                    <td>*Pindah Merauke</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td class="left-align">L1 - L2 ( Volt )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">AC 01 (Split Wall)</td>
+                    <td><input type="text"></td>
+                    <td>A</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td class="left-align">L1 - L3 ( Volt )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">AC 02 (Split Wall)</td>
+                    <td><input type="text"></td>
+                    <td>A</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td class="left-align">L2 - L3 ( Volt )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">AC 03 (Split Wall)</td>
+                    <td><input type="text"></td>
+                    <td>A</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td class="left-align">L1 ( Ampere )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="left-align">Exhaust Fan</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td class="left-align">L2 ( Ampere )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">Papan Nama AirNav</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td class="left-align">L3 ( Ampere )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">Pagar</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td class="left-align">N ( Ampere )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="left-align">Rumput</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td class="left-align">Frekuensi ( Hz )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="left-align">APAR/ Fire Extinguisher</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td class="left-align">Power Factor ( Cos θ )</td>
+                    <td class="gray-cell"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">Atap</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td class="left-align">Tegangan Battery ( Volt )</td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">Dinding</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td class="left-align">Arus Battery ( Ampere )</td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="left-align">Pintu</td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td class="left-align">Kapasitas Battery ( Ah )</td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td class="left-align">Suhu Battery ( °C )</td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td class="left-align">Mode *</td>
+                    <td class="gray-cell"></td>
+                    <td colspan="2" style="font-size: 9px;">Auto / Manual</td>
+                    <td class="gray-cell"></td>
+                    <td colspan="2" style="font-size: 9px;">Auto / Manual</td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td class="left-align">Suplai Aktif *</td>
+                    <td class="gray-cell"></td>
+                    <td colspan="2" style="font-size: 9px;">PLN / UPS</td>
+                    <td class="gray-cell"></td>
+                    <td colspan="2" style="font-size: 9px;">PLN / UPS</td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td class="left-align">Suhu Ruangan ( °C )</td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td><input type="number" step="0.1" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td class="left-align">KWH Meter</td>
+                    <td class="gray-cell"></td>
+                    <td><input type="number" class="dotted-input"></td>
+                    <td><input type="number" class="dotted-input"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td class="gray-cell"></td>
+                    <td></td>
+                    <td><input type="text"></td>
+                    <td><input type="text"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- Waktu Pelaksanaan -->
+        <table class="footer-section">
+            <tr>
+                <td colspan="2" style="background-color: #d3d3d3; font-weight: bold; width: 200px;">Waktu Pelaksanaan</td>
+                <td style="width: 60px;"><strong>Hari:</strong></td>
+                <td style="width: 150px;"><input type="text" class="input-field"></td>
+                <td style="width: 80px;"><strong>Tanggal:</strong></td>
+                <td style="width: 150px;"><input type="text" class="input-field"></td>
+                <td style="width: 60px;"><strong>Jam:</strong></td>
+                <td><input type="text" class="input-field" placeholder></td>
+            </tr>
+        </table>
+
+        <!-- Technician Section -->
+        <table class="footer-section">
+            <tr>
+                <th style="width: 30px;">No.</th>
+                <th style="width: 300px;">Pelaksana Teknisi</th>
+                <th style="width: 150px;">Paraf</th>
+                <th style="width: 400px;">Supervisor Teknik</th>
+                <th>Manager Teknik</th>
+            </tr>
+            <tr>
+                <td>1</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+                <td rowspan="4"></td>
+                <td rowspan="4"></td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td><input type="text" class="input-field"></td>
+                <td><input type="text" class="input-field"></td>
+            </tr>
+        </table>
+
+        <!-- Note -->
+        <div class="note">
+            (*) Coret yang tidak perlu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Kondisi : (√) Baik / Normal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (x) Tidak Baik / Tidak Normal
+        </div>
+    </div>

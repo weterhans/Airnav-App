@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perum LPPNPI - Work Order CNSD</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -102,6 +103,9 @@
 
         .wo-field textarea { resize: vertical; min-height: 60px; }
         #shift-dinas-textarea { min-height: 70px; }
+        #shift-dinas-textarea {
+            font-weight: bold;
+        }
 
         .wo-signature-area {
             display: flex;
@@ -162,6 +166,7 @@
 
         <div id="wo-form-container" class="hidden">
             <form id="maintenance-form">
+                <input type="hidden" id="wo_id" name="id">
                 <div class="wo-container">
                     <!-- HEADER -->
                     <div class="wo-header">
@@ -225,26 +230,6 @@
                         </div>
                     </div>
                     
-                    <!-- APPROVAL SIGNATURES -->
-                    <div class="three-column-grid">
-                        <div class="grid-header">Manager Teknik</div>
-                        <div class="grid-header">Supervisor</div>
-                        <div class="grid-header">Pelaksana</div>
-                    </div>
-                    <div class="wo-row">
-                        <div class="wo-field wo-signature-area" style="width: 33.33%;">
-                            <img id="approval_manager_sig" src="" alt="Tanda Tangan Manager">
-                            <select name="approval_manager" id="approval_manager_select"></select>
-                        </div>
-                        <div class="wo-field wo-signature-area" style="width: 33.33%;">
-                            <img id="approval_supervisor_sig" src="" alt="Tanda Tangan Supervisor">
-                            <select name="approval_supervisor" id="approval_supervisor_select"></select>
-                        </div>
-                        <div class="wo-field wo-signature-area" style="width: 33.34%;">
-                           <img id="approval_pelaksana_sig" src="" alt="Tanda Tangan Pelaksana">
-                           <select name="approval_pelaksana" id="approval_pelaksana_select"></select>
-                        </div>
-                    </div>
                     
                     <!-- PELAKSANAAN SECTION -->
                     <div class="wo-row" style="background-color: #f3f4f6; text-align: center; font-weight: bold;"><div class="w-full p-2">Pelaksanaan</div></div>

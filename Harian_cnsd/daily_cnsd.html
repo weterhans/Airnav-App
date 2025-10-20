@@ -7,13 +7,11 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script>
-        // Konfigurasi warna kustom AirNav
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
                         'airnav-blue': '#255A9B',
-                        'airnav-red': '#D92D20',
                         'indigo-600': '#255A9B',
                     }
                 }
@@ -21,31 +19,17 @@
         }
     </script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .modal-body {
-            max-height: 80vh;
-            overflow-y: auto;
-        }
-        /* Custom styles for shift buttons */
-        .shift-btn {
-            transition: all 0.2s ease-in-out;
-        }
-        .shift-btn.active {
-            background-color: #255A9B;
-            color: white;
-            border-color: #255A9B;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        .modal-body { max-height: 80vh; overflow-y: auto; }
+        .shift-btn.active { background-color: #255A9B; color: white; }
     </style>
 </head>
 <body class="bg-gray-100">
 
-    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
-        <!-- Header Halaman -->
+    <div class="p-4 sm:p-6 lg:p-8">
         <header class="bg-white shadow-md rounded-lg p-4 mb-6 flex items-center justify-between">
             <div class="flex items-center">
-                <a href="../index.html#cnsd-content" class="p-2 rounded-md hover:bg-gray-200" aria-label="Kembali ke Dashboard">
+                <a href="../index.html#cnsd-content" class="p-2 rounded-md hover:bg-gray-200">
                     <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                 </a>
                 <h1 class="text-xl md:text-2xl font-bold text-gray-800 ml-4">Kesiapan Fasilitas CNSD</h1>
@@ -53,59 +37,48 @@
             <img src="../img/airnav_logo.png" alt="Logo AirNav" class="w-10 h-10 object-contain">
         </header>
 
-        <!-- Main Content -->
         <main class="bg-white p-6 rounded-lg shadow-md">
-             <!-- Aksi Tambah -->
             <div class="mb-6 flex justify-end">
-                <button id="add-report-button" class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-airnav-blue transition-colors text-sm font-medium flex items-center gap-2">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+                <button id="add-report-button" class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-airnav-blue flex items-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
                     Tambah Baru
                 </button>
             </div>
 
-            <!-- Daftar Laporan -->
             <div class="overflow-hidden border border-gray-200 rounded-lg">
-                <!-- Header Tabel -->
-                <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200">
-                    <div class="col-span-3"><h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">TANGGAL</h3></div>
-                    <div class="col-span-4"><h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">MANTEK</h3></div>
-                    <div class="col-span-4"><h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">ACKNOWLEDGE</h3></div>
+                <div class="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b">
+                    <div class="col-span-3"><h3 class="text-xs font-semibold text-gray-500 uppercase">TANGGAL</h3></div>
+                    <div class="col-span-4"><h3 class="text-xs font-semibold text-gray-500 uppercase">MANTEK</h3></div>
+                    <div class="col-span-4"><h3 class="text-xs font-semibold text-gray-500 uppercase">ACKNOWLEDGE</h3></div>
+                    <div class="col-span-1"><h3 class="text-xs font-semibold text-gray-500 uppercase">AKSI</h3></div>
                 </div>
-
-                <!-- Daftar Data -->
                 <ul id="report-list" class="divide-y divide-gray-200">
-                    <!-- Data akan dimasukkan di sini oleh JavaScript -->
-                </ul>
+                    </ul>
             </div>
         </main>
     </div>
     
-    <!-- Modal Tambah Laporan -->
     <div id="add-report-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-3xl">
-            <!-- Modal Header -->
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-4xl">
             <div class="flex justify-between items-center p-4 border-b">
-                <h3 class="text-lg font-semibold text-gray-800">DAILY CNSD FORM</h3>
-                <button id="close-modal-button" class="text-gray-400 hover:text-gray-600">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
-                </button>
+                <h3 id="modal-title" class="text-lg font-semibold text-gray-800">DAILY CNSD FORM</h3>
+                <button id="close-modal-button" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
             </div>
-            <!-- Modal Body -->
             <form id="report-form" class="modal-body p-6">
+                <input type="hidden" id="report-db-id" name="id">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                    <!-- Kolom Kiri -->
                     <div>
                         <label for="id-daily" class="block text-sm font-medium text-gray-700">ID_DAILY*</label>
-                        <input type="text" id="id-daily" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm bg-gray-100" readonly>
+                        <input type="text" id="id-daily" name="report_id_custom" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
                      <div>
                         <label class="block text-sm font-medium text-gray-700">DINAS*</label>
                         <div id="shift-buttons" class="mt-1 grid grid-cols-3 gap-2 rounded-md">
-                            <button type="button" data-shift="PAGI" class="shift-btn border border-gray-300 py-1 px-4 text-sm rounded-l-md">PAGI</button>
-                            <button type="button" data-shift="SIANG" class="shift-btn border-t border-b border-gray-300 py-1 px-4 text-sm">SIANG</button>
-                            <button type="button" data-shift="MALAM" class="shift-btn active border border-gray-300 py-1 px-4 text-sm rounded-r-md">MALAM</button>
+                            <button type="button" data-shift="PAGI" class="shift-btn border py-1 px-4 text-sm rounded-l-md">PAGI</button>
+                            <button type="button" data-shift="SIANG" class="shift-btn border-t border-b py-1 px-4 text-sm">SIANG</button>
+                            <button type="button" data-shift="MALAM" class="shift-btn border py-1 px-4 text-sm rounded-r-md">MALAM</button>
                         </div>
-                         <input type="hidden" id="dinas" name="dinas" value="MALAM">
+                         <input type="hidden" id="dinas" name="dinas">
                     </div>
                     <div>
                         <label for="tanggal" class="block text-sm font-medium text-gray-700">TANGGAL*</label>
@@ -115,11 +88,9 @@
                         <label for="jam" class="block text-sm font-medium text-gray-700">JAM</label>
                         <input type="time" id="jam" name="jam" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
                     </div>
-                    <!-- Daftar Dropdown Peralatan -->
                     <div class="md:col-span-2 text-center my-2 text-airnav-blue font-semibold"> Peralatan CNSD </div>
                     <div id="equipment-list" class="md:col-span-2 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4">
-                        <!-- Dropdowns will be generated here by JS -->
-                    </div>
+                        </div>
                      <div class="md:col-span-2 text-center my-2 text-airnav-blue font-semibold"> Administrasi </div>
                     <div>
                         <label for="mantek" class="block text-sm font-medium text-gray-700">MANTEK</label>
@@ -135,209 +106,17 @@
                     </div>
                     <div class="md:col-span-2">
                          <label for="jadwal-dinas" class="block text-sm font-medium text-gray-700">JADWAL DINAS</label>
-                         <textarea id="jadwal-dinas" name="jadwal-dinas" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
+                         <textarea id="jadwal-dinas" name="jadwal_dinas" rows="3" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
                     </div>
                 </div>
             </form>
-            <!-- Modal Footer -->
-            <div class="flex justify-end items-center p-4 border-t bg-gray-50 rounded-b-lg">
-                <button id="cancel-button" type="button" class="bg-white text-gray-700 px-4 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 text-sm font-medium mr-2">Cancel</button>
-                <button type="submit" form="report-form" class="bg-indigo-600 text-white px-4 py-2 rounded-lg shadow hover:bg-airnav-blue transition-colors text-sm font-medium">Save</button>
+            <div class="flex justify-end items-center p-4 border-t bg-gray-50">
+                <button id="cancel-button" type="button" class="bg-white text-gray-700 px-4 py-2 rounded-lg border">Cancel</button>
+                <button id="save-button" class="bg-indigo-600 text-white px-4 py-2 rounded-lg ml-2">Save</button>
             </div>
         </div>
     </div>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // --- DATA CONTOH & ELEMEN DOM ---
-            const reportData = [
-                { date: "7/28/2025", mantek: "-", acknowledge: "-" },
-                { date: "7/28/2025", mantek: "-", acknowledge: "-" },
-                { date: "7/27/2025", mantek: "-", acknowledge: "-" },
-            ];
-            const technicianList = ["", "-", "-", "-", "-", "-"];
-            const equipmentNames = [
-                'VHF GND Main (p) 118.9','VHF GND Main (s) 119.15','VHF ADC Main (p) 118.3', 'VHF ADC Main (s) 118.1', 'VHF APP Direc Main (p) 123.2','VHF APP Direc Main (s) 124.5', 'VHF APP West Main (p) 125.1', 'VHF APP West Main (s) 123.55',  
-                'VHF APP East Main (p) 124.0','VHF APP East Main (s) 122.85','VHF CDU (p) 121.65','VHF CDU (s) 121.85', 'VHF-ER Makassar (p) 123.9', 'VHF-ER Makassar (s) 125.9', 'VHF-ER UPKN 134.1', 'VHF-ER UBLI 125.7', 'VHF ATIS 128.2','VHF Emergency 121.5',
-                'VHF GND Backup (p) 118.9', 'VHF GND Backup (s) 119.15', 'VHF ADC Backup (p) 118.3', 'VHF ADC Backup (s) 118.1', 'VHF APP Direc Backup (p) 123.2', 'VHF APP West Backup (p) 125.1', 'VHF APP East Main (p) 124.0',
-                'Server Recorder A', 'Server Recorder B', 'PC Recorder Playback', 'NTP Server & Gps', 'ATIS Server A', 'ATIS Server B', 'PC Client Oprator', 'Server AMSC A', 'Server AMSC B', 'Control & Spv console A', 'Control & Spv console B',
-                'Komputer ADPS', 'BO 1 WARRZPZE', 'BO 2 WARRYMYO', 'METEO 1 WARRYMYF', 'METEO 2 WARRYMYO', 'INFORMASI WARRYIYX', 
-                'VCCS - GATE X2 - 01', 'VCCS - GATE X2 - 02', 'VCCS - GATE X2 - 03', 'VCCS - GATE X2 - 04', 'VCCS - GPIF 1-4', 'VCCS - ERIF 1-10', 'VCCS - BCA 1-5', 'VCCS - BCB 1-9', 'CWP1', 'CWP2', 'CWP3', 'CWP4', 'CWP5', 'CWP6', 'CWP7', 'CWP8', 'CWP9', 'CWP10', 'CWP11 (CDU)', 'CWP12',
-                'DVOR', 'DME', 'ILS - Localizer', 'ILS - Glide Path', 'ILS - T-DME', 'MSSR - RMM 1 & 2', 'MSSR - LCMS 1 & 2', 'MSSR - SMP 1 & 2', 'MSSR- RDP 1 & 2', 'ADSB',  
-            ];
-
-            const listElement = document.getElementById('report-list');
-            const addReportButton = document.getElementById('add-report-button');
-            const addReportModal = document.getElementById('add-report-modal');
-            const closeModalButton = document.getElementById('close-modal-button');
-            const cancelButton = document.getElementById('cancel-button');
-            const reportForm = document.getElementById('report-form');
-            const equipmentContainer = document.getElementById('equipment-list');
-
-            // --- FUNGSI ---
-            
-            function renderList(data) {
-                listElement.innerHTML = ''; 
-                if (data.length === 0) {
-                     listElement.innerHTML = `<li class="text-center p-10 text-gray-500">Tidak ada data untuk ditampilkan.</li>`;
-                     return;
-                }
-                data.forEach(item => {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'grid grid-cols-12 gap-4 items-center px-6 py-4 hover:bg-gray-50 cursor-pointer';
-                    listItem.innerHTML = `
-                        <div class="col-span-3 text-sm text-gray-800">${item.date}</div>
-                        <div class="col-span-4 text-sm text-gray-800">${item.mantek}</div>
-                        <div class="col-span-4 text-sm text-gray-500">${item.acknowledge || 'N/A'}</div>
-                        <div class="col-span-1 flex justify-end">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
-                        </div>
-                    `;
-                    listElement.appendChild(listItem);
-                });
-            }
-
-            const createEquipmentDropdowns = () => {
-                equipmentContainer.innerHTML = '';
-                equipmentNames.forEach(name => {
-                    const id = name.toLowerCase().replace(/[\s\(\)-]/g, '');
-                    const div = document.createElement('div');
-                    // Tambahkan div ini agar saat keterangan muncul, tidak merusak layout grid
-                    div.className = "md:col-span-1 flex flex-col"; 
-
-                    div.innerHTML = `
-                        <div>
-                            <label for="${id}" class="block text-sm font-medium text-gray-700">${name}</label>
-                            <select id="${id}" name="${id}" data-equipment-id="${id}" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm">
-                                <option>NORMAL</option>
-                                <option>GANGGUAN</option>
-                                <option>SINGLE</option>
-                                <option>U/S</option>
-                            </select>
-                        </div>
-                        <div id="keterangan-wrapper-${id}" class="mt-2 hidden">
-                            <label for="keterangan-${id}" class="block text-sm font-medium text-gray-500">KETERANGAN ${name}</label>
-                            <textarea id="keterangan-${id}" name="keterangan-${id}" rows="2" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm"></textarea>
-                        </div>
-                    `;
-                    equipmentContainer.appendChild(div);
-                });
-            };
-            
-            const populatePersonDropdown = (selectId, placeholder) => {
-                const select = document.getElementById(selectId);
-                select.innerHTML = '';
-                technicianList.forEach(name => {
-                    const option = document.createElement('option');
-                    option.value = name;
-                    option.textContent = name || placeholder;
-                    select.appendChild(option);
-                });
-            };
-            
-            const updateAutoFields = () => {
-                const dinas = document.getElementById('dinas').value;
-                const tanggal = new Date(document.getElementById('tanggal').value);
-                const day = String(tanggal.getDate()).padStart(2, '0');
-                const month = String(tanggal.getMonth() + 1).padStart(2, '0');
-                const year = tanggal.getFullYear();
-                
-                if(!dinas || isNaN(day)) return;
-
-                const monthName = tanggal.toLocaleString('id-ID', { month: 'long' }).toUpperCase();
-                
-                document.getElementById('id-daily').value = `${dinas}.${day}.${monthName}.${year}`;
-                document.getElementById('kode').value = `${dinas}${day}${month}${year}CNSA`;
-            };
-
-            const openModal = () => {
-                reportForm.reset();
-                const today = new Date();
-                const yyyy = today.getFullYear();
-                const mm = String(today.getMonth() + 1).padStart(2, '0');
-                const dd = String(today.getDate()).padStart(2, '0');
-                document.getElementById('tanggal').value = `${yyyy}-${mm}-${dd}`;
-                document.getElementById('jam').value = today.toTimeString().slice(0,5);
-
-                document.querySelectorAll('#shift-buttons button').forEach(btn => btn.classList.remove('active'));
-                document.querySelector('#shift-buttons button[data-shift="MALAM"]').classList.add('active');
-                document.getElementById('dinas').value = "MALAM";
-
-                // Sembunyikan semua keterangan saat modal dibuka
-                 document.querySelectorAll('[id^="keterangan-wrapper-"]').forEach(el => el.classList.add('hidden'));
-
-                updateAutoFields();
-                addReportModal.classList.remove('hidden');
-            };
-
-            const closeModal = () => addReportModal.classList.add('hidden');
-
-            // --- EVENT LISTENERS ---
-            addReportButton.addEventListener('click', openModal);
-            closeModalButton.addEventListener('click', closeModal);
-            cancelButton.addEventListener('click', closeModal);
-            addReportModal.addEventListener('click', (event) => {
-                if (event.target === addReportModal) closeModal();
-            });
-
-            document.getElementById('tanggal').addEventListener('change', updateAutoFields);
-            
-            document.getElementById('shift-buttons').addEventListener('click', (e) => {
-                if (e.target.tagName === 'BUTTON') {
-                    document.querySelectorAll('#shift-buttons button').forEach(btn => btn.classList.remove('active'));
-                    e.target.classList.add('active');
-                    document.getElementById('dinas').value = e.target.dataset.shift;
-                    updateAutoFields();
-                }
-            });
-            
-            // Event listener untuk memunculkan/menyembunyikan keterangan
-            equipmentContainer.addEventListener('change', (e) => {
-                if (e.target.tagName !== 'SELECT') return;
-
-                const selectElement = e.target;
-                const equipmentId = selectElement.dataset.equipmentId;
-                const keteranganWrapper = document.getElementById(`keterangan-wrapper-${equipmentId}`);
-                if (!keteranganWrapper) return;
-
-                const problematicValues = ['GANGGUAN', 'SINGLE', 'U/S'];
-                if (problematicValues.includes(selectElement.value)) {
-                    keteranganWrapper.classList.remove('hidden');
-                } else {
-                    keteranganWrapper.classList.add('hidden');
-                    // Kosongkan isinya saat disembunyikan
-                    keteranganWrapper.querySelector('textarea').value = '';
-                }
-            });
-
-            reportForm.addEventListener('submit', function(event) {
-                event.preventDefault(); 
-                const formData = new FormData(reportForm);
-                const newReport = {
-                    date: new Date(formData.get('tanggal')).toLocaleDateString('en-US'),
-                    mantek: formData.get('mantek'),
-                    acknowledge: formData.get('acknowledge')
-                };
-                
-                const allData = {};
-                for (let [key, value] of formData.entries()) {
-                    if (value) allData[key] = value;
-                }
-                console.log("Data Form Lengkap:", allData);
-
-                reportData.unshift(newReport);
-                renderList(reportData);
-                closeModal();
-            });
-
-            // --- INISIALISASI ---
-            createEquipmentDropdowns();
-            populatePersonDropdown('mantek', 'Pilih Mantek');
-            populatePersonDropdown('acknowledge', 'Pilih Acknowledge');
-            renderList(reportData);
-        });
-    </script>
+    <script src="./renderer_daily_cnsd.js"></script>
 </body>
 </html>
-
