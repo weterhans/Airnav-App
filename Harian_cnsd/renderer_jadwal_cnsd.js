@@ -1,4 +1,4 @@
-// renderer_jadwal_cnsd.js
+// renderer_jadwal_cnsd.js (Versi Final)
 
 document.addEventListener('DOMContentLoaded', function() {
     // Pengecekan Login
@@ -35,12 +35,24 @@ document.addEventListener('DOMContentLoaded', function() {
         const result = await window.api.getCnsdSchedules();
         scheduleTableBody.innerHTML = '';
         if (result.success && result.data.length > 0) {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            
             result.data.forEach(schedule => {
                 const row = document.createElement('tr');
                 row.className = 'border-b hover:bg-gray-50';
-                const formattedDate = new Date(schedule.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric'});
                 
-                // PERUBAHAN: Tambahkan kolom untuk teknisi_6
+                let formattedDate = '-';
+                if (schedule.tanggal) {
+                    // PERBAIKAN 1: Mengatasi masalah tanggal di TAMPILAN TABEL
+                    try {
+                        const dateString = new Date(schedule.tanggal).toLocaleDateString('en-CA'); // Hasil: "2025-10-21"
+                        const [year, month, day] = dateString.split('-');
+                        formattedDate = `${day} ${monthNames[parseInt(month, 10) - 1]} ${year}`; // Hasil: "21 Okt 2025"
+                    } catch (e) {
+                        formattedDate = "Invalid Date";
+                    }
+                }
+                
                 row.innerHTML = `
                     <td class="px-4 py-3 font-medium text-gray-900">${schedule.schedule_id_custom || '-'}</td>
                     <td class="px-4 py-3">${formattedDate}</td>
@@ -61,12 +73,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 scheduleTableBody.appendChild(row);
             });
         } else {
-            // PERUBAHAN: Update colspan menjadi 13
             scheduleTableBody.innerHTML = `
                 <tr class="text-center">
                    <td colspan="13" class="py-10 px-4 text-gray-500">
                         <p>Tidak ada data jadwal untuk ditampilkan.</p>
-                        <p class="text-sm">Silakan tambahkan jadwal baru.</p>
                    </td>
                 </tr>
             `;
@@ -76,12 +86,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const createTechnicianDropdowns = () => {
         if (!technicianDropdownsContainer) return;
         technicianDropdownsContainer.innerHTML = '';
-        // PERUBAHAN: Loop sampai 6 untuk membuat 6 dropdown
         for (let i = 1; i <= 6; i++) {
             const select = document.createElement('select');
             select.name = `teknisi_${i}`;
             select.className = 'block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm mt-2';
-            let options = `<option value="">Pilih Teknisi ${i}${i > 2 ? ' (Opsional)' : ''}</option>`;
+            let options = `<option value="">Pilih Teknisi ${i}${i > 3 ? ' (Opsional)' : ''}</option>`;
             technicianList.forEach(name => {
                 options += `<option value="${name}">${name}</option>`;
             });
@@ -99,9 +108,9 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         };
         const tanggal = new Date(tanggalValue);
-        const day = String(tanggal.getDate()).padStart(2, '0');
-        const month = String(tanggal.getMonth() + 1).padStart(2, '0');
-        const year = tanggal.getFullYear();
+        const day = String(tanggal.getUTCDate()).padStart(2, '0');
+        const month = String(tanggal.getUTCMonth() + 1).padStart(2, '0');
+        const year = tanggal.getUTCFullYear();
         scheduleIdInput.value = `${dinas.toUpperCase()}-${day}/${month}/${year}-CNSD`;
     };
     
@@ -125,17 +134,20 @@ document.addEventListener('DOMContentLoaded', function() {
     const openEditModal = async (scheduleId) => {
         const result = await window.api.getCnsdScheduleById(scheduleId);
         if (!result.success || !result.data) {
-            alert(result.message || 'Data jadwal tidak ditemukan.');
+            // PERBAIKAN 3: Mengganti alert dengan SweetAlert2
+            Swal.fire('Gagal!', result.message || 'Data jadwal tidak ditemukan.', 'error');
             return;
         }
         const schedule = result.data;
         modalTitle.textContent = 'Edit Jadwal';
         document.getElementById('schedule-db-id').value = schedule.id;
         document.getElementById('schedule-id').value = schedule.schedule_id_custom;
-        document.getElementById('schedule-date').value = new Date(schedule.tanggal).toISOString().slice(0,10);
+        
+        // PERBAIKAN 2: Mengatasi masalah tanggal di MODAL EDIT
+        document.getElementById('schedule-date').value = new Date(schedule.tanggal).toLocaleDateString('en-CA');
+        
         document.getElementById('schedule-shift').value = schedule.dinas;
         
-        // PERUBAHAN: Loop sampai 6 untuk mengisi data edit
         for (let i = 1; i <= 6; i++) {
             const select = document.querySelector(`[name="teknisi_${i}"]`);
             if (select) select.value = schedule[`teknisi_${i}`] || '';
@@ -169,21 +181,25 @@ document.addEventListener('DOMContentLoaded', function() {
             event.preventDefault(); 
             const formData = new FormData(scheduleForm);
             
-            // PERUBAHAN: Mengambil 6 data teknisi dan mengisi kode/grup
+            // Menggunakan getUTCFullYear, dll untuk menghindari masalah timezone saat mengambil hari
+            const scheduleDate = new Date(formData.get('schedule-date'));
+            const userTimezoneOffset = scheduleDate.getTimezoneOffset() * 60000;
+            const correctedDate = new Date(scheduleDate.getTime() + userTimezoneOffset);
+
             const scheduleData = {
                 id: formData.get('id') || null,
                 schedule_id_custom: formData.get('schedule-id'),
                 tanggal: formData.get('schedule-date'),
                 dinas: formData.get('schedule-shift'),
-                hari: new Date(formData.get('schedule-date')).toLocaleDateString('id-ID', { weekday: 'long' }),
+                hari: correctedDate.toLocaleDateString('id-ID', { weekday: 'long', timeZone: 'UTC' }),
                 teknisi_1: formData.get('teknisi_1') || null,
                 teknisi_2: formData.get('teknisi_2') || null,
                 teknisi_3: formData.get('teknisi_3') || null,
                 teknisi_4: formData.get('teknisi_4') || null,
                 teknisi_5: formData.get('teknisi_5') || null,
                 teknisi_6: formData.get('teknisi_6') || null,
-                kode: formData.get('schedule-id'), // 'kode' diisi dari 'ID Jadwal'
-                grup: 'CNSD' // 'grup' diisi default 'CNSD'
+                kode: formData.get('schedule-id'),
+                grup: 'CNSD'
             };
 
             let result;
@@ -192,19 +208,35 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 result = await window.api.saveCnsdSchedule(scheduleData);
             }
-
+            
             if (result.success) {
-                alert(result.message);
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: result.message,
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
                 closeModal();
-                loadSchedules();
+                loadSchedules(); // PERBAIKAN 4: Memanggil fungsi yang benar
             } else {
-                alert('Gagal: ' + (result.message || 'Terjadi kesalahan'));
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: result.message,
+                    icon: 'error'
+                });
             }
         });
     }
 
     // --- Inisialisasi ---
     async function initializePage() {
+        // Tambahkan SweetAlert2 ke head jika belum ada
+        if (!document.querySelector('script[src*="sweetalert2"]')) {
+            const script = document.createElement('script');
+            script.src = "https://cdn.jsdelivr.net/npm/sweetalert2@11";
+            document.head.appendChild(script);
+        }
         await loadTechnicians();
         await loadSchedules();
     }

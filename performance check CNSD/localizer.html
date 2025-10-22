@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>METER READING - ILS LOCALIZER</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Gaya dasar dari kode pertama yang dipertahankan/disesuaikan */
+        body { font-family: 'Arial', sans-serif; }
+        .form-container-inner {
+            max-width: 210mm;
+            margin: 20px auto;
+            border: 2px solid #000;
+            background: white;
+            color: #000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        table, tr, td, th {
+            border: none;
+            }
+
+         .form-table-layout {
+            border-collapse: collapse;
+            border: none;
+            }
+
+            .form-table-layout {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid black;
+            }
+
+            .form-table-layout th,
+            .form-table-layout td {
+             border: 1px solid black;
+            padding: 4px;
+            }
+
+            .thead-green th {
+            background-color: #e2f0d9; /* Warna header */
+            text-align: center;
+            font-weight: bold;
+            }
+                
+            .teknisi-nama,
+            .teknisi-paraf,
+            .ttd-input {
+            width: 95%;
+            border: none;
+            border-bottom: 1px solid #000;
+            text-align: center;
+            }
+
+            .ttd-td-height {
+            height: 150px; /* tinggi kolom tanda tangan */
+            vertical-align: bottom;
+            }
+
+
+        .header-section { display: flex; justify-content: space-between; padding: 15px; border-bottom: 2px solid #000; }
+        .header-left { display: flex; gap: 15px; align-items: center; }
+        .logo { width: 90px; height: 80px; flex-shrink: 0; } /* Ukuran logo disesuaikan ke kode pertama */
+        .logo img { width: 100%; height: 100%; object-fit: contain; }
+        .header-title { font-size: 13px; }
+        .header-title .company { font-size: 16px; font-weight: bold; margin-bottom: 2px; color: #1e5a96; } /* Warna dari kode pertama */
+        .header-right { text-align: right; font-size: 10px; line-height: 1.5; }
+        .header-right .title { font-weight: bold; margin-bottom: 2px; }
+        
+        .title-section { padding: 10px; text-align: center; border-bottom: 2px solid #000; }
+        .title-section h1 { font-size: 20px; font-weight: bold; }
+
+        /* Style Info Section disesuaikan agar mirip dengan kode pertama */
+        .info-section { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; /* 3 kolom seperti ILS Localizer */
+            border-bottom: 2px solid #000; 
+        }
+        .info-cell {
+            padding: 8px 15px;
+            border-right: 1px solid #000;
+            font-size: 12px;
+        }
+        .info-cell:last-child { border-right: none; }
+        .info-cell.ils-center {
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            background: #d4a574;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .info-label { font-weight: bold; min-width: 80px; }
+        .info-field { display: inline-block; }
+
+        /* Style Tabel Utama */
+        table.form-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 2px; }
+        table.form-table th, table.form-table td { border: 1px solid #000; padding: 6px 8px; text-align: left; vertical-align: middle; }
+        table.form-table th { background-color: #b3d9ff; text-align: center; font-weight: bold; font-size: 12px; }
+        .section-title-a { background: #c0c0c0; padding: 8px 15px; font-weight: bold; border-bottom: 2px solid #000; font-size: 14px; }
+        .section-header-row th { background-color: #b3d9ff; }
+        .subsection-header { background: #c8d96f; font-weight: bold; }
+        
+        .input-field {
+            width: 100%; border: none; outline: none; background: transparent; font-size: 12px;
+            font-family: Arial, sans-serif; padding: 2px;
+        }
+        input[type="date"], select { border: 1px solid #ccc; padding: 3px; background: white; font-size: 11px; }
+
+        /* Style Tanda Tangan */
+        .signature-table td { padding: 0 !important; border: 1px solid #000; height: 120px; vertical-align: top; position: relative;}
+        .signature-table th { border: 1px solid #000; }
+        .signature-content { height: 70%; }
+        .name-line-area { position: absolute; bottom: 5px; width: 100%; text-align: center; font-size: 10px; padding: 0 5px; box-sizing: border-box; }
+        .signature-input-line { border: none; border-bottom: 1px solid #000; text-align: center; width: 85%; background-color: transparent; font-size: 10px; padding: 2px 0; }
+        .teknisi-cell { padding: 6px 8px !important; }
+
+        /* Print Media Query */
+        @media print {
+            @page { size: A4 portrait; margin: 6mm; }
+            body { margin: 0; background-color: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            #form-container { display: block !important; padding: 0 !important; }
+            #list-container, #main-controls { display: none !important; }
+            .form-container-inner { box-shadow: none; border: 1.5px solid #000; margin: 0; max-width: 100%; }
+            .header-section, .equipment-section { padding: 8px; }
+            .info-cell { padding: 5px 8px !important; }
+            .logo { width: 50px; height: 50px; }
+            table.form-table th, table.form-table td { padding: 3px 5px !important; font-size: 9px !important; }
+            
+            /* Print Tanda Tangan */
+            .signature-table td { height: 70px !important; }
+            .signature-content { height: 60% !important; }
+            .name-line-area { bottom: 2px; font-size: 8px; }
+            .signature-input-line { border-bottom: 1px solid #000 !important; width: 85%; font-size: 8px; }
+            .teknisi-cell input { font-size: 9px !important; }
+
+            .print-value {
+                border: none !important;
+                background: transparent !important;
+                padding: 1px !important;
+                font-size: 9px !important;
+                color: black !important;
+                display: inline;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    
+    <div id="main-content" class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
+            <div>
+                <div class="flex items-center">
+                    <a href="#" onclick="window.app.showList()" class="flex items-center text-gray-600 hover:text-gray-800 font-semibold p-2 rounded-md hover:bg-gray-200">
+                        <svg class="w-6 h-6 mr-0" fill="none" stroke="currentColor" viewBox="0 0 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-800 ml-4">Meter Reading ILS LOCALIZER</h1>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-4">
+                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Buat Data Baru</button>
+                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Lihat Daftar Data</button>
+                </div>
+            </div>
+            <img src="airnavindo_logo.png" alt="AirNav Logo" class="h-12 w-auto" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/id/thumb/7/77/AirNav_Indonesia_logo.svg/1200px-AirNav_Indonesia_logo.svg.png';">
+        </div>
+
+        <div id="form-container" class="hidden">
+            <form id="ils-form">
+                <input type="hidden" id="data_id" name="id">
+                <div class="form-container-inner">
+                    <div class="header-section">
+                        <div class="header-left">
+                            <div class="logo"><img src="airnavindo_logo.png" alt="AirNav Logo" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/id/thumb/7/77/AirNav_Indonesia_logo.svg/1200px-AirNav_Indonesia_logo.svg.png';"></div>
+                            <div class="header-title">
+                                <div class="company">AirNav Indonesia</div>
+                                <div>FAS CNS & OTOMASI</div>
+                            </div>
+                        </div>
+                        <div class="header-right">
+                            <div class="title">Perum LPPNPI<br>KANTOR CABANG SURABAYA</div>
+                            <div>Telp: (031)8683456 Fax: (031) 8583536</div>
+                            <div>email: sub@airnavindonesia.co.id</div>
+                            <div>Web: www.airnavindonesia.co.id</div>
+                        </div>
+                    </div>
+                    
+                    <div class="title-section"><h1>METER READING</h1></div>
+                    
+                    <div class="info-section">
+                        <div class="info-cell">
+                            <div class="info-field"><span class="info-label">LOKASI</span>: <span id="lokasi" class="print-value">CABANG SURABAYA</span></div>
+                        </div>
+                        <div class="info-cell ils-center">
+                            ILS<br>LOCALIZER
+                        </div>
+                        <div class="info-cell"></div>
+                        
+                        <div class="info-cell">
+                            <div class="info-field">
+                                <span class="info-label">TGL/JAM</span>: 
+                                <input type="date" id="tanggal" style="width: 100px;">
+                                <select id="shift" style="width: 120px;">
+                                    <option value="pagi">Pagi (07:00-13:00)</option>
+                                    <option value="siang">Siang (13:00-19:00)</option>
+                                    <option value="malam">Malam (19:00-07:00)</option>
+                                </select>
+                            </div>
+                        </div>
+                       <table style="width:100%; border-collapse:collapse; margin-top:5px;">
+                        <tr>
+                        <td style="width:50%; border:1px solid #000; padding:5px;">
+                            <span class="info-label">MERK</span>:
+                            <input type="text" id="merk" value="MOPIENS" class="input-field"
+                            style="width: 150px; display: inline-block; border:none; border-bottom:1px solid #000;">
+                        </td>
+                        <td style="width:50%; border:1px solid #000; padding:5px;">
+                            <span class="info-label">TYPE</span>:
+                            <input type="text" id="type" value="500" class="input-field"
+                            style="width: 150px; display: inline-block; border:none; border-bottom:1px solid #000;">
+                        </td>
+                        </tr>
+                    </table>
+                    </div>
+
+                    <div class="section-title-a">A. PERALATAN</div>
+                    
+                    <table class="form-table">
+                        <thead>
+                            <tr class="section-header-row">
+                                <th style="width: 40px;">NO</th>
+                                <th style="width: 250px;">PEMBACAAN METER READING</th>
+                                <th style="width: 120px;">NOMINAL<br>Standart</th>
+                                <th colspan="2" style="width: 200px;">HASIL PEMERIKSAAN</th>
+                                <th style="width: 150px;">KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="subsection-header center">1</td>
+                                <td class="subsection-header">FRONT PANEL</td>
+                                <td class="subsection-header center">Standart</td>
+                                <td class="subsection-header center">TX1</td>
+                                <td class="subsection-header center">TX2</td>
+                                <td class="subsection-header"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">All Status Indikator</td>
+                                <td class="center">Normal / Alrm</td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Alarm">Alarm</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Alarm">Alarm</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">Main Selected</td>
+                                <td class="center">√ / -</td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="√">√</option>
+                                        <option value="-">-</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="√">√</option>
+                                        <option value="-">-</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">TX On AIR</td>
+                                <td class="center">√ / -</td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="√">√</option>
+                                        <option value="-">-</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="√">√</option>
+                                        <option value="-">-</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">TX Stby</td>
+                                <td class="center">√ / -</td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="√">√</option>
+                                        <option value="-">-</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="√">√</option>
+                                        <option value="-">-</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">Control Status</td>
+                                <td class="center">local / Remote</td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="local">local</option>
+                                        <option value="Remote">Remote</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="input-field form-input" style="border: 1px solid #ccc;">
+                                        <option value="">-</option>
+                                        <option value="local">local</option>
+                                        <option value="Remote">Remote</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">DC Power Suplay</td>
+                                <td class="center">28 V</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="subsection-header center">2</td>
+                                <td class="subsection-header">CL (course Line)</td>
+                                <td class="subsection-header center">Standart</td>
+                                <td class="subsection-header center">M1</td>
+                                <td class="subsection-header center">M2</td>
+                                <td class="subsection-header"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">DDM</td>
+                                <td class="center">0.00%</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">SDM</td>
+                                <td class="center">40%</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">Level</td>
+                                <td class="center">0.00dB</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">IDENT</td>
+                                <td class="center">8.00%</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="subsection-header center">3</td>
+                                <td class="subsection-header">DS (Displacement Sensitivity)</td>
+                                <td class="subsection-header center">Standart</td>
+                                <td class="subsection-header center">M1</td>
+                                <td class="subsection-header center">M2</td>
+                                <td class="subsection-header"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">DDM</td>
+                                <td class="center">15.5%</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">SDM</td>
+                                <td class="center">40%</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">Level</td>
+                                <td class="center">0.00dB</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">IDENT</td>
+                                <td class="center">8.00%</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="subsection-header center">4</td>
+                                <td class="subsection-header">CLR (Clearance)</td>
+                                <td class="subsection-header center">Standart</td>
+                                <td class="subsection-header center">M1</td>
+                                <td class="subsection-header center">M2</td>
+                                <td class="subsection-header"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">DDM</td>
+                                <td class="center">22.28%</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">SDM</td>
+                                <td class="center">40%</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">Level</td>
+                                <td class="center">0.00dB</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">IDENT</td>
+                                <td class="center">8.00%</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="subsection-header center">5</td>
+                                <td class="subsection-header">Near Field</td>
+                                <td class="subsection-header center">Standart</td>
+                                <td class="subsection-header center">M1</td>
+                                <td class="subsection-header center">M2</td>
+                                <td class="subsection-header"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">DDM</td>
+                                <td class="center">0.00</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">SDM</td>
+                                <td class="center">40.00</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">Level</td>
+                                <td class="center">0.00</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">IDENT</td>
+                                <td class="center">8.00</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="subsection-header center">6</td>
+                                <td class="subsection-header">Power Supply DC/DC~A</td>
+                                <td class="subsection-header center">Standart</td>
+                                <td class="subsection-header center">M1</td>
+                                <td class="subsection-header center">M2</td>
+                                <td class="subsection-header"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">5V</td>
+                                <td class="center">5V</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">15V</td>
+                                <td class="center">15V</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">-15V</td>
+                                <td class="center">-15V</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="subsection-header center">7</td>
+                                <td class="subsection-header">Power Supply DC/DC</td>
+                                <td class="subsection-header center">Standart</td>
+                                <td class="subsection-header center">M1</td>
+                                <td class="subsection-header center">M2</td>
+                                <td class="subsection-header"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">5V</td>
+                                <td class="center">5V</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">8V</td>
+                                <td class="center">8V</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">15V</td>
+                                <td class="center">15V</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">-15V</td>
+                                <td class="center">-15V</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">28V</td>
+                                <td class="center">28V</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="subsection-header center">8</td>
+                                <td class="subsection-header">Baterai</td>
+                                <td class="subsection-header center">Standart</td>
+                                <td class="subsection-header center">M1</td>
+                                <td class="subsection-header center">M2</td>
+                                <td class="subsection-header"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td style="padding-left: 20px;">Baterai</td>
+                                <td class="center"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class="section-title-a" style="border-top: 2px solid #000;">B. LINGKUNGAN KERJA</div>
+                    <table class="form-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">NO</th>
+                                <th>KEGIATAN</th>
+                                <th style="width: 120px;">Nominal</th>
+                                <th style="width: 120px;">HASIL</th>
+                                <th style="width: 150px;">KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="center">1</td>
+                                <td>PEMERIKSAAN SUHU RUANGAN</td>
+                                <td class="center">&lt; 22° C</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="center">2</td>
+                                <td>PEMERIKSAAN AIR HUMIDITY</td>
+                                <td class="center">√</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="center">3</td>
+                                <td>PEMERIKSAAN KEBERSIHAN RUANGAN</td>
+                                <td class="center">√</td>
+                                <td><input type="text" class="input-field form-input"></td>
+                                <td><input type="text" class="input-field form-input"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="form-table-layout" style="margin-top:12px;">
+                    <tr class="thead-green">
+                        <th colspan="3">TEKNISI</th>
+                        <th>SUPERVISOR</th>
+                        <th>MANAGER TEKNIK</th>
+                    </tr>
+                    <tr>
+                        <td style="width:8%">No</td>
+                        <td style="width:25%">Nama</td>
+                        <td style="width:17%">Paraf</td>
+                        <td rowspan="6" class="ttd-td-height" style="text-align:center;">
+                        <input type="text" id="supervisor" class="ttd-input" placeholder="Supervisor"> 
+                        </td>
+                        <td rowspan="6" class="ttd-td-height" style="text-align:center;">
+                        <input type="text" id="manager" class="ttd-input" placeholder="Manager Teknik"> 
+                        </td>
+                    </tr>
+                    <tr><td>1</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                    <tr><td>2</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                    <tr><td>3</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                    <tr><td>4</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                    <tr><td>5</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                    </table>
+
+              
+
+                </div>
+            </form>
+            <div class="flex justify-center gap-4 mt-6 mb-10 no-print">
+                <button type="button" id="save-btn" class="bg-green-600 hover:bg-green-700 text-white px-8 py-2 rounded-lg font-semibold">Simpan</button>
+                <button type="button" id="print-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2 rounded-lg font-semibold">Print Form</button>
+                <button type="button" id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-2 rounded-lg font-semibold">Batal</button>
+            </div>
+        </div>
+        
+        <div id="list-container" class="bg-white p-6 rounded-lg shadow-md hidden">
+            <h3 class="text-lg font-bold leading-6 text-gray-900 mb-4">Daftar Meter Reading</h3>
+            <div id="tableContent" class="overflow-x-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const formContainer = document.getElementById('form-container');
+            const listContainer = document.getElementById('list-container');
+            const tableContent = document.getElementById('tableContent');
+            const ilsForm = document.getElementById('ils-form');
+            const dataIdInput = document.getElementById('data_id');
+            const createNewBtn = document.getElementById('create-new-btn');
+            const viewListBtn = document.getElementById('view-list-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const printBtn = document.getElementById('print-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+            let currentEditId = null;
+            const STORAGE_KEY = 'meterReadingData_ILS_LOCALIZER';
+
+            const showForm = () => {
+                formContainer.classList.remove('hidden');
+                listContainer.classList.add('hidden');
+                window.scrollTo(0, 0);
+            };
+
+            const showList = () => {
+                formContainer.classList.add('hidden');
+                listContainer.classList.remove('hidden');
+                loadTableData();
+            };
+
+            const getSavedData = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const saveAllData = (data) => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            const loadTableData = () => {
+                const data = getSavedData();
+                if (data.length === 0) {
+                    tableContent.innerHTML = '<p class="text-center text-gray-500 py-8">Belum ada data yang tersimpan.</p>';
+                    return;
+                }
+                const tableHtml = `
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${data.sort((a, b) => b.id - a.id).map((item, index) => `
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.tanggal}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.shift}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Selesai
+                                                </span>
+                                         </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="#" onclick="event.preventDefault(); window.app.editData(${item.id})" class="text-blue-600 hover:text-blue-800">Edit</a>
+                                            <a href="#" onclick="event.preventDefault(); window.app.deleteData(${item.id})" class="text-red-600 hover:text-red-800 ml-4">Hapus</a>
+                                        </td>       
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>`;
+                tableContent.innerHTML = tableHtml;
+            };
+
+            const clearForm = () => {
+                ilsForm.reset();
+                dataIdInput.value = '';
+                currentEditId = null;
+                // Set nilai default
+                document.getElementById('lokasi').textContent = 'CABANG SURABAYA';
+                document.getElementById('merk').value = 'MOPIENS';
+                document.getElementById('type').value = '500';
+                
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                document.getElementById('tanggal').value = `${yyyy}-${mm}-${dd}`;
+                
+                const jam = today.getHours();
+                let shiftValue = 'malam';
+                if (jam >= 7 && jam < 13) shiftValue = 'pagi';
+                else if (jam >= 13 && jam < 19) shiftValue = 'siang';
+                document.getElementById('shift').value = shiftValue;
+                
+                // Reset select inputs to default/first option
+                document.querySelectorAll('select.form-input').forEach(select => {
+                    select.selectedIndex = 0;
+                });
+            };
+
+            const handleSave = () => {
+                const tanggal = document.getElementById('tanggal').value;
+                if (!tanggal) {
+                    Swal.fire('Error', 'Tanggal wajib diisi!', 'error');
+                    return;
+                }
+                const savedData = getSavedData();
+                const teknisiNama = Array.from(document.querySelectorAll('.teknisi-nama')).map(el => el.value);
+                const teknisiParaf = Array.from(document.querySelectorAll('.teknisi-paraf')).map(el => el.value);
+                const formInputs = Array.from(document.querySelectorAll('.form-input')).map(input => input.value);
+                
+                const shiftSelect = document.getElementById('shift');
+
+                const formData = {
+                    id: currentEditId || Date.now(),
+                    tanggal,
+                    shift: shiftSelect.options[shiftSelect.selectedIndex].text.match(/\((.*?)\)/)[1], // Ambil nilai shift (contoh: 07:00-13:00)
+                    shiftValue: shiftSelect.value,
+                    lokasi: document.getElementById('lokasi').textContent,
+                    merk: document.getElementById('merk').value,
+                    type: document.getElementById('type').value,
+                    supervisor: document.getElementById('supervisor').value,
+                    manager: document.getElementById('manager').value,
+                    teknisi: teknisiNama,
+                    paraf: teknisiParaf,
+                    dataInput: formInputs // Menyimpan semua nilai input/select tabel
+                };
+
+                if (currentEditId) {
+                    const index = savedData.findIndex(data => data.id === currentEditId);
+                    if (index !== -1) savedData[index] = formData;
+                } else {
+                    savedData.push(formData);
+                }
+                
+                saveAllData(savedData);
+                Swal.fire('Sukses!', `Data berhasil ${currentEditId ? 'diperbarui' : 'disimpan'}.`, 'success');
+                showList();
+            };
+            
+            const handleCreateNew = () => {
+                clearForm();
+                saveBtn.innerText = 'Simpan';
+                showForm();
+            };
+
+            const handleCancel = () => {
+                Swal.fire({
+                    title: 'Anda yakin?',
+                    text: "Perubahan yang belum disimpan akan hilang.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, batalkan!',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showList();
+                    }
+                });
+            };
+
+            const handlePrint = () => {
+                // Kloning form untuk modifikasi saat print
+                const formToPrint = ilsForm.cloneNode(true);
+                formToPrint.id = 'print-form-temp';
+                
+                // Isi input fields dengan nilai dan ubah menjadi span
+                const inputs = formToPrint.querySelectorAll('input, select');
+                inputs.forEach(input => {
+                    const span = document.createElement('span');
+                    let value = input.value || ' ';
+                    
+                    if (input.tagName === 'SELECT') {
+                         const selectedOption = Array.from(input.options).find(opt => opt.value === input.value);
+                         value = selectedOption ? selectedOption.text : ' ';
+                         if (input.id === 'shift') {
+                             value = selectedOption ? selectedOption.text.match(/\((.*?)\)/)[1] : ' ';
+                         }
+                    }
+                    
+                    span.textContent = value;
+                    span.className = 'print-value';
+                    span.style.cssText = input.style.cssText;
+                    
+                    // Menambahkan class untuk input select Front Panel
+                    if (input.tagName === 'SELECT' && input.classList.contains('form-input')) {
+                        span.textContent = value;
+                        span.style.cssText += ' border: 1px solid #ccc;'; // Tambahkan border kembali untuk select agar terlihat seperti kotak
+                    }
+
+                    input.parentNode.replaceChild(span, input);
+                });
+
+                // Tampilkan form cetak dan sembunyikan yang lain
+                document.body.appendChild(formToPrint);
+                formToPrint.classList.remove('hidden');
+                document.getElementById('main-content').classList.add('hidden'); // Sembunyikan konten utama
+
+                window.print();
+                
+                // Hapus form sementara setelah print
+                formToPrint.remove();
+                document.getElementById('main-content').classList.remove('hidden'); // Tampilkan kembali konten utama
+            };
+
+            // --- RESTORE FORM AFTER PRINT (Reload untuk keaslian form) ---
+            window.onafterprint = () => {
+                 // Tidak perlu reload, cukup pastikan tampilan utama kembali
+                 // Namun, karena ada perubahan DOM, reload adalah cara termudah dan teraman 
+                 // untuk mengembalikan semua input.
+                 location.reload(); 
+            };
+
+            window.app = {
+                showList,
+                editData: (id) => {
+                    const data = getSavedData().find(d => d.id === id);
+                    if (!data) return;
+                    currentEditId = id;
+                    dataIdInput.value = id;
+                    
+                    // Isi data formulir
+                    document.getElementById('tanggal').value = data.tanggal;
+                    document.getElementById('shift').value = data.shiftValue;
+                    document.getElementById('merk').value = data.merk;
+                    document.getElementById('type').value = data.type;
+                    document.getElementById('supervisor').value = data.supervisor;
+                    document.getElementById('manager').value = data.manager;
+                    
+                    document.querySelectorAll('.form-input').forEach((input, i) => {
+                        const savedValue = data.dataInput[i] || '';
+                        if (input.tagName === 'SELECT') {
+                            input.value = savedValue;
+                        } else {
+                            input.value = savedValue;
+                        }
+                    });
+
+                    document.querySelectorAll('.teknisi-nama').forEach((input, i) => input.value = data.teknisi[i] || '');
+                    document.querySelectorAll('.teknisi-paraf').forEach((input, i) => input.value = data.paraf[i] || '');
+                    
+                    saveBtn.innerText = 'Perbarui Data';
+                    showForm();
+                },
+                deleteData: (id) => {
+                    Swal.fire({
+                        title: 'Anda yakin ingin menghapus data ini?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let data = getSavedData();
+                            data = data.filter(item => item.id !== id);
+                            saveAllData(data);
+                            Swal.fire('Terhapus!', 'Data telah berhasil dihapus.', 'success');
+                            loadTableData();
+                        }
+                    });
+                }
+            };
+            
+            // Event Listeners
+            createNewBtn.addEventListener('click', handleCreateNew);
+            viewListBtn.addEventListener('click', showList);
+            saveBtn.addEventListener('click', handleSave);
+            cancelBtn.addEventListener('click', handleCancel);
+            printBtn.addEventListener('click', handlePrint);
+            
+            showList();
+        });
+    </script>
+</body>
+</html>

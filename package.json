@@ -11,11 +11,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "electron": "^37.2.6"
+    "electron": "^37.7.0"
   },
   "dependencies": {
+    "axios": "^1.12.2",
     "bcrypt": "^6.0.0",
     "firebase": "^12.2.1",
-    "mysql2": "^3.15.0"
+    "mysql2": "^3.15.0",
+    "papaparse": "^5.5.3"
   }
 }

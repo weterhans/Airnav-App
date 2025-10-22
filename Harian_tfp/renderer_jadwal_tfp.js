@@ -1,7 +1,7 @@
-// renderer_jadwal_tfp.js
+// renderer_jadwal_tfp.js (Versi Final)
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Auth Guard
+    // Pengecekan Login
     if (!localStorage.getItem('loggedInUser')) {
         window.location.href = '../login.html';
         return;
@@ -32,18 +32,33 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     const loadSchedules = async () => {
+        // Panggil API khusus TFP
         const result = await window.api.getTfpSchedules();
         scheduleTableBody.innerHTML = '';
         if (result.success && result.data.length > 0) {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            
             result.data.forEach(schedule => {
                 const row = document.createElement('tr');
                 row.className = 'border-b hover:bg-gray-50';
-                const formattedDate = new Date(schedule.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric'});
+                
+                let formattedDate = '-';
+                if (schedule.tanggal) {
+                    // Perbaikan tampilan tanggal di tabel
+                    try {
+                        const dateString = new Date(schedule.tanggal).toLocaleDateString('en-CA');
+                        const [year, month, day] = dateString.split('-');
+                        formattedDate = `${day} ${monthNames[parseInt(month, 10) - 1]} ${year}`;
+                    } catch (e) {
+                        formattedDate = "Invalid Date";
+                    }
+                }
+                
                 row.innerHTML = `
-                    <td class="px-4 py-3">${schedule.schedule_id_custom}</td>
+                    <td class="px-4 py-3 font-medium text-gray-900">${schedule.schedule_id_custom || '-'}</td>
                     <td class="px-4 py-3">${formattedDate}</td>
-                    <td class="px-4 py-3">${schedule.hari}</td>
-                    <td class="px-4 py-3">${schedule.dinas}</td>
+                    <td class="px-4 py-3">${schedule.hari || '-'}</td>
+                    <td class="px-4 py-3">${schedule.dinas || '-'}</td>
                     <td class="px-4 py-3">${schedule.teknisi_1 || '-'}</td>
                     <td class="px-4 py-3">${schedule.teknisi_2 || '-'}</td>
                     <td class="px-4 py-3">${schedule.teknisi_3 || '-'}</td>
@@ -59,102 +74,168 @@ document.addEventListener('DOMContentLoaded', function() {
                 scheduleTableBody.appendChild(row);
             });
         } else {
-            scheduleTableBody.innerHTML = `<tr class="text-center"><td colspan="13" class="py-10">Belum ada data jadwal.</td></tr>`;
+            scheduleTableBody.innerHTML = `
+                <tr class="text-center">
+                   <td colspan="13" class="py-10 px-4 text-gray-500">
+                        <p>Tidak ada data jadwal TFP untuk ditampilkan.</p>
+                   </td>
+                </tr>
+            `;
         }
     };
 
     const createTechnicianDropdowns = () => {
+        if (!technicianDropdownsContainer) return;
         technicianDropdownsContainer.innerHTML = '';
-        // PERUBAHAN: Loop sampai 6
         for (let i = 1; i <= 6; i++) {
             const select = document.createElement('select');
             select.name = `teknisi_${i}`;
-            select.className = 'block w-full border-gray-300 rounded-md shadow-sm mt-2';
-            let options = `<option value="">Pilih Teknisi ${i}${i > 2 ? ' (Opsional)' : ''}</option>`;
-            technicianList.forEach(name => options += `<option value="${name}">${name}</option>`);
+            select.className = 'block w-full border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 text-sm mt-2';
+            let options = `<option value="">Pilih Teknisi ${i}${i > 3 ? ' (Opsional)' : ''}</option>`;
+            technicianList.forEach(name => {
+                options += `<option value="${name}">${name}</option>`;
+            });
             select.innerHTML = options;
             technicianDropdownsContainer.appendChild(select);
         }
     };
 
     const generateScheduleId = () => {
+        if (!scheduleShiftInput || !scheduleDateInput || !scheduleIdInput) return;
         const dinas = scheduleShiftInput.value;
-        const tanggal = new Date(scheduleDateInput.value);
-        if (!dinas || isNaN(tanggal)) return;
-        const day = String(tanggal.getDate()).padStart(2, '0');
-        const month = String(tanggal.getMonth() + 1).padStart(2, '0');
-        const year = tanggal.getFullYear();
+        const tanggalValue = scheduleDateInput.value;
+        if (!dinas || !tanggalValue) {
+            scheduleIdInput.value = '';
+            return;
+        };
+        const tanggal = new Date(tanggalValue);
+        const day = String(tanggal.getUTCDate()).padStart(2, '0');
+        const month = String(tanggal.getUTCMonth() + 1).padStart(2, '0');
+        const year = tanggal.getUTCFullYear();
+        // Ganti Suffix ID
         scheduleIdInput.value = `${dinas.toUpperCase()}-${day}/${month}/${year}-TFP`;
     };
     
-    const openModal = (isEditing = false, data = null) => {
+    const openModal = () => {
+        if (!scheduleForm || !addScheduleModal) return;
+        modalTitle.textContent = 'Tambah Jadwal Baru';
         scheduleForm.reset();
-        modalTitle.textContent = isEditing ? 'Edit Jadwal TFP' : 'Tambah Jadwal Baru';
-        document.getElementById('schedule-db-id').value = isEditing ? data.id : '';
-
-        if (isEditing) {
-            scheduleIdInput.value = data.schedule_id_custom;
-            scheduleDateInput.value = new Date(data.tanggal).toISOString().slice(0,10);
-            scheduleShiftInput.value = data.dinas;
-            // PERUBAHAN: Loop sampai 6
-            for (let i = 1; i <= 6; i++) {
-                const select = document.querySelector(`[name="teknisi_${i}"]`);
-                if (select) select.value = data[`teknisi_${i}`] || '';
-            }
-        } else {
-            scheduleDateInput.value = new Date().toISOString().slice(0, 10);
-            const hour = new Date().getHours();
-            let currentShift = (hour >= 7 && hour < 13) ? 'Pagi' : (hour >= 13 && hour < 19) ? 'Siang' : 'Malam';
-            scheduleShiftInput.value = currentShift;
-            generateScheduleId();
-        }
+        createTechnicianDropdowns();
+        document.getElementById('schedule-db-id').value = '';
+        const today = new Date();
+        scheduleDateInput.value = today.toISOString().slice(0, 10);
+        const hour = today.getHours();
+        let currentShift = 'Malam';
+        if (hour >= 7 && hour < 13) { currentShift = 'Pagi'; } 
+        else if (hour >= 13 && hour < 19) { currentShift = 'Siang'; }
+        scheduleShiftInput.value = currentShift;
+        generateScheduleId();
         addScheduleModal.classList.remove('hidden');
     };
 
-    const closeModal = () => addScheduleModal.classList.add('hidden');
+    const openEditModal = async (scheduleId) => {
+        // Panggil API khusus TFP
+        const result = await window.api.getTfpScheduleById(scheduleId);
+        if (!result.success || !result.data) {
+            Swal.fire('Gagal!', result.message || 'Data jadwal tidak ditemukan.', 'error');
+            return;
+        }
+        const schedule = result.data;
+        modalTitle.textContent = 'Edit Jadwal';
+        document.getElementById('schedule-db-id').value = schedule.id;
+        document.getElementById('schedule-id').value = schedule.schedule_id_custom;
+        
+        // Perbaikan tanggal di modal edit
+        document.getElementById('schedule-date').value = new Date(schedule.tanggal).toLocaleDateString('en-CA');
+        
+        document.getElementById('schedule-shift').value = schedule.dinas;
+        
+        for (let i = 1; i <= 6; i++) {
+            const select = document.querySelector(`[name="teknisi_${i}"]`);
+            if (select) select.value = schedule[`teknisi_${i}`] || '';
+        }
+        
+        addScheduleModal.classList.remove('hidden');
+    };
+
+    const closeModal = () => {
+        if (addScheduleModal) addScheduleModal.classList.add('hidden');
+    };
 
     // --- Event Listeners ---
-    addScheduleButton.addEventListener('click', () => openModal(false));
-    closeModalButton.addEventListener('click', closeModal);
-    cancelButton.addEventListener('click', closeModal);
-    scheduleDateInput.addEventListener('change', generateScheduleId);
-    scheduleShiftInput.addEventListener('change', generateScheduleId);
+    if(addScheduleButton) addScheduleButton.addEventListener('click', openModal);
+    if(closeModalButton) closeModalButton.addEventListener('click', closeModal);
+    if(cancelButton) cancelButton.addEventListener('click', closeModal);
+    if(scheduleDateInput) scheduleDateInput.addEventListener('change', generateScheduleId);
+    if(scheduleShiftInput) scheduleShiftInput.addEventListener('change', generateScheduleId);
 
-    scheduleTableBody.addEventListener('click', async (e) => {
-        if (e.target.classList.contains('edit-btn')) {
-            const result = await window.api.getTfpScheduleById(e.target.dataset.id);
-            if (result.success) openModal(true, result.data);
-        }
-    });
+    if (scheduleTableBody) {
+        scheduleTableBody.addEventListener('click', (event) => {
+            if (event.target.classList.contains('edit-btn')) {
+                const scheduleId = event.target.dataset.id;
+                openEditModal(scheduleId);
+            }
+        });
+    }
 
-    scheduleForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const formData = new FormData(scheduleForm);
-        const scheduleData = {
-            id: formData.get('id') || null,
-            schedule_id_custom: formData.get('schedule-id'),
-            tanggal: formData.get('schedule-date'),
-            dinas: formData.get('schedule-shift'),
-            hari: new Date(formData.get('schedule-date')).toLocaleDateString('id-ID', { weekday: 'long' }),
-            teknisi_1: formData.get('teknisi_1') || null,
-            teknisi_2: formData.get('teknisi_2') || null,
-            teknisi_3: formData.get('teknisi_3') || null,
-            teknisi_4: formData.get('teknisi_4') || null,
-            teknisi_5: formData.get('teknisi_5') || null,
-            teknisi_6: formData.get('teknisi_6') || null, // Tambahkan teknisi 6
-            kode: formData.get('schedule-id'),
-            grup: 'TFP'
-        };
+    if (scheduleForm) {
+        scheduleForm.addEventListener('submit', async function(event) {
+            event.preventDefault(); 
+            const formData = new FormData(scheduleForm);
+            
+            const scheduleDate = new Date(formData.get('schedule-date'));
+            const userTimezoneOffset = scheduleDate.getTimezoneOffset() * 60000;
+            const correctedDate = new Date(scheduleDate.getTime() + userTimezoneOffset);
 
-        const result = scheduleData.id ? await window.api.updateTfpSchedule(scheduleData) : await window.api.saveTfpSchedule(scheduleData);
-        alert(result.message);
-        if (result.success) {
-            closeModal();
-            loadSchedules();
-        }
-    });
+            const scheduleData = {
+                id: formData.get('id') || null,
+                schedule_id_custom: formData.get('schedule-id'),
+                tanggal: formData.get('schedule-date'),
+                dinas: formData.get('schedule-shift'),
+                hari: correctedDate.toLocaleDateString('id-ID', { weekday: 'long', timeZone: 'UTC' }),
+                teknisi_1: formData.get('teknisi_1') || null,
+                teknisi_2: formData.get('teknisi_2') || null,
+                teknisi_3: formData.get('teknisi_3') || null,
+                teknisi_4: formData.get('teknisi_4') || null,
+                teknisi_5: formData.get('teknisi_5') || null,
+                teknisi_6: formData.get('teknisi_6') || null,
+                kode: formData.get('schedule-id'),
+                grup: 'TFP' // Ganti grup
+            };
+
+            let result;
+            // Panggil API khusus TFP
+            if (scheduleData.id) {
+                result = await window.api.updateTfpSchedule(scheduleData);
+            } else {
+                result = await window.api.saveTfpSchedule(scheduleData);
+            }
+            
+            if (result.success) {
+                Swal.fire({
+                    title: 'Berhasil!',
+                    text: result.message,
+                    icon: 'success',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                closeModal();
+                loadSchedules();
+            } else {
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: result.message,
+                    icon: 'error'
+                });
+            }
+        });
+    }
 
     // --- Inisialisasi ---
-    loadTechnicians();
-    loadSchedules();
+    async function initializePage() {
+        await loadTechnicians();
+        await loadSchedules();
+    }
+    
+    initializePage();
 });

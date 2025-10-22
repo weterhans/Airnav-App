@@ -1,582 +1,781 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Meter Reading - AirNav Indonesia (Form C-3)</title>
-<style>
-  /* Basic page */
-  @page { size: A4; margin: 20mm; }
-  body {
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 12px;
-    color: #000;
-    margin: 0;
-    padding: 20px;
-  }
-  table { border-collapse: collapse; width: 100%; }
-  td, th {
-    border: 1px solid #000;
-    padding: 4px 5px;
-    vertical-align: middle;
-  }
-  .no-border { border: none !important; }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meter Reading - AirNav Indonesia (Form C-3)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Khusus untuk Tampilan Formulir */
+        body { font-family: 'Arial', sans-serif; background-color: #f3f4f6; }
+        .form-container-inner {
+            max-width: 210mm; /* A4 width */
+            margin: 20px auto;
+            /* Border dan Shadow dipertahankan untuk tampilan formulir A4 */
+            border: 1px solid #000; 
+            background: white;
+            color: #000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            padding: 20px; /* Padding dari body asli */
+        }
+        
+        /* Styling Tabel dari CSS Asli */
+        .form-table-layout { border-collapse: collapse; width: 100%; margin-top: 2px; }
+        .form-table-layout td, .form-table-layout th {
+            border: 1px solid #000;
+            padding: 4px 5px;
+            vertical-align: middle;
+            font-size: 12px;
+        }
+        .no-border { border: none !important; }
 
-  /* Header */
-  .logo { width: 110px; display:block; }
-  .header-right {
-    background-color: #1f4e79;
-    color: #fff;
-    padding: 8px;
-    font-size: 12px;
-  }
-  .title {
-    text-align: center;
-    font-weight: 700;
-    font-size: 18px;
-    padding: 6px 0;
-  }
+        /* Header (disesuaikan dengan skema warna asli dan layout div/flex) */
+        .header-section { display: flex; align-items: stretch; margin-bottom: 4px; border-bottom: 3px solid #000; }
+        .header-logo-box { width: 30%; padding: 4px 0; border: 1px solid #000; border-right: none; vertical-align: top; }
+        .header-title-box { width: 40%; text-align: center; vertical-align: middle; border: 1px solid #000; border-left: none; border-right: none; }
+        .header-info-box { width: 70%; padding: 4px 5px; vertical-align: top; text-align: left; border: 1px solid #000; border-left: none; }
+        
+        .logo { width: 110px; display:block; margin: 0 auto; }
+        .title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 18px;
+            padding: 6px 0;
+            border-top: 3px solid #000;
+            border-bottom: 3px solid #000;
+            margin: 0 10px;
+        }
 
-  /* recorder box */
-  .recorder {
-    background-color: #3b6b36;
-    color: #fff;
-    font-weight: 700;
-    text-align: center;
-  }
+        /* Subheader */
+        .subheader-table { margin-top: 2px; }
+        .subheader-table td { border: 1px solid #000; padding: 4px 5px; vertical-align: middle; }
+        .recorder {
+            background-color: #3b6b36;
+            color: #fff;
+            font-weight: 700;
+            text-align: center;
+        }
 
-  /* table colors */
-  .thead-green { background-color: #c6e0b4; font-weight: 700; text-align: center; }
-  .section-green { background-color: #d9ead3; font-weight: 700; padding: 6px; }
-  .us-cell { background-color: #ff4c4c; color: #fff; font-weight: 700; text-align:center; }
+        /* recorder box */
+        .recorder-form-c3 {
+            color: #1f4e79; 
+            font-weight: 700; 
+            font-size: 11px;
+            margin-top: 3px;
+        }
+        
+        .info-row-flex {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 10px 0;
+            padding: 8px;
+            border: 1px solid #000;
+        }
 
-  /* inputs */
-  input[type="text"], select{
-    width: 96%;
-    border: none;
-    padding: 2px 4px;
-    font-size: 12px;
-    background: transparent;
-  }
-  input[type="text"]:focus, select:focus {
-    outline: 1px dashed #2b78d0;
-    background: #fff;
-  }
+        /* table colors dari CSS Asli */
+        .thead-green { background-color: #c6e0b4; font-weight: 700; text-align: center; }
+        .section-green { background-color: #d9ead3; font-weight: 700; padding: 6px; }
+        .us-cell { background-color: #ff4c4c; color: #fff; font-weight: 700; text-align:center; }
 
-  select {
-    width: 100%;
-    cursor: pointer;
-  }
+        /* inputs dari CSS Asli */
+        input[type="text"], input[type="date"], select{
+            width: 96%;
+            border: none;
+            padding: 2px 4px;
+            font-size: 12px;
+            background: transparent;
+            /* Perubahan: Tambahkan fokus state untuk non-print view */
+            transition: all 0.1s;
+        }
+        input[type="text"]:focus, select:focus {
+            outline: 1px dashed #2b78d0;
+            background: #fff;
+        }
+        
+        select {
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .print-value {
+            /* Untuk menggantikan input saat print */
+            display: block; 
+            min-height: 18px; /* agar tinggi baris tidak berubah */
+            padding: 2px 4px;
+        }
 
-  .info-row {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin: 10px 0;
-    padding: 8px;
-    border: 1px solid #000;
-  }
 
-  /* small helpers */
-  .center { text-align:center; }
-  .bold { font-weight:700; }
+        /* small helpers */
+        .center { text-align:center; }
+        .bold { font-weight:700; }
 
-  /* Print Button */
-  .print-button {
-    display: inline-block;
-    margin: 10px 5px;
-    padding: 12px 30px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: bold;
-    box-shadow: 0 3px 6px rgba(0,0,0,0.2);
-    transition: all 0.3s;
-  }
-
-  .print-button:hover {
-    background-color: #45a049;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 10px rgba(0,0,0,0.3);
-  }
-
-  .btn-save-table {
-    background-color: #FF9800;
-  }
-
-  .btn-save-table:hover {
-    background-color: #e68900;
-  }
-
-  .btn-cancel {
-    background-color: #f44336;
-  }
-
-  .btn-cancel:hover {
-    background-color: #da190b;
-  }
-
-  .button-container {
-    text-align: center;
-    margin: 20px 0;
-  }
-
-  /* print tweaks */
-  @media print {
-    input[type="text"], select { 
-      background: transparent; 
-      border: none;
-    
-    }
-    body { margin: 0; padding: 0; }
-    .print-button {
-      display: none !important;
-    }
-    .info-row {
-      border: 1px solid #000;
-    }
-    @page {
-      size: A4;
-      margin: 10mm;
-    }
-    
-    body {
-      font-size: 9px;
-    }
-    
-    th, td {
-      padding: 3px 5px;
-      font-size: 9px;
-    }
-  }
-</style>
+        /* Print Tweaks */
+        @media print {
+            @page { size: A4; margin: 10mm; }
+            body { margin: 0; padding: 0; font-size: 9px; background-color: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            .form-container-inner { box-shadow: none; margin: 0; max-width: 100%; border: 1.5px solid #000; padding: 0 !important; }
+            
+            /* Override input/select for print */
+            input[type="text"], input[type="date"], select { 
+                background: transparent; 
+                border: none !important;
+                padding: 0 !important;
+                width: 98% !important; /* Adjust width slightly for better fit */
+                font-size: 9px !important;
+                color: black !important;
+            }
+            select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+            }
+            .print-value {
+                display: block; 
+                min-height: 14px;
+                padding: 0 !important;
+                font-size: 9px !important;
+            }
+            
+            /* Table Adjustments */
+            .form-table-layout td, .form-table-layout th {
+                padding: 3px 5px !important;
+                font-size: 9px !important;
+            }
+            
+            .header-info-box, .header-logo-box, .header-title-box { border: none !important; }
+            .subheader-table td { border: 1px solid #000; }
+            .info-row-flex { border: 1px solid #000; margin: 5px 20px 5px 20px !important; padding: 5px !important; }
+            
+            /* TTD Adjustment */
+            .ttd-input { border-bottom: 1px solid #000; }
+            .ttd-td-height { height: 60px; padding-bottom: 10px !important; }
+        }
+    </style>
 </head>
-<body>
-
-<!-- HEADER -->
-<table style="margin-bottom:4px;">
-  <tr>
-    <td colspan="2" style="width:30%; vertical-align: top; border-right:none;">
-      <img src="../img/airnav.png" alt="AirNav Indonesia" class="logo">
-      <div style="margin-top:3px; font-weight:700; font-size:11px;">AirNav Indonesia</div>
-    </td>
-    <td colspan="2" style="width:40%; text-align:center; vertical-align:middle; border-left:none; border-right:none;">
-      <div style="border-top:3px solid #000; border-bottom:3px solid #000; padding:5px 0; margin:0 10px;">
-        <div class="title">METER READING</div>
-      </div>
-    </td>
-    <td style="width:70%; vertical-align: top; text-align:left; border-left:none;">
-      <div style="font-size:10px; line-height:1.4;">
-        <div style="font-weight:700;">Perum LPPNPI</div>
-        <div style="font-weight:700;">KANTOR CABANG SURABAYA</div>
-        <div>Telp: (031)8688456 Fax: (031)8688536</div>
-        <div>email: sub@airnavindonesia.co.id</div>
-        <div>Web: www.airnavindonesia.co.id</div>
-      </div>
-    </td>
-  </tr>
-</table>
-
-<!-- SUBHEADER / IDENTITAS -->
-<table style="margin-top:2px;">
-  <tr>
-    <td style="width:10%; font-weight:700;">LOKASI</td>
-    <td style="width:30%">: CABANG SURABAYA</td>
-    <td class="recorder" style="width:38%;">RECORDER</td>
-    <td style="width:22%; text-align:center;">
-      <div style="color:#1f4e79; font-weight:700; font-size:11px;">FAS CNS &amp; A</div>
-      <div style="font-weight:700; font-size:12px;">FORM C-3</div>
-    </td>
-  </tr>
-</table>
-
-<div class="info-row">
-  <strong>TGL/JAM :</strong>
-  <div style="flex: 1; display: flex; gap: 10px; align-items: center;">
-    <input type="date" id="tanggal" style="width: 130px;">
-    <select id="shift" style="width: 160px;">
-      <option value="pagi">Pagi (07:00-13:00)</option>
-      <option value="siang">Siang (13:00-19:00)</option>
-      <option value="malam">Malam (19:00-07:00)</option>
-    </select>
-  </div>
-</div>
-
-<table style="margin-top:2px;">
-  <tr>
-    <td style="width:10%; font-weight:700;">MERK</td>
-    <td style="width:30%">: ATIS - UHER</td>
-    <td style="width:10%; font-weight:700;">TYPE</td>
-    <td style="width:30%">: VC - MDx</td>
-    <td style="width:8%; font-weight:700;">S N</td>
-    <td style="width:12%">: 51</td>
-  </tr>
-</table>
-
-<!-- A. PERALATAN -->
-<div class="section-green" style="margin-top:8px;">A. PERALATAN</div>
-
-<table style="margin-top:4px;">
-  <tr>
-    <th style="width:3%" class="thead-green">NO</th>
-    <th style="width:33%" class="thead-green">PEMBACAAN METER READING</th>
-    <th style="width:18%" class="thead-green">NOMINAL</th>
-    <th style="width:11%" class="thead-green">HASIL PEMERIKSAAN<br></th>
-    <th style="width:11%" class="thead-green">HASIL PEMERIKSAAN<br></th>
-    <th style="width:24%" class="thead-green">KETERANGAN</th>
-  </tr>
-
-  <!-- 1 KVM -->
-  <tr>
-    <td class="center" rowspan="2">1</td>
-    <td><span class="bold">KVM</span></td>
-    <td class="center"><span class="bold">Standart</span></td>
-    <td class="center"><input type="text"></td>
-    <td class="center"><input type="text"></td>
-    <td><input type="text"></td>  
-  </tr>
-  <tr>
-    <td>All Status Indikator</td>
-    <td class="center">Normal / Alrm</td>
-    <td class="center">
-      <select>
-        <option value="">-- Pilih --</option>
-        <option value="Normal">Normal</option>
-        <option value="Alrm">Alrm</option>
-      </select>
-    </td>
-    <td class="center">
-      <select>
-        <option value="">-- Pilih --</option>
-        <option value="Normal">Normal</option>
-        <option value="Alrm">Alrm</option>
-      </select>
-    </td>
-    <td><input type="text"></td>
-  </tr>
-
-  <!-- 2 SERVER -->
-  <tr>
-    <td class="center" rowspan="3">2</td>
-    <td><span class="bold">SERVER</span></td>
-    <td rowspan="3" class="center">√ / –</td>
-    <td class="center"><input type="text"></td>
-    <td class="center"><input type="text"></td>
-    <td><input type="text"></td>
-  </tr>
-  <tr>
-    <td>Main Server</td>
-    <td class="center">
-      <select>
-        <option value="">-- Pilih --</option>
-        <option value="√">√</option>
-        <option value="–">–</option>
-      </select>
-    </td>
-    <td class="center">
-      <select>
-        <option value="">-- Pilih --</option>
-        <option value="√">√</option>
-        <option value="–">–</option>
-      </select>
-    </td>
-    <td><input type="text"></td>
-  </tr>
-  <tr>
-    <td>Standby server</td>
-    <td class="center">
-      <select>
-        <option value="">-- Pilih --</option>
-        <option value="√">√</option>
-        <option value="–">–</option>
-      </select>
-    </td>
-    <td class="center">
-      <select>
-        <option value="">-- Pilih --</option>
-        <option value="√">√</option>
-        <option value="–">–</option>
-      </select>
-    </td>
-    <td><input type="text"></td>
-  </tr>
-
-  <!-- 3 POWER -->
-  <tr>
-    <td class="center" rowspan="3">3</td>
-    <td><span class="bold">POWER</span></td>
-    <td rowspan="3"></td>
-    <td class="center"><input type="text"></td>
-    <td class="center"><input type="text"></td>
-    <td><input type="text"></td>
-  </tr>
-  <tr>
-    <td>AC</td>
-    <td class="center"><input type="text"></td>
-    <td class="center"><input type="text"></td>
-    <td><input type="text"></td>
-  </tr>
-  <tr>
-    <td>DC</td>
-    <td class="center"><input type="text"></td>
-    <td class="center"><input type="text"></td>
-    <td><input type="text"></td>
-  </tr>
-
-  <!-- Channels 1-64 -->
-  <tr><td></td><td>Channel 1</td><td>Ground Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 2</td><td>Ground Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 3</td><td>Tower Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 4</td><td>Tower Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 5</td><td>Director Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 6</td><td>Director Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 7</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 8</td><td>East Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 9</td><td>West Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 10</td><td>West Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 11</td><td>Blora Primary 125.1MHz</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 12</td><td>DS DHQ/DO KEDIRI</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 13</td><td>MKS-ER Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 14</td><td>MKS-ER Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 15</td><td>ATIS</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 16</td><td>EMERGENCY</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 17</td><td>CDU FUNKE</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 18</td><td>CDU Primary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 19</td><td>CDU Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 20</td><td>Blora Secondary</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 21</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 22</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 23</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 24</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 25</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 26</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 27</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 28</td><td>DS Jogja</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 29</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 30</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 31</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 32</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 33</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 34</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 35</td><td class="us-cell"></td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td class="us-cell">U/S</td></tr>
-  <tr><td></td><td>Channel 36</td><td>Telp TOWER 581</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 37</td><td>Telp TOWER 110</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 38</td><td>Telp APP 597</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 39</td><td>Telp APP 8655223</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 40</td><td>TRUNKING TOWER</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 41</td><td>Frequentis Control Tower</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 42</td><td>Frequentis Ass Tower</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 43</td><td>Frequentis Control GND</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 44</td><td>Frequentis Control CDU</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 45</td><td>Frequentis East Asst</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 46</td><td>Frequentis East Control</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 47</td><td>Frequentis West Asst</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 48</td><td>Frequentis West Controller</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 49</td><td>Frequentis Director Asst</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 50</td><td>Frequentis Director Control</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 51</td><td>Frequentis Supervisor APP</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 52</td><td>DS Banjarmasin</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 53</td><td>DS Pangkalbun (Pangkabun)</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 54</td><td>DS JAKARTA</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 55</td><td>DS MKS-EAST</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 56</td><td>DS MKS-WEST</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 57</td><td>DS BALI</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 58</td><td>DS SEMARANG</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 59</td><td>DS BALI INFO</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 60</td><td>DS MALANG</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 61</td><td>DS YIA</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 62</td><td>DS MADIUN</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 63</td><td>EAST SECONDARY</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td></td><td>Channel 64</td><td>DS UPG PKN</td><td class="center"><input type="text"></td><td class="center"><input type="text"></td><td><input type="text"></td></tr>
-</table>
-
-<!-- B. LINGKUNGAN KERJA -->
-<div class="section-green" style="margin-top:12px;">B. LINGKUNGAN KERJA</div>
-<table style="margin-top:4px;">
-  <tr>
-    <th style="width:2%" class="thead-green">NO</th>
-    <th style="width:34%" class="thead-green">KEGIATAN</th>
-    <th style="width:15%" class="thead-green">NOMINAL</th>
-    <th style="width:15%" class="thead-green">HASIL</th>
-    <th style="width:10%" class="thead-green">KETERANGAN</th>
-  </tr>
-  <tr>
-    <td class="center">1</td>
-    <td>PEMERIKSAAN SUHU RUANGAN</td>
-    <td>&lt; 22 &deg;C</td>
-    <td class="center"><input type="text"></td>
-    <td class="center"><input type="text"></td>
-  </tr>
-  <tr>
-    <td class="center">2</td>
-    <td>PEMERIKSAAN AIR HUMIDITY</td>
-    <td class="center">√ / -</td>
-    <td class="center">
-      <select>
-        <option value="">-- Pilih --</option>
-        <option value="√">√</option>
-        <option value="–">–</option>
-      </select>
-    </td>
-    <td class="center"><input type="text"></td>
-  </tr>
-  <tr>
-    <td class="center">3</td>
-    <td>PEMERIKSAAN KEBERSIHAN RUANGAN</td>
-    <td class="center">√ / -</td>
-    <td class="center">
-      <select>
-        <option value="">-- Pilih --</option>
-        <option value="√">√</option>
-        <option value="–">–</option>
-      </select>
-    </td>
-    <td class="center"><input type="text"></td>
-  </tr>
-</table>
-
-<!-- TANDA TANGAN -->
-<table style="margin-top:12px;">
-  <tr class="thead-green">
-    <th colspan="3">TEKNISI</th>
-    <th>SUPERVISOR</th>
-    <th>MANAGER TEKNIK</th>
-  </tr>
-  <tr>
-    <td>No</td>
-    <td>Nama</td>
-    <td>Paraf</td>
-    <td rowspan="6" style="text-align:center; vertical-align:bottom;">
-      ( <input type="text" placeholder="Nama Supervisor" style="width:90%;"> )
-    </td>
-    <td rowspan="6" style="text-align:center; vertical-align:bottom;">
-      ( <input type="text" placeholder="Nama Manager Teknik" style="width:90%;"> )
-    </td>
-  </tr>
-  <tr><td>1</td><td><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td>2</td><td><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td>3</td><td><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td>4</td><td><input type="text"></td><td><input type="text"></td></tr>
-  <tr><td>5</td><td><input type="text"></td><td><input type="text"></td></tr>
-</table>
-
-<div class="button-container">
-  <button class="print-button btn-save-table" onclick="saveToTable()">📊 SAVE TO TABLE</button>
-  <button class="print-button" onclick="window.print()">🖨️ CETAK / PRINT</button>
-  <button class="print-button btn-cancel" onclick="batalForm()">❌ BATAL</button>
-</div>
-
-<script>
-  function setTanggalHariIni() {
-    const today = new Date();
-    const yyyy = today.getFullYear();
-    const mm = String(today.getMonth() + 1).padStart(2, '0');
-    const dd = String(today.getDate()).padStart(2, '0');
-    document.getElementById('tanggal').value = yyyy + '-' + mm + '-' + dd;
-  }
-
-  function tentukanShiftOtomatis() {
-    const now = new Date();
-    const jam = now.getHours();
+<body class="bg-gray-100">
     
-    if (jam >= 7 && jam < 13) {
-      return 'pagi';
-    } else if (jam >= 13 && jam < 19) {
-      return 'siang';
-    } else {
-      return 'malam';
-    }
-  }
+    <div id="main-content" class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800">Meter Reading Recorder</h1>
+                <div class="mt-4 flex flex-wrap gap-4">
+                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">Buat Data Baru</button>
+                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold">Lihat Daftar Data</button>
+                </div>
+            </div>
+            <img src="airnav.jpg" alt="AirNav Logo" class="h-12 w-auto">
+        </div>
+        <div id="form-container" class="hidden">
+            <form id="atis-form">
+                <input type="hidden" id="data_id" name="id">
+                <div class="form-container-inner">
+                    
+                    <table class="form-table-layout no-border" style="margin-bottom:4px;">
+                        <tr>
+                            <td colspan="2" style="width:30%; vertical-align: top; border-right:none;" class="no-border">
+                                <img src="airnav.jpg" alt="AirNav Indonesia" class="logo">
+                                <div style="margin-top:3px; font-weight:700; font-size:11px; text-align: center;">AirNav Indonesia</div>
+                            </td>
+                            <td colspan="2" style="width:40%; text-align:center; vertical-align:middle; border-left:none; border-right:none;" class="no-border">
+                                <div style="padding:5px 0; margin:0 10px;">
+                                    <div class="title">METER READING</div>
+                                </div>
+                            </td>
+                            <td style="width:70%; vertical-align: top; text-align:left; border-left:none;" class="no-border">
+                                <div style="font-size:10px; line-height:1.4;">
+                                    <div style="font-weight:700;">Perum LPPNPI</div>
+                                    <div style="font-weight:700;">KANTOR CABANG SURABAYA</div>
+                                    <div>Telp: (031)8688456 Fax: (031)8688536</div>
+                                    <div>email: sub@airnavindonesia.co.id</div>
+                                    <div>Web: www.airnavindonesia.co.id</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
 
-  window.addEventListener('DOMContentLoaded', function() {
-    setTanggalHariIni();
-    const shiftOtomatis = tentukanShiftOtomatis();
-    document.getElementById('shift').value = shiftOtomatis;
-  });
+                    <table class="form-table-layout subheader-table" style="margin-top:2px;">
+                        <tr>
+                            <td style="width:10%; font-weight:700;">LOKASI</td>
+                            <td style="width:30%"><input type="text" id="lokasi" value="CABANG SURABAYA" style="padding: 0 4px; width: 98%;"></td>
+                            <td class="recorder" style="width:38%;">RECORDER</td>
+                            <td style="width:22%; text-align:center;">
+                                <div class="recorder-form-c3">FAS CNS &amp; A</div>
+                                <div style="font-weight:700; font-size:12px;">FORM C-3</div>
+                            </td>
+                        </tr>
+                    </table>
 
-  // Fungsi Save to Table
-  function saveToTable() {
-    const tanggal = document.getElementById('tanggal').value;
-    const shift = document.getElementById('shift').options[document.getElementById('shift').selectedIndex].text;
-    
-    if (!tanggal) {
-      alert('⚠️ Mohon isi tanggal terlebih dahulu!');
-      return;
-    }
+                    <div class="info-row-flex" style="margin-left: 0; margin-right: 0;">
+                        <strong style="font-size: 12px;">TGL/JAM :</strong>
+                        <div style="flex: 1; display: flex; gap: 10px; align-items: center;">
+                            <input type="date" id="tanggal" style="width: 130px; border: 1px solid #ccc;">
+                            <select id="shift" style="width: 220px; border: 1px solid #ccc;">
+                                <option value="pagi">Pagi (07:00-13:00)</option>
+                                <option value="siang">Siang (13:00-19:00)</option>
+                                <option value="malam">Malam (19:00-07:00)</option>
+                            </select>
+                        </div>
+                    </div>
 
-    // Kumpulkan semua data input dan select
-    const allInputs = document.querySelectorAll('input[type="text"]');
-    const allSelects = document.querySelectorAll('select:not(#shift)');
-    
-    const formData = {
-      timestamp: new Date().toLocaleString('id-ID'),
-      tanggal: tanggal,
-      shift: shift,
-      dataCount: allInputs.length + allSelects.length,
-      filledCount: 0
-    };
+                    <table class="form-table-layout subheader-table" style="margin-top:2px;">
+                        <tr>
+                            <td style="width:10%; font-weight:700;">MERK</td>
+                            <td style="width:30%"><input type="text" id="merk" value="ATIS - UHER" style="padding: 0 4px; width: 98%;"></td>
+                            <td style="width:10%; font-weight:700;">TYPE</td>
+                            <td style="width:30%"><input type="text" id="type" value="VC - MDx" style="padding: 0 4px; width: 98%;"></td>
+                            <td style="width:8%; font-weight:700;">S N</td>
+                            <td style="width:12%"><input type="text" id="sn" value="51" style="padding: 0 4px; width: 98%;"></td>
+                        </tr>
+                    </table>
 
-    // Hitung jumlah field yang terisi
-    allInputs.forEach(input => {
-      if (input.value.trim() !== '') formData.filledCount++;
-    });
-    allSelects.forEach(select => {
-      if (select.value !== '') formData.filledCount++;
-    });
+                    <div class="section-green" style="margin-top:8px;">A. PERALATAN</div>
 
-    // Simpan ke memori (array)
-    if (!window.savedRecords) {
-      window.savedRecords = [];
-    }
-    
-    window.savedRecords.push(formData);
-    
-    alert(`✅ Data berhasil disimpan!\n\n` +
-          `Tanggal: ${tanggal}\n` +
-          `Shift: ${shift}\n` +
-          `Field terisi: ${formData.filledCount}/${formData.dataCount}\n` +
-          `Total record tersimpan: ${window.savedRecords.length}`);
-    
-    console.log('Data tersimpan:', formData);
-    console.table(window.savedRecords);
-  }
+                    <table class="form-table-layout" id="peralatan-table">
+                        <tr>
+                            <th style="width:3%" class="thead-green">NO</th>
+                            <th style="width:33%" class="thead-green">PEMBACAAN METER READING</th>
+                            <th style="width:18%" class="thead-green">NOMINAL</th>
+                            <th style="width:11%" class="thead-green">HASIL PEMERIKSAAN<br></th>
+                            <th style="width:11%" class="thead-green">HASIL PEMERIKSAAN<br></th>
+                            <th style="width:24%" class="thead-green">KETERANGAN</th>
+                        </tr>
 
-  // Fungsi Batal (Reset form)
-  function batalForm() {
-    if (confirm('⚠️ Apakah Anda yakin ingin membatalkan dan mengosongkan semua form?\n\nSemua data yang belum disimpan akan hilang!')) {
-      // Reset semua input text
-      document.querySelectorAll('input[type="text"]').forEach(input => {
-        input.value = '';
-      });
+                        <tr>
+                            <td class="center" rowspan="2">1</td>
+                            <td><span class="bold">KVM</span></td>
+                            <td class="center"><span class="bold">Standart</span></td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td><input type="text" class="form-input"></td>  
+                        </tr>
+                        <tr>
+                            <td>All Status Indikator</td>
+                            <td class="center">Normal / Alrm</td>
+                            <td class="center">
+                                <select class="form-select">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Alrm">Alrm</option>
+                                </select>
+                            </td>
+                            <td class="center">
+                                <select class="form-select">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Alrm">Alrm</option>
+                                </select>
+                            </td>
+                            <td><input type="text" class="form-input"></td>
+                        </tr>
 
-      // Reset semua select (kecuali shift)
-      document.querySelectorAll('select:not(#shift)').forEach(select => {
-        select.selectedIndex = 0;
-      });
+                        <tr>
+                            <td class="center" rowspan="3">2</td>
+                            <td><span class="bold">SERVER</span></td>
+                            <td rowspan="3" class="center">√ / –</td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td><input type="text" class="form-input"></td>
+                        </tr>
+                        <tr>
+                            <td>Main Server</td>
+                            <td class="center">
+                                <select class="form-select">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="√">√</option>
+                                    <option value="–">–</option>
+                                </select>
+                            </td>
+                            <td class="center">
+                                <select class="form-select">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="√">√</option>
+                                    <option value="–">–</option>
+                                </select>
+                            </td>
+                            <td><input type="text" class="form-input"></td>
+                        </tr>
+                        <tr>
+                            <td>Standby server</td>
+                            <td class="center">
+                                <select class="form-select">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="√">√</option>
+                                    <option value="–">–</option>
+                                </select>
+                            </td>
+                            <td class="center">
+                                <select class="form-select">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="√">√</option>
+                                    <option value="–">–</option>
+                                </select>
+                            </td>
+                            <td><input type="text" class="form-input"></td>
+                        </tr>
 
-      // Reset tanggal dan shift ke default
-      setTanggalHariIni();
-      const shiftOtomatis = tentukanShiftOtomatis();
-      document.getElementById('shift').value = shiftOtomatis;
+                        <tr>
+                            <td class="center" rowspan="3">3</td>
+                            <td><span class="bold">POWER</span></td>
+                            <td rowspan="3"></td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td><input type="text" class="form-input"></td>
+                        </tr>
+                        <tr>
+                            <td>AC</td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td><input type="text" class="form-input"></td>
+                        </tr>
+                        <tr>
+                            <td>DC</td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td><input type="text" class="form-input"></td>
+                        </tr>
 
-      alert('✅ Form berhasil direset!\n\nSemua data telah dikosongkan.');
-    }
-  }
+                        <tr><td></td><td>Channel 1</td><td>Ground Primary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 2</td><td>Ground Secondary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 3</td><td>Tower Primary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 4</td><td>Tower Secondary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 5</td><td>Director Primary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 6</td><td>Director Secondary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 7</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 8</td><td>East Primary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 9</td><td>West Primary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 10</td><td>West Secondary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 11</td><td>Blora Primary 125.1MHz</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 12</td><td>DS DHQ/DO KEDIRI</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 13</td><td>MKS-ER Primary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 14</td><td>MKS-ER Secondary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 15</td><td>ATIS</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 16</td><td>EMERGENCY</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 17</td><td>CDU FUNKE</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 18</td><td>CDU Primary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 19</td><td>CDU Secondary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 20</td><td>Blora Secondary</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 21</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 22</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 23</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 24</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 25</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 26</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 27</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 28</td><td>DS Jogja</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 29</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 30</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 31</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 32</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 33</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 34</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 35</td><td class="us-cell"></td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td class="us-cell">U/S</td></tr>
+                        <tr><td></td><td>Channel 36</td><td>Telp TOWER 581</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 37</td><td>Telp TOWER 110</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 38</td><td>Telp APP 597</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 39</td><td>Telp APP 8655223</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 40</td><td>TRUNKING TOWER</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 41</td><td>Frequentis Control Tower</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 42</td><td>Frequentis Ass Tower</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 43</td><td>Frequentis Control GND</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 44</td><td>Frequentis Control CDU</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 45</td><td>Frequentis East Asst</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 46</td><td>Frequentis East Control</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 47</td><td>Frequentis West Asst</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 48</td><td>Frequentis West Controller</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 49</td><td>Frequentis Director Asst</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 50</td><td>Frequentis Director Control</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 51</td><td>Frequentis Supervisor APP</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 52</td><td>DS Banjarmasin</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 53</td><td>DS Pangkalbun (Pangkabun)</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 54</td><td>DS JAKARTA</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 55</td><td>DS MKS-EAST</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 56</td><td>DS MKS-WEST</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 57</td><td>DS BALI</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 58</td><td>DS SEMARANG</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 59</td><td>DS BALI INFO</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 60</td><td>DS MALANG</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 61</td><td>DS YIA</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 62</td><td>DS MADIUN</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 63</td><td>EAST SECONDARY</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                        <tr><td></td><td>Channel 64</td><td>DS UPG PKN</td><td class="center"><input type="text" class="form-input"></td><td class="center"><input type="text" class="form-input"></td><td><input type="text" class="form-input"></td></tr>
+                    </table>
 
-  // Tambahan: Fungsi untuk melihat data yang tersimpan
-  function lihatDataTersimpan() {
-    if (!window.savedRecords || window.savedRecords.length === 0) {
-      alert('📋 Belum ada data yang tersimpan.');
-      return;
-    }
-    
-    console.table(window.savedRecords);
-    alert(`📊 Total data tersimpan: ${window.savedRecords.length} record\n\nLihat detail di Console (F12)`);
-  }
-</script>
+                    <div class="section-green" style="margin-top:12px;">B. LINGKUNGAN KERJA</div>
+                    <table class="form-table-layout" id="lingkungan-table">
+                        <tr>
+                            <th style="width:2%" class="thead-green">NO</th>
+                            <th style="width:34%" class="thead-green">KEGIATAN</th>
+                            <th style="width:15%" class="thead-green">NOMINAL</th>
+                            <th style="width:15%" class="thead-green">HASIL</th>
+                            <th style="width:10%" class="thead-green">KETERANGAN</th>
+                        </tr>
+                        <tr>
+                            <td class="center">1</td>
+                            <td>PEMERIKSAAN SUHU RUANGAN</td>
+                            <td>&lt; 22 &deg;C</td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                        </tr>
+                        <tr>
+                            <td class="center">2</td>
+                            <td>PEMERIKSAAN AIR HUMIDITY</td>
+                            <td class="center">√ / -</td>
+                            <td class="center">
+                                <select class="form-select">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="√">√</option>
+                                    <option value="–">–</option>
+                                </select>
+                            </td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                        </tr>
+                        <tr>
+                            <td class="center">3</td>
+                            <td>PEMERIKSAAN KEBERSIHAN RUANGAN</td>
+                            <td class="center">√ / -</td>
+                            <td class="center">
+                                <select class="form-select">
+                                    <option value="">-- Pilih --</option>
+                                    <option value="√">√</option>
+                                    <option value="–">–</option>
+                                </select>
+                            </td>
+                            <td class="center"><input type="text" class="form-input"></td>
+                        </tr>
+                    </table>
 
+                    <table class="form-table-layout" style="margin-top:12px;">
+                        <tr class="thead-green">
+                            <th colspan="3">TEKNISI</th>
+                            <th>SUPERVISOR</th>
+                            <th>MANAGER TEKNIK</th>
+                        </tr>
+                        <tr>
+                            <td style="width:8%">No</td>
+                            <td style="width:25%">Nama</td>
+                            <td style="width:17%">Paraf</td>
+                            <td rowspan="6" class="ttd-td-height" style="text-align:center; vertical-align:bottom;">
+                                ( <input type="text" id="supervisor" class="ttd-input" placeholder="Nama Supervisor" style="width:90%; text-align:center;"> )
+                            </td>
+                            <td rowspan="6" class="ttd-td-height" style="text-align:center; vertical-align:bottom;">
+                                ( <input type="text" id="manager" class="ttd-input" placeholder="Nama Manager Teknik" style="width:90%; text-align:center;"> )
+                            </td>
+                        </tr>
+                        <tr><td>1</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                        <tr><td>2</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                        <tr><td>3</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                        <tr><td>4</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                        <tr><td>5</td><td><input type="text" class="teknisi-nama"></td><td><input type="text" class="teknisi-paraf"></td></tr>
+                    </table>
+                </div>
+            </form>
+            
+            <div class="flex justify-center gap-4 mt-6 no-print">
+                <button type="button" id="save-btn" class="bg-green-600 hover:bg-green-700 text-white px-8 py-2 rounded-lg font-semibold shadow-md">Simpan</button>
+                <button type="button" id="print-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2 rounded-lg font-semibold shadow-md">Print Form</button>
+                <button type="button" id="cancel-btn" class="bg-red-600 hover:bg-red-700 text-white px-8 py-2 rounded-lg font-semibold shadow-md">Batal / Kembali</button>
+            </div>
+            </div>
+        <div id="list-container" class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-lg font-bold leading-6 text-gray-900 mb-4">Daftar Meter Reading</h3>
+            <div id="tableContent" class="overflow-x-auto">
+                </div>
+        </div>
+        </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const formContainer = document.getElementById('form-container');
+            const listContainer = document.getElementById('list-container');
+            const tableContent = document.getElementById('tableContent');
+            const atisForm = document.getElementById('atis-form');
+            const dataIdInput = document.getElementById('data_id');
+            const createNewBtn = document.getElementById('create-new-btn');
+            const viewListBtn = document.getElementById('view-list-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const printBtn = document.getElementById('print-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+            let currentEditId = null;
+            const STORAGE_KEY = 'meterReadingData_ATIS_C3';
+
+            const showForm = () => {
+                formContainer.classList.remove('hidden');
+                listContainer.classList.add('hidden');
+                window.scrollTo(0, 0);
+            };
+
+            const showList = () => {
+                formContainer.classList.add('hidden');
+                listContainer.classList.remove('hidden');
+                loadTableData();
+            };
+
+            const getSavedData = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const saveAllData = (data) => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            
+            // Helper function to map form inputs to data object
+            const getFormData = (id) => {
+                const formInputs = Array.from(document.querySelectorAll('.form-table-layout .form-input')).map(input => input.value);
+                const formSelects = Array.from(document.querySelectorAll('.form-table-layout .form-select')).map(select => select.value);
+                
+                // Combine all data fields into one array for easier storage/retrieval
+                const allFormFields = [
+                    ...formInputs.slice(0, 3), // KVM text inputs (3)
+                    document.querySelectorAll('.form-select')[0].value, // KVM select 1
+                    document.querySelectorAll('.form-select')[1].value, // KVM select 2
+                    formInputs[3], // KVM text 2
+                    formInputs[4], formInputs[5], formInputs[6], // Server text inputs (3)
+                    document.querySelectorAll('.form-select')[2].value, // Server select 1
+                    document.querySelectorAll('.form-select')[3].value, // Server select 2
+                    formInputs[7], // Server text 2
+                    document.querySelectorAll('.form-select')[4].value, // Server select 3
+                    document.querySelectorAll('.form-select')[5].value, // Server select 4
+                    formInputs[8], // Server text 3
+                    // ... dan seterusnya, tetapi karena struktur asli tidak memiliki ID/Nama,
+                    // cara termudah adalah mengambil semua input dan select dalam urutan kemunculannya
+                    // dan menyimpannya dalam satu array (formInputs & formSelects sudah di atas)
+                ];
+                
+                const inputsAndSelects = Array.from(document.querySelectorAll('.form-table-layout input[type="text"]:not(.ttd-input), .form-table-layout select')).map(el => el.value);
+
+                return {
+                    id: id || Date.now(),
+                    timestamp: new Date().toLocaleString('id-ID'),
+                    tanggal: document.getElementById('tanggal').value,
+                    shift: document.getElementById('shift').options[document.getElementById('shift').selectedIndex].text,
+                    shiftValue: document.getElementById('shift').value,
+                    lokasi: document.getElementById('lokasi').value,
+                    merk: document.getElementById('merk').value,
+                    type: document.getElementById('type').value,
+                    sn: document.getElementById('sn').value,
+                    supervisor: document.getElementById('supervisor').value,
+                    manager: document.getElementById('manager').value,
+                    teknisiNama: Array.from(document.querySelectorAll('.teknisi-nama')).map(el => el.value),
+                    teknisiParaf: Array.from(document.querySelectorAll('.teknisi-paraf')).map(el => el.value),
+                    dataFields: inputsAndSelects // Semua nilai input/select dari tabel
+                };
+            };
+
+            // Helper function to set form data from a stored object
+            const setFormData = (data) => {
+                currentEditId = data.id;
+                dataIdInput.value = data.id;
+                document.getElementById('tanggal').value = data.tanggal;
+                document.getElementById('shift').value = data.shiftValue;
+                document.getElementById('lokasi').value = data.lokasi;
+                document.getElementById('merk').value = data.merk;
+                document.getElementById('type').value = data.type;
+                document.getElementById('sn').value = data.sn;
+                document.getElementById('supervisor').value = data.supervisor;
+                document.getElementById('manager').value = data.manager;
+                
+                // Set main table fields
+                const allInputs = Array.from(document.querySelectorAll('.form-table-layout input[type="text"]:not(.ttd-input), .form-table-layout select'));
+                allInputs.forEach((el, i) => {
+                    if (data.dataFields[i] !== undefined) {
+                        el.value = data.dataFields[i];
+                    }
+                });
+                
+                // Set TTD fields
+                document.querySelectorAll('.teknisi-nama').forEach((input, i) => input.value = data.teknisiNama[i] || '');
+                document.querySelectorAll('.teknisi-paraf').forEach((input, i) => input.value = data.teknisiParaf[i] || '');
+                
+                saveBtn.innerText = 'Perbarui Data';
+                showForm();
+            };
+
+
+            const loadTableData = () => {
+                const data = getSavedData();
+                if (data.length === 0) {
+                    tableContent.innerHTML = '<p class="text-center text-gray-500 py-8">Belum ada data yang tersimpan.</p>';
+                    return;
+                }
+                const tableHtml = `
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${data.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal)).map((item, index) => `
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.tanggal}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.shift}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Selesai
+                                                </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="#" onclick="event.preventDefault(); window.app.editData(${item.id})" class="text-blue-600 hover:text-blue-800">Edit</a>
+                                            <a href="#" onclick="event.preventDefault(); window.app.deleteData(${item.id})" class="text-red-600 hover:text-red-800 ml-4">Hapus</a>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>`;
+                tableContent.innerHTML = tableHtml;
+            };
+
+            const clearForm = () => {
+                atisForm.reset();
+                dataIdInput.value = '';
+                currentEditId = null;
+                
+                // Set default values (sesuai kode asli)
+                document.getElementById('lokasi').value = 'CABANG SURABAYA';
+                document.getElementById('merk').value = 'ATIS - UHER';
+                document.getElementById('type').value = 'VC - MDx';
+                document.getElementById('sn').value = '51';
+
+                // Set Tanggal dan Shift Otomatis
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                document.getElementById('tanggal').value = `${yyyy}-${mm}-${dd}`;
+                
+                const jam = today.getHours();
+                let shiftValue = 'malam';
+                if (jam >= 7 && jam < 13) shiftValue = 'pagi';
+                else if (jam >= 13 && jam < 19) shiftValue = 'siang';
+                document.getElementById('shift').value = shiftValue;
+            };
+
+            const handleSave = () => {
+                const tanggal = document.getElementById('tanggal').value;
+                if (!tanggal) {
+                    Swal.fire('Error', 'Tanggal wajib diisi!', 'error');
+                    return;
+                }
+                
+                const savedData = getSavedData();
+                const formData = getFormData(currentEditId);
+
+                if (currentEditId) {
+                    const index = savedData.findIndex(data => data.id === currentEditId);
+                    if (index !== -1) savedData[index] = formData;
+                } else {
+                    savedData.push(formData);
+                }
+
+                saveAllData(savedData);
+                Swal.fire('Sukses!', `Data berhasil ${currentEditId ? 'diperbarui' : 'disimpan'}.`, 'success');
+                showList();
+            };
+            
+            const handleCreateNew = () => {
+                clearForm();
+                saveBtn.innerText = 'Simpan';
+                showForm();
+            };
+
+            const handleCancel = () => {
+                Swal.fire({
+                    title: 'Anda yakin?',
+                    text: "Perubahan yang belum disimpan akan hilang. Kembali ke daftar data?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, kembali!',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showList();
+                    }
+                });
+            };
+            
+            // --- PRINT FUNCTION ---
+            const handlePrint = () => {
+                const formToPrint = document.getElementById('atis-form');
+                
+                // Ganti semua input dan select dengan elemen span statis untuk dicetak
+                const elements = formToPrint.querySelectorAll('input[type="text"]:not(.ttd-input), input[type="date"], select');
+                const printValues = [];
+
+                elements.forEach(el => {
+                    const value = el.tagName === 'SELECT' ? (el.options[el.selectedIndex]?.text || '') : el.value;
+                    printValues.push({ element: el, value: value, tagName: el.tagName });
+                    
+                    const span = document.createElement('span');
+                    span.textContent = value || ' ';
+                    span.className = 'print-value';
+                    span.style.cssText = el.style.cssText; // Copy styles
+                    el.parentNode.replaceChild(span, el);
+                });
+
+                window.print();
+
+                // Kembalikan elemen form setelah proses print selesai
+                window.onafterprint = () => {
+                    let printIndex = 0;
+                    formToPrint.querySelectorAll('.print-value').forEach(span => {
+                        const originalEl = printValues[printIndex].element;
+                        originalEl.value = printValues[printIndex].value;
+                        span.parentNode.replaceChild(originalEl, span);
+                        printIndex++;
+                    });
+                    
+                    // Ini penting karena window.onafterprint mungkin tidak selalu dipicu atau bekerja sempurna di semua browser.
+                    // Jika ingin kembali ke tampilan input setelah print, cara di atas adalah cara yang bersih.
+                    // Namun, jika ingin reload halaman untuk memastikan semua kembali ke keadaan semula:
+                    // location.reload(); 
+                };
+            };
+            
+            window.app = {
+                showList,
+                editData: (id) => {
+                    const data = getSavedData().find(d => d.id === id);
+                    if (data) setFormData(data);
+                },
+                deleteData: (id) => {
+                    Swal.fire({
+                        title: 'Anda yakin?',
+                        text: "Data yang dihapus tidak dapat dikembalikan!",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let data = getSavedData();
+                            data = data.filter(item => item.id !== id);
+                            saveAllData(data);
+                            Swal.fire('Terhapus!', 'Data telah berhasil dihapus.', 'success');
+                            loadTableData();
+                        }
+                    });
+                }
+            };
+            
+            createNewBtn.addEventListener('click', handleCreateNew);
+            viewListBtn.addEventListener('click', showList);
+            saveBtn.addEventListener('click', handleSave);
+            cancelBtn.addEventListener('click', handleCancel);
+            printBtn.addEventListener('click', handlePrint);
+            
+            // Tampilkan daftar data saat halaman dimuat
+            showList();
+        });
+    </script>
 </body>
 </html>

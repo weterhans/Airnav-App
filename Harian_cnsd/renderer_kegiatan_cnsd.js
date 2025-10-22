@@ -1,4 +1,4 @@
-// renderer_kegiatan_cnsd.js (Versi Perbaikan)
+// renderer_kegiatan_cnsd.js (Versi Final dengan SweetAlert2)
 
 document.addEventListener('DOMContentLoaded', function () {
     // Auth Guard
@@ -29,99 +29,66 @@ document.addEventListener('DOMContentLoaded', function () {
     let existingAttachmentPaths = [];
 
     const getCurrentShift = () => {
-    const currentHour = new Date().getHours(); // Ambil jam saat ini (format 0-23)
-
-    if (currentHour >= 7 && currentHour < 13) {
-        // Antara jam 7:00 pagi sampai 12:59 siang
-        return 'Pagi';
-    } else if (currentHour >= 13 && currentHour < 19) {
-        // Antara jam 1:00 siang sampai 6:59 sore
-        return 'Siang';
-    } else {
-        // Sisa waktu lainnya (jam 7:00 malam sampai 6:59 pagi)
+        const currentHour = new Date().getHours();
+        if (currentHour >= 7 && currentHour < 13) return 'Pagi';
+        if (currentHour >= 13 && currentHour < 19) return 'Siang';
         return 'Malam';
-    }};
-
-    const showToast = (message, type = 'success') => {
-    const toast = document.getElementById('toast-notification');
-    const toastIcon = document.getElementById('toast-icon');
-    const toastMessage = document.getElementById('toast-message');
-
-    // Hapus dulu kelas warna sebelumnya
-    toast.classList.remove('bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
-
-    if (type === 'success') {
-        toastIcon.innerHTML = '✅';
-        toast.classList.add('bg-green-100', 'text-green-700');
-    } else { // type === 'error'
-        toastIcon.innerHTML = '❌';
-        toast.classList.add('bg-red-100', 'text-red-700');
-    }
-
-    toastMessage.textContent = message;
-    toast.classList.remove('hidden');
-
-    // Sembunyikan notifikasi setelah 3 detik
-    setTimeout(() => {
-        toast.classList.add('hidden');
-    }, 3000);
-};
+    };
 
     // --- Fungsi Utama ---
-
     const loadActivities = async () => {
-        console.log("1. Memanggil backend untuk mengambil data kegiatan...");
-        const result = await window.api.getCnsdActivities();
-        console.log("2. Menerima hasil dari backend:", result);
+    const result = await window.api.getCnsdActivities();
+    activityTableBody.innerHTML = '';
+    if (result && result.success && result.data.length > 0) {
+        // Daftar nama bulan dalam Bahasa Indonesia
+        const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
 
-        activityTableBody.innerHTML = '';
-        if (result && result.success && result.data.length > 0) {
-            console.log(`3. Ditemukan ${result.data.length} data, mulai merender tabel.`);
-            result.data.forEach(activity => {
+        result.data.forEach(activity => {
+            const row = document.createElement('tr');
+            row.className = 'border-b hover:bg-gray-50';
+            
+            let formattedDate = '-';
+            if (activity.tanggal) {
+                // PERBAIKAN FINAL: Format tanggal secara manual untuk menghindari timezone
                 try {
-                    const row = document.createElement('tr');
-                    row.className = 'border-b hover:bg-gray-50';
-                    
-                    let formattedDate = '-';
-                    if (activity.tanggal) {
-                        formattedDate = new Date(activity.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-                    }
-
-                    const teknisiArray = Array.isArray(activity.teknisi) ? activity.teknisi : [];
-                    const lampiranArray = Array.isArray(activity.lampiran) ? activity.lampiran : [];
-                    
-                    const lampiranCell = lampiranArray.length > 0
-                        ? `<span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">${lampiranArray.length} Lampiran</span>`
-                        : '-';
-
-                    row.innerHTML = `
-                        <td class="px-4 py-2">${activity.kode || '-'}</td>
-                        <td class="px-4 py-2">${activity.dinas || '-'}</td>
-                        <td class="px-4 py-2">${formattedDate}</td>
-                        <td class="px-4 py-2">${activity.waktu_mulai || '-'}</td>
-                        <td class="px-4 py-2">${activity.waktu_selesai || '-'}</td>
-                        <td class="px-4 py-2">${activity.alat || '-'}</td>
-                        <td class="px-4 py-2 truncate max-w-xs" title="${activity.permasalahan || ''}">${activity.permasalahan || ''}</td>
-                        <td class="px-4 py-2 truncate max-w-xs" title="${activity.tindakan || ''}">${activity.tindakan || ''}</td>
-                        <td class="px-4 py-2 truncate max-w-xs" title="${activity.hasil || ''}">${activity.hasil || ''}</td>
-                        <td class="px-4 py-2">${activity.status || '-'}</td>
-                        <td class="px-4 py-2">${teknisiArray.join(', ')}</td>
-                        <td class="px-4 py-2">${activity.waktu_terputus || '-'}</td>
-                        <td class="px-4 py-2">${lampiranCell}</td>
-                        <td class="px-4 py-2">
-                            <button class="edit-btn text-indigo-600 hover:text-indigo-900 font-medium" data-id="${activity.id}">Edit</button>
-                        </td>
-                    `;
-                    activityTableBody.appendChild(row);
+                    const dateString = new Date(activity.tanggal).toLocaleDateString('en-CA'); // Hasil: "2025-10-21"
+                    const [year, month, day] = dateString.split('-');
+                    formattedDate = `${day} ${monthNames[parseInt(month, 10) - 1]} ${year}`; // Hasil: "21 Okt 2025"
                 } catch (e) {
-                    console.error('Gagal memproses satu baris data kegiatan:', activity, e);
+                    console.error("Gagal memformat tanggal:", activity.tanggal, e);
+                    formattedDate = "Invalid Date";
                 }
-            });
-        } else {
-            console.log("3. Tidak ada data yang ditemukan atau terjadi error, menampilkan pesan kosong.");
-            activityTableBody.innerHTML = `<tr id="empty-row" class="text-center"><td colspan="14" class="py-10">Belum ada data kegiatan.</td></tr>`;
-        }
-    };
+            }
+
+            const teknisiArray = activity.teknisi ? (typeof activity.teknisi === 'string' ? JSON.parse(activity.teknisi) : activity.teknisi) : [];
+            const lampiranArray = activity.lampiran ? (typeof activity.lampiran === 'string' ? JSON.parse(activity.lampiran) : activity.lampiran) : [];
+            
+            const lampiranCell = lampiranArray.length > 0 ? `<span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">${lampiranArray.length} Lampiran</span>` : '-';
+
+            row.innerHTML = `
+                <td class="px-4 py-2">${activity.kode || '-'}</td>
+                <td class="px-4 py-2">${activity.dinas || '-'}</td>
+                <td class="px-4 py-2">${formattedDate}</td>
+                <td class="px-4 py-2">${activity.waktu_mulai || '-'}</td>
+                <td class="px-4 py-2">${activity.waktu_selesai || '-'}</td>
+                <td class="px-4 py-2">${activity.alat || '-'}</td>
+                <td class="px-4 py-2 truncate max-w-xs" title="${activity.permasalahan || ''}">${activity.permasalahan || ''}</td>
+                <td class="px-4 py-2 truncate max-w-xs" title="${activity.tindakan || ''}">${activity.tindakan || ''}</td>
+                <td class="px-4 py-2 truncate max-w-xs" title="${activity.hasil || ''}">${activity.hasil || ''}</td>
+                <td class="px-4 py-2">${activity.status || '-'}</td>
+                <td class="px-4 py-2">${teknisiArray.join(', ')}</td>
+                <td class="px-4 py-2">${activity.waktu_terputus || '-'}</td>
+                <td class="px-4 py-2">${lampiranCell}</td>
+                <td class="px-4 py-2">
+                    <button class="edit-btn text-indigo-600 hover:text-indigo-900 font-medium" data-id="${activity.id}">Edit</button>
+                </td>
+            `;
+            activityTableBody.appendChild(row);
+        });
+    } else {
+        activityTableBody.innerHTML = `<tr id="empty-row" class="text-center"><td colspan="14" class="py-10">Belum ada data kegiatan.</td></tr>`;
+    }
+};
 
     const createTechnicianDropdowns = () => {
         if (!technicianDropdownsContainer) return;
@@ -136,41 +103,26 @@ document.addEventListener('DOMContentLoaded', function () {
             technicianDropdownsContainer.appendChild(select);
         }
     };
-    
-    // ... (fungsi lainnya seperti openModal, createPreviewElement, dll. tetap sama persis seperti sebelumnya) ...
+
+    const createPreviewElement = (src, identifier, type) => {
+        const div = document.createElement('div');
+        div.className = 'relative w-full h-24 bg-gray-100 rounded-lg overflow-hidden group preview-image-wrapper cursor-pointer';
+        div.innerHTML = `<img src="${src}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100"><button type="button" class="remove-attachment-btn text-white p-2 rounded-full hover:bg-red-500 z-10" data-identifier="${identifier}" data-type="${type}" title="Hapus"><svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg></button></div>`;
+        return div;
+    };
 
     const renderAllPreviews = async () => {
         existingAttachmentPreview.innerHTML = '';
         newAttachmentPreview.innerHTML = '';
         for (const path of existingAttachmentPaths) {
             const dataUrl = await window.api.readFileAsBase64(path);
-            if (dataUrl) {
-                const div = createPreviewElement(dataUrl, path, 'existing');
-                existingAttachmentPreview.appendChild(div);
-            }
+            if (dataUrl) existingAttachmentPreview.appendChild(createPreviewElement(dataUrl, path, 'existing'));
         }
         newAttachmentFiles.forEach((file, index) => {
             const reader = new FileReader();
-            reader.onload = function(e) {
-                const div = createPreviewElement(e.target.result, index, 'new');
-                newAttachmentPreview.appendChild(div);
-            };
+            reader.onload = e => newAttachmentPreview.appendChild(createPreviewElement(e.target.result, index, 'new'));
             reader.readAsDataURL(file);
         });
-    };
-    
-    const createPreviewElement = (src, identifier, type) => {
-        const div = document.createElement('div');
-        div.className = 'relative w-full h-24 bg-gray-100 rounded-lg overflow-hidden group preview-image-wrapper cursor-pointer';
-        div.innerHTML = `
-            <img src="${src}" class="w-full h-full object-cover">
-            <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <button type="button" class="remove-attachment-btn text-white p-2 rounded-full hover:bg-red-500 z-10" data-identifier="${identifier}" data-type="${type}" title="Hapus gambar ini">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
-                </button>
-            </div>
-        `;
-        return div;
     };
 
     const openModal = async (isEditing = false, data = null) => {
@@ -183,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('activity-code').value = data.kode;
             document.getElementById('activity-shift').value = data.dinas;
             if (data.tanggal) {
-                document.getElementById('activity-date').value = new Date(data.tanggal).toISOString().slice(0,10);
+                document.getElementById('activity-date').value = new Date(data.tanggal).toLocaleDateString('en-CA');
             }
             document.getElementById('activity-start-time').value = data.waktu_mulai;
             document.getElementById('activity-end-time').value = data.waktu_selesai;
@@ -193,28 +145,13 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('activity-result').value = data.hasil;
             document.getElementById('activity-status').value = data.status;
             document.getElementById('activity-downtime').value = data.waktu_terputus;
-            let teknisiArray = [];
-            if (Array.isArray(data.teknisi)) {
-                // KASUS 1: Jika datanya SUDAH berbentuk Array, langsung pakai.
-                teknisiArray = data.teknisi;
-            } else if (typeof data.teknisi === 'string' && data.teknisi) {
-                // KASUS 2: Jika datanya adalah String, proses lebih lanjut.
-                try {
-                    // Coba parse sebagai JSON. Berhasil untuk '["Andi", "Joko"]'.
-                    const parsed = JSON.parse(data.teknisi);
-                    // Pastikan hasil parse adalah array
-                    teknisiArray = Array.isArray(parsed) ? parsed : [parsed];
-                } catch (e) {
-                    // Gagal parse, berarti ini string biasa. Split dengan koma.
-                    // Berhasil untuk "joko" dan "Andi,Joko".
-                    teknisiArray = data.teknisi.split(',');
-                }
-            }
+            
+            let teknisiArray = data.teknisi ? (typeof data.teknisi === 'string' ? JSON.parse(data.teknisi) : data.teknisi) : [];
             for (let i = 0; i < 5; i++) {
                 const select = document.querySelector(`select[name="teknisi-${i+1}"]`);
                 if (select) select.value = teknisiArray[i] || '';
             }
-            existingAttachmentPaths = Array.isArray(data.lampiran) ? data.lampiran : [];
+            existingAttachmentPaths = data.lampiran ? (typeof data.lampiran === 'string' ? JSON.parse(data.lampiran) : data.lampiran) : [];
         } else {
             document.getElementById('activity-code').value = `KG-CNSD-${Date.now().toString().slice(-6)}`;
             document.getElementById('activity-date').value = new Date().toISOString().slice(0,10);
@@ -231,8 +168,9 @@ document.addEventListener('DOMContentLoaded', function () {
         activityAttachmentInput.value = '';
     };
 
+    const closeModal = () => addActivityModal.classList.add('hidden');
+
     // --- Event Listeners ---
-    
     activityForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const formData = new FormData(activityForm);
@@ -269,17 +207,28 @@ document.addEventListener('DOMContentLoaded', function () {
             });
             activityData.attachments = await Promise.all(filePromises);
         }
+
         const result = await window.api.saveCnsdActivity(activityData);
+
         if (result.success) {
-            showToast(result.message, 'success'); // Notifikasi sukses (hijau)
+            Swal.fire({
+                title: 'Berhasil!',
+                text: result.message,
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
             addActivityModal.classList.add('hidden');
             loadActivities();
         } else {
-            showToast(result.message || 'Terjadi kesalahan', 'error'); // Notifikasi error (merah)
+            Swal.fire({
+                title: 'Gagal!',
+                text: result.message || 'Terjadi kesalahan',
+                icon: 'error'
+            });
         }
     });
     
-    // MENGGABUNGKAN DUA EVENT LISTENER MENJADI SATU
     document.getElementById('attachment-container').addEventListener('click', (event) => {
         const removeButton = event.target.closest('.remove-attachment-btn');
         const previewWrapper = event.target.closest('.preview-image-wrapper');
@@ -314,7 +263,11 @@ document.addEventListener('DOMContentLoaded', function () {
             if (result.success && result.data) {
                 await openModal(true, result.data);
             } else {
-                showToast('Gagal mengambil detail kegiatan.', 'error');
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: 'Gagal mengambil detail kegiatan.',
+                    icon: 'error'
+                });
             }
         }
     });
@@ -328,23 +281,17 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // --- FUNGSI INISIALISASI HALAMAN ---
     const initializePage = async () => {
-        console.log("Memulai inisialisasi halaman...");
         try {
             const techResult = await window.api.getTechnicians();
             if (techResult.success) {
                 technicianList = techResult.data;
                 createTechnicianDropdowns();
-                console.log("Daftar teknisi berhasil dimuat.");
-            } else {
-                console.error("Gagal memuat daftar teknisi.");
             }
             await loadActivities();
         } catch (error) {
-            console.error("Terjadi error fatal saat inisialisasi:", error);
+            console.error("Terjadi error saat inisialisasi:", error);
         }
-        console.log("Inisialisasi halaman selesai.");
     };
 
-    // Memulai semuanya
     initializePage();
 });

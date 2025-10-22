@@ -58,5 +58,10 @@ contextBridge.exposeInMainWorld('api', {
     saveTfpWorkorder: (data) => ipcRenderer.invoke('db:save-tfp-workorder', data),
     getTfpWorkorders: () => ipcRenderer.invoke('db:get-tfp-workorders'),
     getTfpWorkorderById: (id) => ipcRenderer.invoke('db:get-tfp-workorder-by-id', id),
-    deleteTfpWorkorder: (id) => ipcRenderer.invoke('db:delete-tfp-workorder', id)
+    deleteTfpWorkorder: (id) => ipcRenderer.invoke('db:delete-tfp-workorder', id),
+    
+    // --- API UNTUK JADWAL GOOGLE SHEET ---
+    onUpdateSchedule: (callback) => ipcRenderer.on('update-schedule', (event, data) => callback(data)),
+    onScheduleError: (callback) => ipcRenderer.on('schedule-error', () => callback()),
+    openSheet: () => ipcRenderer.invoke('open-sheet') // <-- Fungsi baru untuk buka sheet
 });

@@ -20,7 +20,9 @@
       "default",
       {
         "ignore": [
-          "-moz-appearance"
+          "-moz-appearance",
+          "scrollbar-width",
+          "scrollbar-width: none"
         ]
       }
     ],

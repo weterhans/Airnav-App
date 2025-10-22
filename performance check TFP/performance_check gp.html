@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Check Fasilitas Penunjang Gedung Glide Path - AirNav Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .form-container-inner {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 15px;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .company-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #003366;
+        }
+
+        .header-info {
+            text-align: right;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 20px 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 15px;
+            font-size: 11px;
+        }
+
+        th, td {
+            border: 1px solid #000;
+            padding: 8px 6px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        th {
+            background-color: #d3d3d3;
+            color: black;
+            font-weight: bold;
+        }
+
+        .gray-cell {
+            background-color: #e0e0e0;
+        }
+
+        .left-align {
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .param-col { width: 180px; }
+        .no-col { width: 35px; }
+        .kondisi-col { width: 70px; }
+        .keterangan-col { width: 150px; }
+
+
+        input[type="text"], input[type="number"], input[type="date"], select {
+            /* Penting: Pastikan input di dalam form memiliki attribute 'name' agar bisa di-serialize */
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            padding: 4px;
+            font-size: 11px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        /* Gaya untuk input di bagian footer */
+        .footer-section .input-field {
+            border: none !important;
+        }
+
+        .footer-row input[type="date"], .footer-row select {
+            border: 1px solid #999 !important;
+            padding: 3px !important;
+            text-align: left !important;
+        }
+        
+        /* Hilangkan border bawah pada input yang diklik/fokus */
+        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus {
+            outline: 1px solid #1e90ff;
+            background: #f0f8ff;
+        }
+
+        .footer-section {
+            margin-top: 15px;
+        }
+
+        .footer-section th {
+            background-color: #d3d3d3;
+            color: black;
+        }
+
+        .footer-section td {
+            padding: 8px;
+            font-size: 11px;
+        }
+
+        .status-selesai {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 11px;
+            background-color: #dcfce7; /* Green-100 */
+            color: #15803d; /* Green-700 */
+        }
+
+        .signature-cell {
+            height: 70px;
+            vertical-align: bottom;
+            position: relative;
+            padding: 0;
+        }
+
+        .signature-cell input {
+            position: absolute;
+            bottom: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: calc(100% - 10px);
+            text-align: center;
+            font-weight: bold;
+            border: none;
+            padding: 0;
+        }
+        
+        .signature-cell-label {
+            position: absolute;
+            top: 5px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            font-style: italic;
+        }
+        
+        .footer-row { margin-bottom: 20px; font-size: 11px; text-align: left; padding: 5px 0; }
+        .footer-row strong { margin-right: 10px; }
+        .footer-row .input-field { font-size: 11px; }
+
+        /* ===== GAYA CETAK/PRINT ===== */
+        @page { size: A4 landscape; margin: 10mm; }
+        @media print {
+            .no-print { display: none !important; }
+            body { padding: 0; margin: 0; background-color: #fff; font-size: 9pt; }
+            .form-container-inner { padding: 0; margin: 0; box-shadow: none; width: 100%; max-width: 100%; border: none; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            table { font-size: 9pt; margin-bottom: 5px; }
+            th, td { padding: 3px !important; }
+            .header { padding-bottom: 5px; margin-bottom: 10px; }
+            .company-name { font-size: 18pt; }
+            .header-info { font-size: 10pt; }
+            .title { font-size: 14pt; margin: 10px 0; }
+            .footer-section, .footer-row { font-size: 8pt; margin-top: 5px; }
+            .footer-row { margin-bottom: 5px; }
+            
+            /* Sembunyikan input, tampilkan teksnya */
+            #form-container input:not([type="hidden"]), #form-container select {
+                display: none;
+            }
+            .print-value {
+                display: inline;
+                border: none;
+                background: transparent;
+                text-align: center;
+                font-size: 9pt;
+                font-family: 'Times New Roman', Times, serif;
+                font-weight: normal;
+                padding: 0 2px;
+                line-height: 1.2;
+                white-space: nowrap;
+            }
+            .print-value-left {
+                text-align: left;
+                padding-left: 10px;
+            }
+            
+            /* Perbaiki tampilan input di footer saat print */
+            .footer-section .signature-cell {
+                height: 50px;
+                vertical-align: top;
+                padding-top: 15px;
+                text-align: center;
+            }
+            .footer-section .signature-cell .print-value {
+                display: block;
+                font-weight: bold;
+                text-decoration: underline;
+                margin-top: 10px;
+            }
+            .footer-section .signature-cell-label { display: none; }
+            
+            .footer-row .print-value {
+                border: none;
+                padding: 0 5px;
+            }
+        }
+    </style>
+</head>
+<body id="body">
+    <div id="main-content" class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 mb-4">Performance Check Gedung Glide Path</h1>
+                <div class="flex flex-wrap gap-4">
+                    <button type="button" id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">Buat Data Baru</button>
+                    <button type="button" id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold">Lihat Daftar Data</button>
+                </div>
+            </div>
+            <div class="text-sm text-gray-600">
+                <p><strong>Perum LPPNPI</strong></p>
+                <p>Cabang Surabaya</p>
+            </div>
+        </div>
+
+        <div id="form-container" class="hidden">
+            <form id="gedung-gp">
+                <input type="hidden" id="data_id" name="id">
+                <div class="form-container-inner">
+                    <div class="header">
+                        <div class="logo-section">
+                            <img src="airnav.png" alt="AirNav Indonesia" style="width: 90px; height: auto; object-fit: contain;" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/id/thumb/7/77/AirNav_Indonesia_logo.svg/1200px-AirNav_Indonesia_logo.svg.png';">
+                            <div class="company-name">AirNav Indonesia</div>
+                        </div>
+                        <div class="header-info">
+                            <div><strong>Perum LPPNPI</strong></div>
+                            <div><strong>Cabang Surabaya</strong></div>
+                            <div><strong>Teknik Fasilitas Penunjang</strong></div>
+                        </div>
+                    </div>
+                    
+                    <div class="title">Performance Check Fasilitas Penunjang Gedung Glide Path</div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="no-col" rowspan="2">No.</th>
+                                <th class="param-col" rowspan="2">Parameter</th>
+                                <th style="width: 200px;" rowspan="2">Panel GP 01</th>
+                                <th style="width: 150px;" rowspan="2">Nama Fasilitas</th>
+                                <th class="kondisi-col" rowspan="2">Kondisi</th>
+                                <th class="keterangan-col" rowspan="2">Keterangan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td> <td class="left-align">L1 - N ( Volt )</td> 
+                                <td><input type="number" step="0.1" name="gp01_l1n" class="form-input"></td> <td class="left-align">Catu Daya Listrik</td> <td><input type="text" name="kondisi_catudaya" class="form-input"></td> <td><input type="text" name="keterangan_catudaya" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td> <td class="left-align">L2 - N ( Volt )</td> <td><input type="number" step="0.1" name="gp01_l2n" class="form-input"></td> <td class="left-align">Penerangan</td> <td><input type="text" name="kondisi_penerangan" class="form-input"></td> <td><input type="text" name="keterangan_penerangan" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>3</td> <td class="left-align">L3 - N ( Volt )</td> <td><input type="number" step="0.1" name="gp01_l3n" class="form-input"></td> <td class="left-align">Obstacle Light</td> <td><input type="text" name="kondisi_ol" class="form-input"></td> <td><input type="text" name="keterangan_ol" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>4</td> <td class="left-align">N - G ( Volt )</td> <td><input type="number" step="0.1" name="gp01_ng" class="form-input"></td> <td class="left-align">AC 01 (Split Wall)</td> <td><input type="text" name="kondisi_ac01" class="form-input"></td> <td><input type="text" name="keterangan_ac01" value="A" readonly class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>5</td> <td class="left-align">L1 - L2 ( Volt )</td> <td><input type="number" step="0.1" name="gp01_l1l2" class="form-input"></td> <td class="left-align">AC 02 (Split Wall)</td> <td><input type="text" name="kondisi_ac02" class="form-input"></td> <td><input type="text" name="keterangan_ac02" value="A" readonly class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>6</td> <td class="left-align">L1 - L3 ( Volt )</td> <td><input type="number" step="0.1" name="gp01_l1l3" class="form-input"></td> <td class="left-align">Exhaust Fan</td> <td><input type="text" name="kondisi_exhaust" class="form-input"></td> <td><input type="text" name="keterangan_exhaust" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>7</td> <td class="left-align">L2 - L3 ( Volt )</td> <td><input type="number" step="0.1" name="gp01_l2l3" class="form-input"></td> <td class="left-align">Rumput</td> <td><input type="text" name="kondisi_rumput" class="form-input"></td> <td><input type="text" name="keterangan_rumput" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>8</td> <td class="left-align">L1 ( Ampere )</td> <td><input type="number" step="0.1" name="gp01_l1a" class="form-input"></td> <td class="left-align">APAR/ Fire Extinguisher</td> <td><input type="text" name="kondisi_apar" class="form-input"></td> <td><input type="text" name="keterangan_apar" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>9</td> <td class="left-align">L2 ( Ampere )</td> <td><input type="number" step="0.1" name="gp01_l2a" class="form-input"></td> <td class="left-align">Atap</td> <td><input type="text" name="kondisi_atap" class="form-input"></td> <td><input type="text" name="keterangan_atap" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>10</td> <td class="left-align">L3 ( Ampere )</td> <td><input type="number" step="0.1" name="gp01_l3a" class="form-input"></td> <td class="left-align">Plafond</td> <td><input type="text" name="kondisi_plafond" class="form-input"></td> <td><input type="text" name="keterangan_plafond" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>11</td> <td class="left-align">N ( Ampere )</td> <td><input type="number" step="0.1" name="gp01_na" class="form-input"></td> <td class="left-align">Dinding</td> <td><input type="text" name="kondisi_dinding" class="form-input"></td> <td><input type="text" name="keterangan_dinding" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>12</td> <td class="left-align">Frekuensi ( Hz )</td> <td><input type="number" step="0.1" name="gp01_hz" class="form-input"></td> <td class="left-align">Pintu</td> <td><input type="text" name="kondisi_pintu" class="form-input"></td> <td><input type="text" name="keterangan_pintu" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>13</td> <td class="left-align">Power Factor ( Cos &theta; )</td> <td class="gray-cell"></td> <td class="left-align"></td> <td><input type="text" name="kondisi_pf" class="form-input"></td> <td><input type="text" name="keterangan_pf" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>14</td> <td class="left-align">Tegangan Battery ( Volt )</td> <td class="gray-cell"></td> <td class="left-align"></td> <td><input type="text" name="kondisi_batt_v" class="form-input"></td> <td><input type="text" name="keterangan_batt_v" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>15</td> <td class="left-align">Arus Battery ( Ampere )</td> <td class="gray-cell"></td> <td class="left-align"></td> <td><input type="text" name="kondisi_batt_a" class="form-input"></td> <td><input type="text" name="keterangan_batt_a" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>16</td> <td class="left-align">Kapasitas Battery ( Ah )</td> <td class="gray-cell"></td> <td class="left-align"></td> <td><input type="text" name="kondisi_batt_ah" class="form-input"></td> <td><input type="text" name="keterangan_batt_ah" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>17</td> <td class="left-align">Suhu Battery ( &deg;C )</td> <td class="gray-cell"></td> <td class="left-align"></td> <td><input type="text" name="kondisi_batt_temp" class="form-input"></td> <td><input type="text" name="keterangan_batt_temp" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>18</td> <td class="left-align">Mode *</td> <td class="gray-cell"></td> <td class="left-align"></td> <td><input type="text" name="kondisi_mode" class="form-input"></td> <td><input type="text" name="keterangan_mode" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>19</td> <td class="left-align">Suplai Aktif *</td> <td class="gray-cell"></td> <td class="left-align"></td> <td><input type="text" name="kondisi_suplai" class="form-input"></td> <td><input type="text" name="keterangan_suplai" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>20</td> <td class="left-align">Suhu Ruangan ( &deg;C )</td> <td><input type="number" step="0.1" name="gp01_ruangan_temp" class="form-input"></td> <td class="left-align"></td> <td><input type="text" name="kondisi_ruangan_temp" class="form-input"></td> <td><input type="text" name="keterangan_ruangan_temp" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td>21</td> <td class="left-align">KWH Meter</td> <td><input type="number" name="gp01_kwh" class="form-input"></td> <td class="left-align"></td> <td><input type="text" name="kondisi_kwh" class="form-input"></td> <td><input type="text" name="keterangan_kwh" class="form-input"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="footer-row bg-gray-50 p-3 border border-gray-300 rounded-md">
+                        <strong>Waktu Pelaksanaan</strong>
+                        <span style="margin: 0 10px;">Hari:</span>
+                        <select id="hari" name="hari" class="input-field" style="width: 120px; display: inline-block;">
+                            <option value="">Pilih Hari</option> <option value="Senin">Senin</option> <option value="Selasa">Selasa</option> <option value="Rabu">Rabu</option> <option value="Kamis">Kamis</option> <option value="Jum'at">Jum'at</option> <option value="Sabtu">Sabtu</option> <option value="Minggu">Minggu</option>
+                        </select>
+                        <span style="margin: 0 10px;">Tanggal:</span>
+                        <input type="date" id="tanggal" name="tanggal_pelaksanaan" class="input-field" style="width: 150px; display: inline-block;">
+                        <span style="margin: 0 10px;">Jam:</span>
+                        <select id="shift" name="shift" class="input-field" style="width: 120px; display: inline-block;">
+                            <option value="">Pilih Shift</option> <option value="07.00-13.00">07.00-13.00</option> <option value="13.00-19.00">13.00-19.00</option> <option value="19.00-07.00">19.00-07.00</option>
+                        </select>
+                        <span style="margin-left: 10px; font-weight: bold;">WIB</span>
+                    </div>
+
+                    <table class="footer-section"> 
+                        <thead>
+                            <tr>
+                                <th style="width: 30px;">No.</th> 
+                                <th style="width: 250px;">Pelaksana Teknisi</th> 
+                                <th style="width: 100px;">Paraf</th> 
+                                <th style="width: 250px;">Supervisor Teknik</th> 
+                                <th>Manager Teknik</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td> 
+                                <td><input type="text" name="teknisi_nama_1" class="input-field teknisi-nama" id="teknisi_nama_1"></td> 
+                                <td><input type="text" name="teknisi_paraf_1" class="input-field teknisi-paraf" id="teknisi_paraf_1"></td> 
+                                <td rowspan="5" style="vertical-align: bottom;">
+                                    <input type="text" id="supervisor" name="supervisor" class="input-field" placeholder="Nama Supervisor" style="height: 100%; text-align:center;">
+                                </td> 
+                                <td rowspan="5" style="vertical-align: bottom;">
+                                     <input type="text" id="manager" name="manager" class="input-field" placeholder="Nama Manager" style="height: 100%; text-align:center;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td> 
+                                <td><input type="text" name="teknisi_nama_2" class="input-field teknisi-nama" id="teknisi_nama_2"></td> 
+                                <td><input type="text" name="teknisi_paraf_2" class="input-field teknisi-paraf" id="teknisi_paraf_2"></td>
+                            </tr>
+                            <tr>
+                                <td>3</td> 
+                                <td><input type="text" name="teknisi_nama_3" class="input-field teknisi-nama" id="teknisi_nama_3"></td> 
+                                <td><input type="text" name="teknisi_paraf_3" class="input-field teknisi-paraf" id="teknisi_paraf_3"></td>
+                            </tr>
+                            <tr>
+                                <td>4</td> 
+                                <td><input type="text" name="teknisi_nama_4" class="input-field teknisi-nama" id="teknisi_nama_4"></td> 
+                                <td><input type="text" name="teknisi_paraf_4" class="input-field teknisi-paraf" id="teknisi_paraf_4"></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><input type="text" name="teknisi_nama_5" class="input-field teknisi-nama" id="teknisi_nama_5"></td>
+                                <td><input type="text" name="teknisi_paraf_5" class="input-field teknisi-paraf" id="teknisi_paraf_5"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> 
+                
+                <div class="flex justify-center gap-4 mt-6 mb-6 no-print">
+                    <button type="button" id="save-btn" class="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">💾 Simpan Data</button>
+                    <button type="button" id="print-btn" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">🖨️ Print Form</button>
+                    <button type="button" id="cancel-btn" class="bg-red-600 hover:bg-red-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">✖ Batal</button>
+                </div>
+            </form>
+        </div> 
+
+        <div id="list-container" class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold leading-6 text-gray-900 mb-4">Daftar Data Performance Check Gedung Glide Path</h3>
+            <div id="tableContent" class="overflow-x-auto"></div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification"></div>
+
+    <script>
+        const STORAGE_KEY = 'PerformaneCheckGedungGP';
+        let currentEditId = null;
+
+        const formContainer = document.getElementById('form-container');
+        const listContainer = document.getElementById('list-container');
+        const tableContent = document.getElementById('tableContent');
+        const gedungGPForm = document.getElementById('gedung-gp');
+        const dataIdInput = document.getElementById('data_id');
+        
+        // Waktu Pelaksanaan Inputs
+        const hariInput = document.getElementById('hari');
+        const tanggalInput = document.getElementById('tanggal');
+        const shiftInput = document.getElementById('shift');
+
+        // Mengambil SEMUA INPUT DATA dari form (kecuali hidden id) sudah TIDAK DIPERLUKAN. Kita akan gunakan FormData.
+
+        const showForm = () => {
+            formContainer.classList.remove('hidden');
+            listContainer.classList.add('hidden');
+            document.getElementById('main-controls').classList.add('hidden');
+            window.scrollTo(0, 0);
+        };
+
+        const showList = () => {
+            formContainer.classList.add('hidden');
+            listContainer.classList.remove('hidden');
+            document.getElementById('main-controls').classList.remove('hidden');
+            loadTableData();
+        };
+
+        const getSavedData = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const saveAllData = (data) => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+        const loadTableData = () => {
+            const data = getSavedData();
+            if (data.length === 0) {
+                tableContent.innerHTML = '<p class="text-center text-gray-500 py-8">Belum ada data yang tersimpan.</p>';
+                return;
+            }
+            const tableHtml = `
+                <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">No</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Tanggal</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Shift</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase" style="background-color: #d3d3d3;">Manager Teknik</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-700 uppercase" style="background-color: #d3d3d3;">Status</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                                ${data.sort((a, b) => b.id - a.id).map((item, index) => {
+                                    // Mengambil nama manager dari data yang tersimpan
+                                    const managerName = item.manager || '-';
+                                    const tanggalPelaksanaan = item.tanggal_pelaksanaan || '-';
+                                    const hariPelaksanaan = item.hari || '-';
+                                    const shiftPelaksanaan = item.shift || '-';
+                                    return `
+                                        <tr>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${hariPelaksanaan}, ${tanggalPelaksanaan}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${shiftPelaksanaan}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">${managerName}</td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                                <span class="status-selesai">SELESAI</span>
+                                            </td>
+                                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                                <a href="#" onclick="event.preventDefault(); window.app.editData(${item.id})" class="text-blue-600 hover:text-blue-800 mr-4">Edit</a>
+                                                <a href="#" onclick="event.preventDefault(); window.app.deleteData(${item.id})" class="text-red-600 hover:text-red-800">Hapus</a>
+                                            </td>
+                                        </tr>
+                                    `;
+                                }).join('')}
+                        </tbody>
+                    </table>
+                </div>`;
+            tableContent.innerHTML = tableHtml;
+        };
+
+        const clearForm = () => {
+            gedungGPForm.reset();
+            dataIdInput.value = '';
+            currentEditId = null;
+            // Set default date to today
+            const today = new Date().toISOString().split('T')[0];
+            tanggalInput.value = today;
+            document.getElementById('save-btn').innerText = '💾 Simpan Data';
+        };
+
+        const handleSave = () => {
+            const hari = hariInput.value;
+            const tanggal = tanggalInput.value;
+            const shift = shiftInput.value;
+    
+            if (!tanggal || !hari || !shift) {
+                Swal.fire('Error', 'Hari, Tanggal, dan Jam wajib diisi!', 'error');
+                return;
+            }
+
+            const savedData = getSavedData();
+
+            // 1. Kumpulkan semua data form menggunakan FormData
+            const form = document.getElementById('gedung-gp');
+            const data = new FormData(form);
+            
+            // 2. Ubah FormData menjadi objek JSON
+            const formData = {};
+            for (let [key, value] of data.entries()) {
+                // Konversi angka yang seharusnya menjadi number (jika tidak kosong)
+                if (form.elements[key] && form.elements[key].type === 'number' && value !== '') {
+                    formData[key] = parseFloat(value);
+                } else {
+                    formData[key] = value;
+                }
+            }
+
+            // Atur ID baru atau yang sudah ada
+            formData.id = currentEditId || Date.now();
+            formData.lokasi = 'Gedung Glide Path'; // Lokasi disamakan dengan judul
+            
+            if (currentEditId) {
+                const index = savedData.findIndex(d => d.id == currentEditId); // Gunakan == karena Date.now() menghasilkan number, tapi di local storage mungkin tersimpan string.
+                if (index !== -1) savedData[index] = formData;
+            } else {
+                savedData.push(formData);
+            }
+
+            saveAllData(savedData);
+            Swal.fire('Sukses!', `Data berhasil ${currentEditId ? 'diperbarui' : 'disimpan'}.`, 'success');
+            showList();
+        };
+
+        const handleCreateNew = () => {
+            clearForm();
+            showForm();
+        };
+
+        const handleCancel = () => {
+            Swal.fire({
+                title: 'Anda yakin?',
+                text: "Perubahan yang belum disimpan akan hilang.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, batalkan!',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showList();
+                }
+            });
+        };
+
+        const handlePrint = () => {
+            const replacers = [];
+            const form = document.getElementById('gedung-gp');
+            
+            // Ambil semua input dan select yang akan dicetak
+            const inputs = form.querySelectorAll('input:not([type="hidden"]), select');
+            
+            inputs.forEach(input => {
+                const span = document.createElement('span');
+                let value = input.value || '';
+                
+                // Khusus untuk select (Hari/Shift), ambil teks option yang terpilih
+                if (input.tagName === 'SELECT' && input.options.length > 0 && input.selectedIndex !== -1) {
+                    value = input.options[input.selectedIndex].text === 'Pilih Hari' || input.options[input.selectedIndex].text === 'Pilih Shift' ? '' : input.options[input.selectedIndex].text;
+                }
+                
+                // Khusus untuk Supervisor/Manager/Teknisi Nama, tambahkan garis bawah
+                if (input.name === 'supervisor' || input.name === 'manager' || input.name.startsWith('teknisi_nama_')) {
+                    span.innerHTML = value.toUpperCase() || ' ..................................... ';
+                    span.style.textDecoration = 'underline';
+                    span.style.fontWeight = 'bold';
+                    span.style.marginTop = '10px';
+                } else if (input.name.startsWith('teknisi_paraf_')) {
+                    span.innerHTML = value || ' (Paraf) '; // Untuk paraf
+                } else {
+                    span.textContent = value;
+                }
+
+                span.className = 'print-value';
+                
+                if (input.parentNode.classList.contains('left-align')) {
+                    span.classList.add('print-value-left');
+                }
+
+                replacers.push({ original: input, replacement: span });
+            });
+
+            // Lakukan penggantian sebelum print
+            replacers.forEach(r => r.original.parentNode.replaceChild(r.replacement, r.original));
+
+            window.print();
+            
+            // Setelah print, kembalikan input ke posisi semula
+            setTimeout(() => {
+                replacers.forEach(r => r.replacement.parentNode.replaceChild(r.original, r.replacement));
+                // Tidak perlu location.reload() di sini jika onafterprint sudah memanggilnya.
+            }, 500); 
+        };
+
+        window.onafterprint = () => {
+            location.reload(); 
+        };
+
+        window.app = {
+            showList,
+            editData: (id) => {
+                const data = getSavedData().find(d => d.id == id);
+                if (!data) return;
+                
+                currentEditId = id;
+                dataIdInput.value = id;
+                
+                // Mengisi ulang semua input dari objek data yang tersimpan
+                for (const key in data) {
+                    const input = gedungGPForm.elements[key];
+                    if (input) {
+                        input.value = data[key] || '';
+                    }
+                }
+                
+                document.getElementById('save-btn').innerText = '💾 Perbarui Data';
+                showForm();
+            },
+            deleteData: (id) => { 
+                Swal.fire({
+                    title: 'Anda yakin ingin menghapus data ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let data = getSavedData();
+                        data = data.filter(item => item.id != id);
+                        saveAllData(data);
+                        Swal.fire('Terhapus!', 'Data telah berhasil dihapus.', 'success');
+                        loadTableData();
+                    }
+                });
+            }
+        };
+
+        // Event Listeners
+        document.getElementById('create-new-btn').addEventListener('click', handleCreateNew);
+        document.getElementById('view-list-btn').addEventListener('click', showList);
+        document.getElementById('save-btn').addEventListener('click', handleSave);
+        document.getElementById('cancel-btn').addEventListener('click', handleCancel);
+        document.getElementById('print-btn').addEventListener('click', handlePrint);
+
+        // Initial Load: Tampilkan daftar data
+        showList();
+    </script>
+</body>
+</html>

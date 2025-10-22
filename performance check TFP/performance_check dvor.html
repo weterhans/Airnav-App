@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Check Gedung DVOR - AirNav Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            padding: 15px;
+            background-color: #f5f5f5;
+        }
+        
+        .form-container-inner {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: white;
+            padding: 0;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #003366;
+            padding: 15px 20px 15px 20px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .logo {
+            width: 90px;
+            height: 90px;
+            background: linear-gradient(135deg, #0099cc 0%, #0066cc 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .company-name {
+            font-size: 28px;
+            font-weight: bold;
+            color: #003366;
+        }
+        
+        .header-info {
+            text-align: right;
+            font-size: 16px;
+            line-height: 1.6;
+        }
+        
+        .title {
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 15px 0;
+            color: #003366;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10px;
+            margin-bottom: 10px;
+        }
+        
+        th, td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: #d3d3d3;
+            font-weight: bold;
+        }
+        
+        .gray-cell {
+            background-color: #e0e0e0; /* Sedikit lebih terang dari gray agar masih terlihat */
+        }
+        
+        .left-align {
+            text-align: left;
+            padding-left: 8px;
+        }
+        
+        .input-field {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            padding: 2px;
+            font-size: 10px;
+            font-family: 'Times New Roman', Times, serif; /* Samakan font */
+        }
+        
+        .input-field:focus {
+            outline: 1px solid #0066cc;
+            background: #ffffcc;
+        }
+        
+        .footer-section {
+            margin-top: 3px;
+        }
+        
+        .footer-section td {
+            padding: 8px;
+        }
+        
+        .note {
+            font-size: 9px;
+            margin-top: 8px;
+            font-style: italic;
+        }
+        
+        .legend {
+            margin-top: 15px;
+            font-size: 11px;
+        }
+
+        /* PERBAIKI: Samakan selector input */
+        input[type="text"], input[type="number"], input[type="date"], select, .input-field {
+            width: 100%;
+            border: none;
+            background: transparent;
+            text-align: center;
+            padding: 4px;
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 11px;
+        }
+        
+        /* Beri sedikit style pada input/select di footer agar terlihat */
+        .footer-section input[type="date"], .footer-section select {
+              border: 1px solid #999;
+              padding: 3px;
+        }
+        
+        .footer-section .input-field {
+            text-align: left;
+        }
+        
+        input[type="text"]:focus, input[type="number"]:focus, input[type="date"]:focus, select:focus {
+            outline: 1px solid #1e90ff;
+            background: #f0f8ff;
+        }
+
+        .signature-cell {
+            height: 80px;
+            vertical-align: bottom;
+        }
+
+        /* Buttons and Notifications CSS (Dibiarkan sama) */
+        .button-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px; 
+            padding-top: 20px; 
+            border-top: 1px solid #eee; 
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+        }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, #fb8c00 0%, #f57c00 100%);
+        }
+
+        .btn-print {
+            background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+        }
+
+        .btn-print:hover {
+            background: linear-gradient(135deg, #43a047 0%, #388e3c 100%);
+        }
+
+        .btn-cancel {
+            background: linear-gradient(135deg, #ef5350 0%, #e53935 100%);
+        }
+
+        .btn-cancel:hover {
+            background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+        }
+
+        .icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        /* Notifikasi */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            display: none;
+            animation: slideIn 0.4s ease;
+            z-index: 1000;
+            border-left: 5px solid;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        .notification.success {
+            border-left-color: #43a047;
+        }
+
+        .notification.error {
+            border-left-color: #e53935;
+        }
+
+        .notification.info {
+            border-left-color: #fb8c00; 
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .keterangan-col {
+            width: 200px;
+        }
+
+        /* CSS Tambahan untuk Waktu Pelaksanaan */
+        .footer-row {
+            margin-bottom: 20px;
+            font-size: 14px; 
+        }
+        .footer-row .input-field {
+            font-size: 14px;
+        }
+
+        /* ===== GAYA CETAK/PRINT (DIBIARKAN SAMA) ===== */
+
+        @page {
+            size: A4 landscape; 
+            margin: 10mm; 
+        }
+
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+
+            .button-group, .notification {
+                display: none !important;
+            }
+
+            body {
+                padding: 0;
+                margin: 0;
+                background-color: #fff; 
+                font-size: 9pt;
+            }
+            
+            .form-container-inner {
+                border: 2px solid #000;
+                max-width: 100%;
+                margin: 0;
+                width: 190mm;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            
+            table {
+                font-size: 7pt; 
+                margin-bottom: 5px;
+            }
+            th, td {
+                padding: 2px !important; 
+            }
+
+            .header {
+                padding-bottom: 5px;
+                margin-bottom: 10px;
+            }
+            .company-name { font-size: 18pt; }
+            .header-info { font-size: 10pt; }
+            .title { font-size: 12pt; margin: 5px 0; }
+            
+            .footer-section, .footer-row, .note {
+                font-size: 7pt;
+                margin-top: 5px;
+            }
+            .footer-row { margin-bottom: 10px; }
+            .footer-row .input-field, .footer-section .input-field {
+                font-size: 7pt;
+                padding: 1px;
+            }
+            .footer-section {
+                margin-top: 10px;
+            }
+            
+            th, td {
+                width: auto !important;
+                min-width: 0 !important;
+            }
+
+            .print-value {
+                display: block;
+                padding: 4px;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main-content" class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
+            <div>
+                <h1 class="text-2xl font-bold text-gray-800 mb-4">Performance Check DVOR</h1>
+                <div class="flex flex-wrap gap-4">
+                    <button type="button" id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">Buat Data Baru</button>
+                    <button type="button" id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold">Lihat Daftar Data</button>
+                </div>
+            </div>
+            <div class="text-sm text-gray-600">
+                <p><strong>Perum LPPNPI</strong></p>
+                <p>Cabang Surabaya</p>
+            </div>
+        </div>
+
+        <div id="form-container" class="hidden">
+            <form id="check-dvor">
+                <input type="hidden" id="data_id" name="id">
+                <div class="form-container-inner">
+                    <div class="header">
+                        <div class="logo-section">
+                            <img src="airnav.png" alt="AirNav Indonesia" style="width: 90px; height: auto; object-fit: contain;" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/id/thumb/7/77/AirNav_Indonesia_logo.svg/1200px-AirNav_Indonesia_logo.svg.png';">
+                            <div class="company-name">AirNav Indonesia</div>
+                        </div>
+                        <div class="header-info">
+                            <div><strong>Perum LPPNPI</strong></div>
+                            <div><strong>Cabang Surabaya</strong></div>
+                            <div><strong>Teknik Fasilitas Penunjang</strong></div>
+                        </div>
+                    </div>
+
+                    <div class="title">Performance Check DVOR</div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="width: 30px;">No.</th>
+                                <th rowspan="2" style="width: 150px;">Parameter</th>
+                                <th rowspan="2" style="width: 100px;">Panel D.01</th>
+                                <th rowspan="2" style="width: 140px;">Panel D.03<br>CCTV Indoor</th>
+                                <th rowspan="2" style="width: 140px;">Panel D.04<br>CCTV Outdoor</th>
+                                <th rowspan="2" style="width: 100px;">Panel Input<br>D.05</th>
+                                <th colspan="2" >Panel ATS/AMF (D.06)</th>
+                                <th rowspan="2" style="width: 150px;">Nama Fasilitas</th>
+                                <th rowspan="2" style="width: 60px;">Kondisi</th>
+                                <th rowspan="2" style="width: 150px;">Keterangan</th>
+                            </tr>
+                            <tr>    
+                                <th>Input</th>
+                                <th>Output</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td class="left-align">L1 - N (Volt)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">Catu Daya Listrik</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td class="left-align">L2 - N (Volt)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">Penerangan</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td class="left-align">L3 - N (Volt)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">Obstacle Light</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td class="left-align">N - G (Volt)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">AC 01 (Split Wall)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="center"><input type="text" class="input-field data-input"></td> </tr>
+                            <tr>
+                                <td>5</td>
+                                <td class="left-align">L1 - L2 (Volt)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">AC 02 (Split Wall)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="center"><input type="text" class="input-field data-input"></td> </tr>
+                            <tr>
+                                <td>6</td>
+                                <td class="left-align">L1 - L3 (Volt)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">Exhaust Fan 1</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>                    
+                            <tr>
+                                <td>7</td>
+                                <td class="left-align">L2 - L3 (Volt)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">Exhaust Fan 2</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>8</td>
+                                <td class="left-align">L1 (Ampere)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">Exhaust Fan 3</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>   
+                            <tr>
+                                <td>9</td>
+                                <td class="left-align">L2 (Ampere)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">Exhaust Fan 4</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>   
+                            <tr>
+                                <td>10</td>
+                                <td class="left-align">L3 (Ampere)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">Papan Nama AirNav</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>11</td>
+                                <td class="left-align">N (Ampere)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">Rumput</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>12</td>
+                                <td class="left-align">Frekuensi (Hz)</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td class="left-align">APAR/ Fire Extinguisher</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>             
+                            <tr>
+                                <td>13</td>
+                                <td class="left-align">Power Factor (Cos θ)</td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td colspan="2"></td>
+                                <td class="left-align">Atap</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>14</td>
+                                <td class="left-align">Tegangan Battery (Volt)</td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell" colspan="2"></td>
+                                <td class="left-align">Dinding</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>15</td>
+                                <td class="left-align">Arus Battery (Ampere)</td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell" colspan="2"></td>
+                                <td class="left-align">Pintu</td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>16</td>
+                                <td class="left-align">Kapasitas Battery (Ah)</td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell" colspan="2"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>17</td>
+                                <td class="left-align">Suhu Battery (°C)</td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell" colspan="2"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>18</td>
+                                <td class="left-align">Mode *</td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td colspan="2"><input type="text" class="input-field data-input" placeholder="Auto / Manual"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>19</td>
+                                <td class="left-align">Suplai Aktif *</td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td class="gray-cell"></td>
+                                <td colspan="2"><input type="text" class="input-field data-input" placeholder="PLN / Genset"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>20</td>
+                                <td class="left-align">Suhu Ruangan (°C)</td>
+                                <td colspan="3"><input type="text" class="input-field data-input" ></td>
+                                <td colspan="3"><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                            <tr>
+                                <td>21</td>
+                                <td class="left-align">KWH Meter</td>
+                                <td colspan="6"><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                                <td><input type="text" class="input-field data-input"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="footer-section">
+                        <div class="footer-row">
+                            <div class="footer-item">
+                                <strong>Waktu Pelaksanaan</strong>
+                                <span style="margin: 0 10px;">Hari:</span>
+                                <select id="hari" class="input-field time-input" style="width: 120px; display: inline-block; border: 1px solid #999;">
+                                    <option value="">Pilih Hari</option>
+                                    <option value="Senin">Senin</option>
+                                    <option value="Selasa">Selasa</option>
+                                    <option value="Rabu">Rabu</option>
+                                    <option value="Kamis">Kamis</option>
+                                    <option value="Jum'at">Jum'at</option>
+                                    <option value="Sabtu">Sabtu</option>
+                                    <option value="Minggu">Minggu</option>
+                                </select>
+                                <span style="margin: 0 10px;">Tanggal:</span>
+                                <input type="date" id="tanggal" class="time-input" style="width: 150px; border: 1px solid #333; padding: 3px;">
+                                <span style="margin: 0 10px;">Jam:</span>
+                                <select id="shift" class="input-field time-input" style="width: 120px; display: inline-block; border: 1px solid #999;">
+                                    <option value="">Pilih Shift</option>
+                                    <option value="07.00-13.00">07.00-13.00</option>
+                                    <option value="13.00-19.00">13.00-19.00</option>
+                                    <option value="19.00-07.00">19.00-07.00</option>
+                                </select>
+                                <span style="margin-left: 10px; font-weight: bold;">WIB</span>
+                            </div>
+                        </div>
+
+                        <table class="footer-section">
+                            <tr>
+                                <th style="width: 30px;">No.</th>
+                                <th style="width: 300px;">Pelaksana Teknisi</th>
+                                <th style="width: 150px;">Paraf</th>
+                                <th style="width: 400px;">Supervisor Teknik</th>
+                                <th>Manager Teknik</th>
+                            </tr>
+                            <tr>
+                                <td>1</td>
+                                <td><input type="text" class="input-field teknisi-nama footer-input"></td>
+                                <td><input type="text" class="input-field teknisi-paraf footer-input"></td>
+                                <td rowspan="5" style="vertical-align: bottom;">
+                                <input type="text" id="supervisor" class="input-field footer-input" placeholder="Nama Supervisor" style="height: 100%; border: none; text-align:center;">
+                                </td> 
+                                <td rowspan="5" style="vertical-align: bottom;">
+                                <input type="text" id="manager" class="input-field footer-input" placeholder="Nama Manager" style="height: 100%; border: none;text-align:center;">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td><input type="text" class="input-field teknisi-nama footer-input"></td>
+                                <td><input type="text" class="input-field teknisi-paraf footer-input"></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td><input type="text" class="input-field teknisi-nama footer-input"></td>
+                                <td><input type="text" class="input-field teknisi-paraf footer-input"></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td><input type="text" class="input-field teknisi-nama footer-input"></td>
+                                <td><input type="text" class="input-field teknisi-paraf footer-input"></td>
+                            </tr>
+                            <tr>
+                                <td>5</td>
+                                <td><input type="text" class="input-field teknisi-nama footer-input"></td>
+                                <td><input type="text" class="input-field teknisi-paraf footer-input"></td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </form>
+
+            <div class="flex justify-center gap-4 mt-6 mb-6 no-print">
+                <button type="button" id="save-btn" class="btn btn-save">💾 Simpan Data</button>
+                <button type="button" id="print-btn" class="btn btn-print">🖨️ Print Form</button>
+                <button type="button" id="cancel-btn" class="btn btn-cancel">✖ Batal</button>
+            </div>
+        </div> 
+        
+        <div class="notification" id="notification"></div>
+
+        <div id="list-container" class="bg-white p-6 rounded-lg shadow-md">
+            <h3 class="text-xl font-bold leading-6 text-gray-900 mb-4">Daftar Data Performance Check DVOR</h3>
+            <div id="tableContent" class="overflow-x-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY = 'PerformanceCheckDVOR';
+        let currentEditId = null;
+
+        const formContainer = document.getElementById('form-container');
+        const listContainer = document.getElementById('list-container');
+        const tableContent = document.getElementById('tableContent');
+        const checkDVOR = document.getElementById('check-dvor');
+        const dataIdInput = document.getElementById('data_id');
+
+        // AMBIL SEMUA INPUT YANG AKAN DISIMPAN
+        // 1. Input Waktu Pelaksanaan
+        const hariInput = document.getElementById('hari');
+        const tanggalInput = document.getElementById('tanggal');
+        const shiftInput = document.getElementById('shift');
+        // 2. Input Data Utama (Tabel)
+        const dataInputs = Array.from(document.querySelectorAll('.data-input'));
+        // 3. Input Tanda Tangan (Footer)
+        const supervisorInput = document.getElementById('supervisor');
+        const managerInput = document.getElementById('manager');
+        const teknisiNamaInputs = Array.from(document.querySelectorAll('.teknisi-nama'));
+        const teknisiParafInputs = Array.from(document.querySelectorAll('.teknisi-paraf'));
+
+
+        const showForm = () => {
+            formContainer.classList.remove('hidden');
+            listContainer.classList.add('hidden');
+            window.scrollTo(0, 0);
+        };
+
+        const showList = () => {
+            formContainer.classList.add('hidden');
+            listContainer.classList.remove('hidden');
+            loadTableData();
+        };
+
+        const getSavedData = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        const saveAllData = (data) => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+        const loadTableData = () => {
+            const data = getSavedData();
+            if (data.length === 0) {
+                tableContent.innerHTML = '<p class="text-center text-gray-500 py-8">Belum ada data yang tersimpan.</p>';
+                return;
+            }
+            const tableHtml = `
+                <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                    <table class="min-w-full divide-y divide-gray-200">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">No</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Tanggal</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Lokasi</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Manager Teknik</th>
+                                <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody class="bg-white divide-y divide-gray-200">
+                                ${data.sort((a, b) => b.id - a.id).map((item, index) => `
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.hari || '-'}, ${item.tanggal || '-'} (${item.shift || '-'})</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.lokasi}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.manager || '-'}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="#" onclick="event.preventDefault(); window.app.editData(${item.id})" class="text-blue-600 hover:text-blue-800 mr-4">Edit</a>
+                                            <a href="#" onclick="event.preventDefault(); window.app.deleteData(${item.id})" class="text-red-600 hover:text-red-800">Hapus</a>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                        </tbody>
+                    </table>
+                </div>`;
+            tableContent.innerHTML = tableHtml;
+        };
+
+        const clearForm = () => {
+            checkDVOR.reset();
+            dataIdInput.value = '';
+            currentEditId = null;
+            // Mengisi tanggal default
+            const today = new Date().toISOString().split('T')[0];
+            tanggalInput.value = today;
+        };
+
+        const handleSave = () => {
+            const hari = hariInput.value;
+            const tanggal = tanggalInput.value;
+            const shift = shiftInput.value;
+        
+            if (!tanggal || !hari || !shift) {
+                Swal.fire('Error', 'Hari, Tanggal, dan Jam wajib diisi!', 'error');
+                return;
+            }
+
+            const savedData = getSavedData();
+            
+            // 1. Ambil semua data input dari tabel utama
+            const mainTableData = dataInputs.map(input => input.value); 
+
+            const formData = {
+                id: currentEditId || Date.now(),
+                // Data Waktu Pelaksanaan
+                hari: hari, 
+                tanggal: tanggal,
+                shift: shift,
+                lokasi: 'Gedung DVOR', 
+                
+                // Data Tanda Tangan
+                supervisor: supervisorInput.value,
+                manager: managerInput.value,
+                teknisi: teknisiNamaInputs.map(el => el.value),
+                paraf: teknisiParafInputs.map(el => el.value), 
+                
+                // Data Input: array tunggal dari semua nilai input tabel utama
+                dataInput: mainTableData
+            };
+
+            if (currentEditId) {
+                const index = savedData.findIndex(data => data.id === currentEditId);
+                if (index !== -1) savedData[index] = formData;
+            } else {
+                savedData.push(formData);
+            }
+
+            saveAllData(savedData);
+            Swal.fire('Sukses!', `Data berhasil ${currentEditId ? 'diperbarui' : 'disimpan'}.`, 'success');
+            showList();
+        };
+
+        const handleCreateNew = () => {
+            clearForm();
+            document.getElementById('save-btn').innerText = '💾 Simpan Data';
+            showForm();
+        };
+
+        const handleCancel = () => {
+            Swal.fire({
+                title: 'Anda yakin?',
+                text: "Perubahan yang belum disimpan akan hilang.",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Ya, batalkan!',
+                cancelButtonText: 'Tidak'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    showList();
+                }
+            });
+        };
+
+        const handlePrint = () => {
+            // Mengganti semua INPUT (kecuali select) dengan SPAN agar nilainya terlihat saat dicetak
+            const inputs = document.querySelectorAll('#form-container input[type="text"], #form-container input[type="date"]');
+            
+            inputs.forEach(input => {
+                const span = document.createElement('span');
+                span.textContent = input.value || ' ';
+                span.className = 'print-value';
+                // Salin style agar ter-align dengan benar
+                span.style.cssText = input.style.cssText;
+                input.parentNode.replaceChild(span, input);
+            });
+
+            // Mengganti semua SELECT dengan SPAN agar nilainya terlihat saat dicetak
+            const selects = document.querySelectorAll('#form-container select');
+            selects.forEach(select => {
+                const span = document.createElement('span');
+                span.textContent = select.options[select.selectedIndex].text || ' ';
+                span.className = 'print-value';
+                // Salin style agar ter-align dengan benar
+                span.style.cssText = select.style.cssText; 
+                select.parentNode.replaceChild(span, select);
+            });
+            
+            window.print();
+        };
+
+        // Setelah cetak, reload halaman untuk mengembalikan input form (penting!)
+        window.onafterprint = () => {
+            location.reload();
+        };
+
+        window.app = {
+            showList,
+            editData: (id) => {
+                const data = getSavedData().find(d => d.id === id);
+                if (!data) return;
+                
+                currentEditId = id;
+                dataIdInput.value = id;
+                
+                // Mengisi ulang Waktu Pelaksanaan
+                hariInput.value = data.hari || '';
+                tanggalInput.value = data.tanggal;
+                shiftInput.value = data.shift || '';
+                
+                // Mengisi ulang Supervisor dan Manager
+                supervisorInput.value = data.supervisor || '';
+                managerInput.value = data.manager || '';
+                
+                // Mengisi ulang input TEKNISI dan PARAF
+                teknisiNamaInputs.forEach((input, i) => input.value = data.teknisi[i] || '');
+                teknisiParafInputs.forEach((input, i) => input.value = data.paraf[i] || '');
+
+                // Mengisi ulang data input tabel utama
+                dataInputs.forEach((input, i) => {
+                    input.value = data.dataInput[i] || '';
+                });
+
+                document.getElementById('save-btn').innerText = '💾 Perbarui Data';
+                showForm();
+            },
+            deleteData: (id) => { 
+                Swal.fire({
+                    title: 'Anda yakin ingin menghapus data ini?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    confirmButtonText: 'Ya, hapus!',
+                    cancelButtonText: 'Batal'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        let data = getSavedData();
+                        data = data.filter(item => item.id !== id);
+                        saveAllData(data);
+                        Swal.fire('Terhapus!', 'Data telah berhasil dihapus.', 'success');
+                        loadTableData();
+                    }
+                });
+            }
+        };
+
+        // Event Listeners
+        document.getElementById('create-new-btn').addEventListener('click', handleCreateNew);
+        document.getElementById('view-list-btn').addEventListener('click', showList);
+        document.getElementById('save-btn').addEventListener('click', handleSave);
+        document.getElementById('cancel-btn').addEventListener('click', handleCancel);
+        document.getElementById('print-btn').addEventListener('click', handlePrint);
+
+        // Inisiasi awal: tampilkan daftar data
+        showList();
+    </script> 
+</body>
+</html>

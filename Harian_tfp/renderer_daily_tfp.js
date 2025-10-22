@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
     const addReportModal = document.getElementById('add-report-modal');
     const closeModalButton = document.getElementById('close-modal-button');
     const cancelButton = document.getElementById('cancel-button');
-    const saveButton = document.getElementById('save-button');
     const reportForm = document.getElementById('report-form');
     const equipmentContainer = document.getElementById('equipment-list');
     const modalTitle = document.getElementById('modal-title');
@@ -45,8 +44,22 @@ document.addEventListener('DOMContentLoaded', function() {
         const result = await window.api.getTfpReports();
         listElement.innerHTML = '';
         if (result.success && result.data.length > 0) {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+            
             result.data.forEach(item => {
-                const formattedDate = new Date(item.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+                let formattedDate = '-';
+                if (item.tanggal) {
+                    // PERBAIKAN FINAL: Format tanggal secara manual untuk menghindari timezone
+                    try {
+                        const dateString = new Date(item.tanggal).toLocaleDateString('en-CA'); // Hasil: "2025-10-21"
+                        const [year, month, day] = dateString.split('-');
+                        formattedDate = `${day} ${monthNames[parseInt(month, 10) - 1]} ${year}`; // Hasil: "21 Okt 2025"
+                    } catch (e) {
+                        console.error("Gagal memformat tanggal:", item.tanggal, e);
+                        formattedDate = "Invalid Date";
+                    }
+                }
+                
                 const listItem = document.createElement('li');
                 listItem.className = 'grid grid-cols-12 gap-4 items-center px-6 py-4 hover:bg-gray-50';
                 listItem.innerHTML = `
@@ -96,39 +109,59 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
     
+    const autoFillJadwalDinas = async () => {
+        const tanggal = document.getElementById('tanggal').value;
+        const dinas = document.getElementById('dinas').value;
+        const jadwalDinasTextarea = document.getElementById('jadwal-dinas');
+
+        if (!tanggal || !dinas || !jadwalDinasTextarea) return;
+
+        const result = await window.api.getTfpTechniciansBySchedule({ tanggal: tanggal, dinas: dinas });
+
+        if (result.success && result.data.length > 0) {
+            const formattedNames = result.data.map((name, index) => `${index + 1}. ${name}`).join('\n');
+            jadwalDinasTextarea.value = formattedNames;
+        } else {
+            jadwalDinasTextarea.value = '';
+            jadwalDinasTextarea.placeholder = 'Tidak ada jadwal TFP untuk tanggal/shift ini.';
+        }
+    };
+
     const updateAutoFields = () => {
         const dinas = document.getElementById('dinas').value;
         const tanggal = new Date(document.getElementById('tanggal').value);
         if(!dinas || isNaN(tanggal)) return;
-        const day = String(tanggal.getDate()).padStart(2, '0');
-        const month = String(tanggal.getMonth() + 1).padStart(2, '0');
-        const year = tanggal.getFullYear();
+        const day = String(tanggal.getUTCDate()).padStart(2, '0');
+        const month = String(tanggal.getUTCMonth() + 1).padStart(2, '0');
+        const year = tanggal.getUTCFullYear();
         document.getElementById('id-daily').value = `${dinas}-${day}/${month}/${year}-TFP`;
         document.getElementById('kode').value = `${dinas}${day}${month}${year}TFPA`;
+        autoFillJadwalDinas();
     };
 
     const openModal = (isEditing = false, report = null) => {
         reportForm.reset();
         modalTitle.textContent = isEditing ? "Edit Laporan Daily TFP" : "DAILY TFP FORM";
         document.getElementById('report-db-id').value = isEditing ? report.id : '';
-
         document.querySelectorAll('[id^="keterangan-wrapper-"]').forEach(el => el.classList.add('hidden'));
 
         if (isEditing) {
             document.getElementById('id-daily').value = report.report_id_custom;
             document.getElementById('dinas').value = report.dinas;
-            document.getElementById('tanggal').value = new Date(report.tanggal).toISOString().slice(0,10);
+            document.getElementById('tanggal').value = new Date(report.tanggal).toLocaleDateString('en-CA');
             document.getElementById('jam').value = report.jam;
             document.getElementById('mantek').value = report.mantek;
             document.getElementById('acknowledge').value = report.acknowledge;
             document.getElementById('kode').value = report.kode;
             document.getElementById('jadwal-dinas').value = report.jadwal_dinas;
-            
             document.querySelectorAll('#shift-buttons button').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.shift === report.dinas);
             });
 
-            const eqStatus = report.equipment_status || {};
+            const eqStatus = typeof report.equipment_status === 'string'
+                ? JSON.parse(report.equipment_status || '{}')
+                : (report.equipment_status || {});
+
             for (const key in eqStatus) {
                 const select = document.getElementById(key);
                 if (select) {
@@ -145,14 +178,12 @@ document.addEventListener('DOMContentLoaded', function() {
             const now = new Date();
             const hour = now.getHours();
             let currentShift = (hour >= 7 && hour < 13) ? 'PAGI' : (hour >= 13 && hour < 19) ? 'SIANG' : 'MALAM';
-            
             document.querySelectorAll('#shift-buttons button').forEach(btn => btn.classList.toggle('active', btn.dataset.shift === currentShift));
             document.getElementById('dinas').value = currentShift;
             document.getElementById('tanggal').value = now.toISOString().slice(0,10);
             document.getElementById('jam').value = now.toTimeString().slice(0,5);
             updateAutoFields();
         }
-        
         addReportModal.classList.remove('hidden');
     };
 
@@ -188,12 +219,17 @@ document.addEventListener('DOMContentLoaded', function() {
     listElement.addEventListener('click', async (event) => {
         if (event.target.classList.contains('edit-btn')) {
             const result = await window.api.getTfpReportById(event.target.dataset.id);
-            if(result.success) openModal(true, result.data);
-            else alert('Gagal memuat data laporan.');
+            if(result.success && result.data) {
+                openModal(true, result.data);
+            } else {
+                Swal.fire('Gagal!', 'Gagal memuat data laporan.', 'error');
+            }
         }
     });
     
-    saveButton.addEventListener('click', async () => {
+    reportForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
         const formData = new FormData(reportForm);
         const reportData = { equipment_status: {} };
         
@@ -201,7 +237,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const id = name.toLowerCase().replace(/[\s\(\)\.\-\/:]/g, '');
             const status = formData.get(id);
             const keterangan = formData.get(`keterangan-${id}`);
-
             if(status) {
                 reportData.equipment_status[id] = { status: status };
                 if (keterangan) {
@@ -228,11 +263,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         if (result.success) {
-            alert(result.message);
+            Swal.fire({
+                title: 'Berhasil!',
+                text: result.message,
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
             loadAndRenderReports();
             closeModal();
         } else {
-            alert('Gagal: ' + result.message);
+            Swal.fire({
+                title: 'Gagal!',
+                text: result.message,
+                icon: 'error'
+            });
         }
     });
 

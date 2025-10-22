@@ -46,21 +46,20 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     };
 
-    // --- INI BAGIAN YANG DIPERBAIKI ---
-    // Logika ini sekarang bisa membedakan link internal dan eksternal
     allNavigationalLinks.forEach(link => {
-        // HANYA tambahkan listener khusus jika link punya atribut 'data-target'
+        // Cek apakah link ini memiliki atribut 'data-target'
         if (link.hasAttribute('data-target')) {
+            // Jika YA (link internal), tambahkan listener untuk mencegah pindah halaman
             link.addEventListener('click', (e) => {
-                e.preventDefault(); // Mencegah pindah halaman HANYA untuk link internal
+                e.preventDefault(); // Hentikan aksi default HANYA untuk link internal
                 const targetId = link.getAttribute('data-target');
                 handleNavigation(targetId);
+                // Simpan state ke hash agar bisa di-refresh/bookmark
                 window.location.hash = targetId;
             });
         }
-        // Jika link TIDAK punya 'data-target' (seperti link ke work_order.html),
-        // maka tidak ada event listener yang ditambahkan,
-        // sehingga link akan berfungsi normal sesuai 'href'-nya.
+        // Jika TIDAK (link eksternal seperti ke personal.html),
+        // JANGAN tambahkan listener khusus. Biarkan link berfungsi normal.
     });
     
     // Cek hash di URL saat pertama kali load
@@ -111,6 +110,61 @@ document.addEventListener('DOMContentLoaded', function() {
     checkUrlHash();
     updateGreetingAndAvatar();
     setupRoleBasedUI();
+
+    const scheduleDateElement = document.getElementById('schedule-date');
+    const managerTableBody = document.getElementById('manager-table-body');
+    const tfpTableBody = document.getElementById('tfp-table-body');
+    const cnsTableBody = document.getElementById('cns-table-body');
+
+    
+    // Fungsi bantuan untuk mengisi tabel agar tidak mengulang kode
+    function populateTable(tableBody, scheduleData, emptyMessage) {
+        tableBody.innerHTML = ''; // Kosongkan tabel
+        if (scheduleData && scheduleData.length > 0) {
+            scheduleData.forEach(person => {
+                const tr = document.createElement('tr');
+                const cellNama = `<td class="p-4">${person.name || ''}</td>`;
+                const cellShift = `<td class="p-4">${person.shift || ''}</td>`;
+                tr.innerHTML = cellNama + cellShift;
+                tableBody.appendChild(tr);
+            });
+        } else {
+            tableBody.innerHTML = `<tr><td colspan="2" class="p-4 text-center text-gray-500">${emptyMessage}</td></tr>`;
+        }
+    }
+
+    if (scheduleDateElement && managerTableBody && tfpTableBody && cnsTableBody) {
+        // Listener untuk menerima payload jadwal yang baru
+        window.api.onUpdateSchedule((payload) => {
+            console.log('Menerima payload jadwal yang dikategorikan:', payload);
+
+            // Perbarui tanggal
+            scheduleDateElement.textContent = payload.displayDate || 'Tanggal tidak tersedia';
+
+            // Isi setiap tabel dengan data yang sesuai
+            populateTable(managerTableBody, payload.manager, 'Tidak ada Manager yang dinas');
+            populateTable(tfpTableBody, payload.tfp, 'Tidak ada personil TFP yang dinas');
+            populateTable(cnsTableBody, payload.cns, 'Tidak ada personil CNS yang dinas');
+        });
+
+        // Listener jika terjadi error
+        window.api.onScheduleError(() => {
+            const errorMessage = '<tr><td colspan="2" class="p-4 text-center text-red-500">Gagal memuat jadwal</td></tr>';
+            scheduleDateElement.textContent = 'Gagal memuat tanggal';
+            managerTableBody.innerHTML = errorMessage;
+            tfpTableBody.innerHTML = errorMessage;
+            cnsTableBody.innerHTML = errorMessage;
+        });
+
+        const editScheduleBtn = document.getElementById('edit-schedule-btn');
+        if (editScheduleBtn) {
+            editScheduleBtn.addEventListener('click', () => {
+                console.log('Tombol Ubah Jadwal diklik, memanggil openSheet...');
+                window.api.openSheet();
+            });
+        }
+
+    }
 
     // Sisa event listener lainnya (sidebar toggle, profile menu, dll.)
     if (sidebarToggle) {

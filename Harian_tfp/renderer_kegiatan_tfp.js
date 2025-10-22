@@ -1,4 +1,4 @@
-// renderer_kegiatan_tfp.js (Versi Upgrade)
+// renderer_kegiatan_tfp.js (Versi Final dengan Perbaikan Tampilan Tanggal)
 
 document.addEventListener('DOMContentLoaded', function () {
     // Auth Guard
@@ -29,23 +29,6 @@ document.addEventListener('DOMContentLoaded', function () {
     let existingAttachmentPaths = [];
 
     // --- Fungsi Bantuan ---
-    const showToast = (message, type = 'success') => {
-        const toast = document.getElementById('toast-notification');
-        const toastIcon = document.getElementById('toast-icon');
-        const toastMessage = document.getElementById('toast-message');
-        toast.classList.remove('bg-green-100', 'text-green-700', 'bg-red-100', 'text-red-700');
-        if (type === 'success') {
-            toastIcon.innerHTML = '✅';
-            toast.classList.add('bg-green-100', 'text-green-700');
-        } else {
-            toastIcon.innerHTML = '❌';
-            toast.classList.add('bg-red-100', 'text-red-700');
-        }
-        toastMessage.textContent = message;
-        toast.classList.remove('hidden');
-        setTimeout(() => { toast.classList.add('hidden'); }, 3000);
-    };
-
     const getCurrentShift = () => {
         const currentHour = new Date().getHours();
         if (currentHour >= 7 && currentHour < 13) return 'Pagi';
@@ -58,13 +41,28 @@ document.addEventListener('DOMContentLoaded', function () {
         const result = await window.api.getTfpActivities();
         activityTableBody.innerHTML = '';
         if (result && result.success && result.data.length > 0) {
+            const monthNames = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
+
             result.data.forEach(activity => {
                 const row = document.createElement('tr');
                 row.className = 'border-b hover:bg-gray-50';
                 
-                let formattedDate = activity.tanggal ? new Date(activity.tanggal).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' }) : '-';
-                const teknisiArray = Array.isArray(activity.teknisi) ? activity.teknisi : [];
-                const lampiranArray = Array.isArray(activity.lampiran) ? activity.lampiran : [];
+                let formattedDate = '-';
+                if (activity.tanggal) {
+                    // PERBAIKAN FINAL: Format tanggal secara manual untuk menghindari timezone
+                    try {
+                        const dateString = new Date(activity.tanggal).toLocaleDateString('en-CA'); // Hasil: "2025-10-21"
+                        const [year, month, day] = dateString.split('-');
+                        formattedDate = `${day} ${monthNames[parseInt(month, 10) - 1]} ${year}`; // Hasil: "21 Okt 2025"
+                    } catch (e) {
+                        console.error("Gagal memformat tanggal:", activity.tanggal, e);
+                        formattedDate = "Invalid Date";
+                    }
+                }
+
+                const teknisiArray = activity.teknisi ? (typeof activity.teknisi === 'string' ? JSON.parse(activity.teknisi) : activity.teknisi) : [];
+                const lampiranArray = activity.lampiran ? (typeof activity.lampiran === 'string' ? JSON.parse(activity.lampiran) : activity.lampiran) : [];
+
                 const lampiranCell = lampiranArray.length > 0 ? `<span class="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">${lampiranArray.length} Lampiran</span>` : '-';
 
                 row.innerHTML = `
@@ -134,7 +132,7 @@ document.addEventListener('DOMContentLoaded', function () {
         if (isEditing) {
             document.getElementById('activity-code').value = data.kode;
             document.getElementById('activity-shift').value = data.dinas;
-            if (data.tanggal) document.getElementById('activity-date').value = new Date(data.tanggal).toISOString().slice(0,10);
+            if (data.tanggal) document.getElementById('activity-date').value = new Date(data.tanggal).toLocaleDateString('en-CA');
             document.getElementById('activity-start-time').value = data.waktu_mulai;
             document.getElementById('activity-end-time').value = data.waktu_selesai;
             document.getElementById('activity-tool').value = data.alat;
@@ -144,12 +142,12 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('activity-status').value = data.status;
             document.getElementById('activity-downtime').value = data.waktu_terputus;
             
-            let teknisiArray = Array.isArray(data.teknisi) ? data.teknisi : [];
+            let teknisiArray = data.teknisi ? (typeof data.teknisi === 'string' ? JSON.parse(data.teknisi) : data.teknisi) : [];
             for (let i = 0; i < 5; i++) {
                 const select = document.querySelector(`select[name="teknisi-${i+1}"]`);
                 if (select) select.value = teknisiArray[i] || '';
             }
-            existingAttachmentPaths = Array.isArray(data.lampiran) ? data.lampiran : [];
+            existingAttachmentPaths = data.lampiran ? (typeof data.lampiran === 'string' ? JSON.parse(data.lampiran) : data.lampiran) : [];
         } else {
             document.getElementById('activity-code').value = `KG-TFP-${Date.now().toString().slice(-6)}`;
             document.getElementById('activity-date').value = new Date().toISOString().slice(0,10);
@@ -177,8 +175,15 @@ document.addEventListener('DOMContentLoaded', function () {
         if (e.target.classList.contains('edit-btn')) {
             const id = e.target.dataset.id;
             const result = await window.api.getTfpActivityById(id);
-            if (result.success && result.data) await openModal(true, result.data);
-            else showToast('Gagal mengambil detail kegiatan.', 'error');
+            if (result.success && result.data) {
+                await openModal(true, result.data);
+            } else {
+                Swal.fire({
+                    title: 'Gagal!',
+                    text: 'Gagal mengambil detail kegiatan.',
+                    icon: 'error'
+                });
+            }
         }
     });
     
@@ -186,8 +191,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const removeBtn = event.target.closest('.remove-attachment-btn');
         if (removeBtn) {
             const { identifier, type } = removeBtn.dataset;
-            if (type === 'existing') existingAttachmentPaths = existingAttachmentPaths.filter(path => path !== identifier);
-            else if (type === 'new') newAttachmentFiles.splice(parseInt(identifier, 10), 1);
+            if (type === 'existing') {
+                existingAttachmentPaths = existingAttachmentPaths.filter(path => path !== identifier);
+            } else if (type === 'new') {
+                newAttachmentFiles.splice(parseInt(identifier, 10), 1);
+            }
             renderAllPreviews();
         } else {
             const previewWrapper = event.target.closest('.preview-image-wrapper');
@@ -239,12 +247,23 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         
         const result = await window.api.saveTfpActivity(activityData);
+
         if (result.success) {
-            showToast(result.message, 'success');
+            Swal.fire({
+                title: 'Berhasil!',
+                text: result.message,
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
             closeModal();
             loadActivities();
         } else {
-            showToast(result.message || 'Terjadi kesalahan', 'error');
+            Swal.fire({
+                title: 'Gagal!',
+                text: result.message || 'Terjadi kesalahan',
+                icon: 'error'
+            });
         }
     });
     

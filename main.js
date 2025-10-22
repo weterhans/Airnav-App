@@ -1,10 +1,12 @@
 // main.js
 
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog, shell } = require('electron');
 const path = require('path');
 const mysql = require('mysql2');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
+const axios = require('axios'); 
+const Papa = require('papaparse');
 
 const saltRounds = 10;
 
@@ -49,6 +51,7 @@ const createWindow = () => {
     
       win.maximize();
       win.loadFile('index.html');
+      return win;
 };
 
 // Fungsi baru untuk mengecek koneksi database saat startup
@@ -64,12 +67,108 @@ async function checkDbConnection() {
     }
 }
 
+async function fetchScheduleData(win) {
+    const GOOGLE_SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTTgyK8hLDZajIXckdGcBuV9W4zVgT_QGqVK7irDc0fqPUNHgpxai2X9Pk6vj5qz22xBozTruWkWx8z/pub?output=csv'; // URL CSV Anda
+
+    if (!win) return;
+
+    try {
+        console.log('--- Memulai Fetch Jadwal ---');
+        const response = await axios.get(GOOGLE_SHEET_URL);
+        const parseResult = Papa.parse(response.data, { header: false });
+
+        // 1. Membersihkan data
+        const cleanedRows = parseResult.data.filter(row =>
+            Array.isArray(row) && row.length > 3 && row[1] && row[1].trim() !== '' && row[3] && row[3].trim() !== ''
+        );
+        console.log(`Data bersih: ${cleanedRows.length} baris valid.`);
+
+        // 2. Setup tanggal & kolom
+        const today = new Date();
+        const displayDate = today.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        const todayDate = today.getDate();
+        const offsetColumns = 4; // NO, NAMA, KELAS JABATAN, JABATAN
+        const columnIndexForToday = offsetColumns + todayDate - 1;
+
+        // 3. Kamus shift
+        const shiftDictionary = { 'P': 'PAGI', 'S': 'SIANG', 'M': 'MALAM' };
+
+        // 4. Wadah Kategori
+        let managerSchedule = [];
+        let cnsSchedule = [];
+        let tfpSchedule = [];
+
+        // 5. Proses dan kategorikan (LOGIKA BARU YANG MENANGANI "MT x")
+        console.log('Mulai kategorisasi (Revisi Final MT)...');
+        for (const row of cleanedRows) {
+            const name = row[1];
+            const jabatan = row[3].toUpperCase().trim(); // Jabatan dari Google Sheet (dibersihkan)
+            const shiftCode = row[columnIndexForToday] ? row[columnIndexForToday].trim().toUpperCase() : '';
+
+            if (shiftDictionary[shiftCode]) {
+                const scheduleEntry = { name: name, shift: shiftDictionary[shiftCode] };
+
+                // Cek #1: Apakah jabatan DIMULAI DENGAN "MT" ATAU mengandung "PT MT"?
+                if (jabatan.startsWith('MT') || jabatan.includes('PT MT')) {
+                    managerSchedule.push(scheduleEntry);
+                }
+                // Cek #2: Jika BUKAN manager, apakah jabatannya mengandung 'TFP'?
+                else if (jabatan.includes('TFP')) {
+                    tfpSchedule.push(scheduleEntry); // Akan mencakup 'SPV TFP'
+                }
+                // Cek #3: Jika BUKAN manager dan BUKAN TFP, anggap CNS.
+                else {
+                    cnsSchedule.push(scheduleEntry); // Akan mencakup 'Teknik 1', 'Teknik 2', dll.
+                }
+            }
+        }
+        console.log(`Hasil kategorisasi: M(${managerSchedule.length}), C(${cnsSchedule.length}), T(${tfpSchedule.length})`);
+
+
+        // --- Blok Pengurutan (Tidak Berubah) ---
+        console.log('Mulai pengurutan...');
+        const shiftOrder = { 'PAGI': 1, 'SIANG': 2, 'MALAM': 3 };
+        const sortByShift = (a, b) => {
+            const orderA = shiftOrder[a.shift] || 99;
+            const orderB = shiftOrder[b.shift] || 99;
+            if (orderA !== orderB) {
+                return orderA - orderB;
+            }
+            return a.name.localeCompare(b.name);
+         };
+        managerSchedule.sort(sortByShift);
+        cnsSchedule.sort(sortByShift);
+        tfpSchedule.sort(sortByShift);
+        console.log('Pengurutan selesai.');
+        // --- Akhir Blok Pengurutan ---
+
+
+        const payload = {
+            displayDate: displayDate,
+            manager: managerSchedule,
+            tfp: tfpSchedule,
+            cns: cnsSchedule
+        };
+
+        console.log(`Mengirim payload terurut ke renderer.`);
+        win.webContents.send('update-schedule', payload);
+
+    } catch (error) {
+        console.error('!!! ERROR DI fetchScheduleData !!!:', error);
+        win.webContents.send('schedule-error');
+    }
+}
+
 // Logika saat aplikasi siap dijalankan (dengan pengecekan koneksi)
 app.whenReady().then(async () => {
     const isDbConnected = await checkDbConnection();
 
     if (isDbConnected) {
-        createWindow(); // Jika koneksi berhasil, tampilkan aplikasi
+        const win = createWindow(); // Perbaikan #1: Simpan jendela ke dalam variabel 'win'
+    
+        fetchScheduleData(win); // Perbaikan #2: Sekarang 'win' punya referensi yang benar
+        setInterval(() => fetchScheduleData(win), 300000);
+    
     } else {
         // Jika gagal, tampilkan pesan error yang jelas dan tutup aplikasi
         dialog.showErrorBox(
@@ -94,6 +193,19 @@ app.on('window-all-closed', () => {
 
 
 // --- BAGIAN LOGIKA IPC (BACKEND) ---
+ipcMain.handle('open-sheet', () => {
+    console.log(">>> Handler 'open-sheet' di main.js TERPANGGIL!");
+    const EDIT_URL = 'https://docs.google.com/spreadsheets/d/1MJk_RV_ufGHr11bKyMQMxxDlQqv_6GhpZ9rPYSkELy8/edit';
+    console.log(`Mencoba membuka link eksternal: ${EDIT_URL}`);
+    try {
+        shell.openExternal(EDIT_URL); // Gunakan shell yang sudah diimpor
+        console.log(">>> shell.openExternal SUKSES dipanggil.");
+        return { success: true };
+    } catch (error) {
+        console.error('!!! Gagal saat memanggil shell.openExternal !!!:', error);
+        return { success: false, message: 'Gagal membuka link.' };
+    }
+});
 
 // Handle permintaan REGISTER
 ipcMain.handle('db:register', async (event, userData) => {
