@@ -221,15 +221,18 @@
         <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
             <div>
                 <div class="flex items-center">
-                    <h1 class="text-2xl font-bold text-gray-800">Meter Reading RADAR</h1>
+                    <a href="performance_cnsd.html" onclick="history.back(); return false;" class="flex items-center text-gray-600 hover:text-gray-800 font-semibold p-2 rounded-md hover:bg-gray-200">
+                        <svg class="w-6 h-6 mr-0" fill="none" stroke="currentColor" viewBox="0 0 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-800 ml-4">Meter Reading Radar </h1>
                 </div>
                 
                 <div class="mt-4 flex flex-wrap gap-4">
-                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold transition duration-150">Buat Data Baru</button>
-                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold transition duration-150">Lihat Daftar Data</button>
+                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Buat Data Baru</button>
+                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Lihat Daftar Data</button>
                 </div>
             </div>
-            <img src="airnav.png" alt="AirNav Logo" class="h-12 w-auto" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/id/thumb/7/77/AirNav_Indonesia_logo.svg/1200px-AirNav_Indonesia_logo.svg.png';">
+            <img src="../img/airnav.png" alt="AirNav Logo" class="h-12 w-auto">
         </div>
 
         <div id="form-container" class="hidden">

@@ -29,6 +29,18 @@ contextBridge.exposeInMainWorld('api', {
     getCnsdActivityById: (id) => ipcRenderer.invoke('db:get-cnsd-activity-by-id', id),
     readFileAsBase64: (filePath) => ipcRenderer.invoke('fs:read-file-base64', filePath),
 
+    //Fungsi untuk Save Data CNSD
+    getCnsdSaveData: () => ipcRenderer.invoke('db:get-cnsd-savedata'),
+    saveCnsdSaveData: (data) => ipcRenderer.invoke('db:save-cnsd-savedata', data),
+    deleteCnsdSaveData: (id) => ipcRenderer.invoke('db:delete-cnsd-savedata', id),
+    getCnsdScheduleByDate: (tanggal) => ipcRenderer.invoke('db:get-cnsd-schedule-by-date', tanggal),
+    getCnsdActivitiesByDate: (tanggal) => ipcRenderer.invoke('db:get-cnsd-activities-by-date', tanggal),
+    getCnsdActivitiesByDateRange: (startDate, endDate) => ipcRenderer.invoke('db:get-cnsd-activities-by-date-range', startDate, endDate),
+    getCnsdScheduleByDateRange: (startDate, endDate) => ipcRenderer.invoke('db:get-cnsd-schedule-by-date-range', startDate, endDate),
+    generateCnsdReportPdf: (data) => ipcRenderer.invoke('generate:cnsd-report-pdf', data),
+    generateCnsdMonthlyReportPdf: (data) => ipcRenderer.invoke('generate:cnsd-monthly-report-pdf', data),
+    openPdf: (filePath) => ipcRenderer.invoke('open:pdf', filePath),
+
     // Fungsi untuk Jadwal TFP
     getTfpSchedules: () => ipcRenderer.invoke('db:get-tfp-schedules'),
     saveTfpSchedule: (scheduleData) => ipcRenderer.invoke('db:save-tfp-schedule', scheduleData),
@@ -59,7 +71,7 @@ contextBridge.exposeInMainWorld('api', {
     getTfpWorkorders: () => ipcRenderer.invoke('db:get-tfp-workorders'),
     getTfpWorkorderById: (id) => ipcRenderer.invoke('db:get-tfp-workorder-by-id', id),
     deleteTfpWorkorder: (id) => ipcRenderer.invoke('db:delete-tfp-workorder', id),
-    
+
     // --- API UNTUK JADWAL GOOGLE SHEET ---
     onUpdateSchedule: (callback) => ipcRenderer.on('update-schedule', (event, data) => callback(data)),
     onScheduleError: (callback) => ipcRenderer.on('schedule-error', () => callback()),

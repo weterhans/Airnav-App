@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form N-4 Meter Reading - AirNav Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Arial', sans-serif; }
+        .form-container-inner {
+            max-width: 210mm;
+            margin: 20px auto;
+            border: 3px solid #000;
+            background: white;
+            color: #000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .header-section { display: flex; justify-content: space-between; align-items: center; padding: 12px 20px; border-bottom: 3px solid #000; }
+        .header-left { display: flex; gap: 15px; align-items: center; }
+        .logo { width: 80px; height: auto; flex-shrink: 0; }
+        .company-name { font-size: 15px; font-weight: bold; color: #004b87; }
+        .header-right { text-align: right; font-size: 11px; line-height: 1.5; }
+        .header-right .title { font-size: 14px; font-weight: bold; margin-bottom: 5px; }
+        .title-section { padding: 8px; text-align: center; border-bottom: 3px solid #000; }
+        .title-section h1 { font-size: 16px; font-weight: bold; }
+        
+        /* Form Header Section */
+        .form-info-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 3px solid #000; }
+        .form-info-grid > div { padding: 8px; border-right: 3px solid #000; font-size: 11px; }
+        .form-info-grid > div:last-child { border-right: none; }
+        .form-info-grid .receiver { background-color: #b4c7e7; text-align: center; font-weight: bold; }
+        .form-info-grid .form-code { text-align: right; font-weight: bold; }
+        .receiver-title { font-size: 16px; margin-bottom: 3px; }
+        .receiver-subtitle { font-size: 14px; }
+        .code-category { font-size: 12px; margin-bottom: 3px; }
+        .code-number { font-size: 18px; }
+        
+        .date-time-section { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr 1fr; 
+            border-bottom: 3px solid #000;
+            font-size: 12px;
+        }
+        .date-time-section > div {
+            padding: 8px 10px;
+            border-right: 3px solid #000;
+        }
+        .date-time-section > div:last-child { border-right: none; }
+        
+        .equipment-section { display: flex; gap: 18px; padding: 8px 10px; border-bottom: 3px solid #000; font-size: 12px; font-weight: bold; }
+        
+        /* Table Styles */
+        table.form-table { width: 100%; border-collapse: collapse; font-size: 10px; }
+        table.form-table th, table.form-table td { border: 2px solid #000; padding: 6px; text-align: center; vertical-align: middle; }
+        table.form-table th { background-color: #b4c7e7; font-weight: bold; }
+        .section-title { background-color: #b4c7e7; padding: 8px 10px; font-weight: bold; border-bottom: 2px solid #000; font-size: 12px; text-align: left;}
+        .subsection-row { background-color: #b4c7e7; font-weight: bold; }
+        .equipment-column { text-align: left; padding-left: 12px; }
+        .item-row td:nth-child(2) { text-align: left; padding-left: 20px; }
+        .nominal-column { width: 15%; }
+        .result-column-tx { width: 10%; }
+        .result-column-ms { width: 10%; background-color: #e0e0e0; }
+
+        input[type="text"], input[type="date"], input[type="time"], select {
+            width: 100%; border: none; outline: none; background: transparent; font-size: 10px;
+            font-family: Arial, sans-serif; padding: 2px;
+        }
+        input[type="date"], input[type="time"], select { 
+            border: 1px solid #ccc; padding: 3px; background: white; 
+            font-size: 10px; 
+            height: auto;
+            line-height: normal;
+        }
+        .date-time-row input, .date-time-row select { 
+            width: 48%; 
+            display: inline-block;
+            box-sizing: border-box;
+        }
+
+        /* TANDA TANGAN TABLE */
+        table.signature-table th { width: 30%; }
+        table.signature-table th:first-child { width: 5%; }
+        table.signature-table th:nth-child(2) { width: 35%; }
+        table.signature-table th:nth-child(3) { width: 30%; }
+        table.signature-table th:last-child { width: 30%; }
+        table.signature-table td { font-size: 10px; }
+
+
+        @media print {
+            @page { size: A4 portrait; margin: 4mm 6mm; }
+            body { margin: 0; padding: 0; background-color: white; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .no-print { display: none !important; }
+            #form-container { display: block !important; padding: 0 !important; }
+            #list-container, #main-controls { display: none !important; }
+            .form-container-inner { box-shadow: none; border: 2px solid #000; margin: 0; max-width: 100%; width: 190mm; transform: scale(0.95); transform-origin: top left; }
+            .header-section { padding: 6px 10px; border-bottom: 2px solid #000; }
+            .header-left { gap: 6px; }
+            .logo { width: 40px; }
+            .company-name { font-size: 10px; }
+            .header-right .title { font-size: 10px; margin-bottom: 2px; }
+            .header-right { font-size: 8px; line-height: 1.1; }
+            .title-section h1 { font-size: 12px; }
+
+            .form-info-grid { border-bottom: 2px solid #000; }
+            .form-info-grid > div { padding: 3px 6px; border-right: 1px solid #000; font-size: 7px; }
+            .receiver-title { font-size: 12px; margin-bottom: 1px; }
+            .receiver-subtitle { font-size: 10px; }
+            .code-category { font-size: 10px; margin-bottom: 1px; }
+            .code-number { font-size: 12px; }
+
+            .date-time-section { border-bottom: 2px solid #000; font-size: 10px; }
+            .date-time-section > div { padding: 2px 6px; border-right: 1px solid #000; }
+            .equipment-section { gap: 12px; padding: 2px 6px; border-bottom: 1px solid #000; font-size: 10px; }
+            
+            .section-title { padding: 2px 6px; border-bottom: 1px solid #000; font-size: 10px; }
+            
+            table.form-table th, table.form-table td { 
+                border: 1px solid #000; 
+                padding: 2px 4px !important; 
+                font-size: 8px !important; 
+                line-height: 1.2;
+            }
+            .nominal-column { width: 10%; }
+            .result-column-tx { width: 8%; }
+            .result-column-ms { width: 8%; background-color: #e0e0e0 !important; }
+
+            input, select, .print-value {
+                border: none !important;
+                background: transparent !important;
+                padding: 0px !important;
+                font-size: 8px !important;
+                color: black !important;
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+            }
+            input[type="date"], select { padding: 0px !important; border: none !important; }
+            .date-time-row input, .date-time-row select { width: 50% !important; }
+            .item-row td:nth-child(2) { padding-left: 14px !important; }
+            
+            /* TANDA TANGAN */
+            table.signature-table td[rowspan="5"] div, table.signature-table td[rowspan="6"] div { height: 35px !important; }
+            table.signature-table td[rowspan="5"], table.signature-table td[rowspan="6"] { padding-bottom: 5px !important; }
+            .print-hidden-input { display: none; }
+            .print-text { display: block; }
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100">
+    
+    <div id="main-content" class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
+            <div>
+                <div class="flex items-center">
+                    <a href="performance_cnsd.html" onclick="history.back(); return false;" class="flex items-center text-gray-600 hover:text-gray-800 font-semibold p-2 rounded-md hover:bg-gray-200">
+                        <svg class="w-6 h-6 mr-0" fill="none" stroke="currentColor" viewBox="0 0 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-800 ml-4">Meter Reading Outer Marker </h1>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-4">
+                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Buat Data Baru</button>
+                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Lihat Daftar Data</button>
+                </div>
+            </div>
+            <img src="../img/airnav.png" alt="AirNav Logo" class="h-12 w-auto">
+        </div>
+
+        <div id="form-container" class="hidden">
+            <form id="atis-form">
+                <input type="hidden" id="data_id" name="id">
+                <div class="form-container-inner">
+                    <div class="header-section">
+                        <div class="header-left">
+                            <div class="logo"><img src="../img/airnav_logo.png" alt="AirNav Indonesia"></div>
+                            <div class="company-name">AirNav Indonesia</div>
+                        </div>
+                        <div class="header-right">
+                            <div class="title">Perum LPPNPI<br>KANTOR CABANG SURABAYA</div>
+                            <div>Telp. (031)8688450 Fax : (031) 8688536</div>
+                            <div>email : sub@airnavindonesia.co.id</div>
+                            <div>Web : www.airnavindonesia.co.id</div>
+                        </div>
+                    </div>
+
+                    <div class="title-section"><h1>METER READING</h1></div>
+
+                    <div class="form-info-grid">
+                        <div class="location">
+                            <strong>LOKASI :</strong> <input type="text" id="lokasi" value="CABANG SURABAYA" style="display: inline-block; width: 60%; font-weight: bold;">
+                        </div>
+                        <div class="receiver">
+                            <div class="receiver-title">ILS</div>
+                            <div class="receiver-subtitle">OUTER MARKER</div>
+                        </div>
+                        <div class="form-code">
+                            <div class="code-category">FAS CNS & OTOMASI</div>
+                            <div class="code-number">FORM N-4</div>
+                        </div>
+                    </div>
+
+                    <div class="date-time-section">
+                        <div class="date-time-row" style="grid-column: 1 / 4;">
+                            <strong>TANGGAL / SHIFT :</strong> 
+                            <input type="date" id="tanggal" style="margin-left: 5px;">
+                            <select id="shift" style="margin-left: 10px;">
+                                <option value="pagi">Pagi (07:00-13:00)</option>
+                                <option value="siang">Siang (13:00-19:00)</option>
+                                <option value="malam">Malam (19:00-07:00)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="equipment-section">
+                        <div><strong>MERK :</strong> <input type="text" id="merk" value="NORMARC" style="display: inline; width: 80px; font-weight: bold;"></div>
+                        <div><strong>TYPE :</strong> <input type="text" id="type" value="NM 7014B" style="display: inline; width: 80px; font-weight: bold;"></div>
+                        <div><strong>S N :</strong> <input type="text" id="sn" value="117" style="display: inline; width: 50px; font-weight: bold;"></div>
+                    </div>
+
+                    <div class="section-title">A. PERALATAN</div>
+                    <table class="form-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">NO</th>
+                                <th style="width: 25%;">PEMBACAAN METER READING</th>
+                                <th class="nominal-column">NOMINAL</th>
+                                <th colspan="3" class="result-column-tx">HASIL PEMERIKSAAN</th>
+                                <th style="width: 25%;">KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="subsection-row">
+                                <td>1</td>
+                                <td class="equipment-column">FRONT PANEL</td>
+                                <td>Standart</td>
+                                <td>TX 1</td>
+                                <td>TX 2</td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">All Status Indikator</td>
+                                <td>Normal/Alrm</td>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Alrm">Alrm</option>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="Normal">Normal</option>
+                                    <option value="Alrm">Alrm</option>
+                                <td class="result-column-ms"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">Main Selected</td>
+                                <td>√/−</td>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td class="result-column-ms"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">TX On AIR</td>
+                                <td>√/−</td>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td class="result-column-ms"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">TX Stby</td>
+                                <td>√/−</td>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td class="result-column-ms"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">Control Status</td>
+                                <td>√/−</td>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td class="result-column-ms"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">DC Power Suplay</td>
+                                <td>28 V</td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td class="result-column-ms"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+
+                            <tr class="subsection-row">
+                                <td>2</td>
+                                <td class="equipment-column">MONITOR</td>
+                                <td>Standart</td>
+                                <td>M1</td>
+                                <td>M2</td>
+                                <td>MS</td>
+                                <td></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">RF</td>
+                                <td>3</td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">Mod. Depth</td>
+                                <td>90%</td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">Keying</td>
+                                <td>ON</td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+
+                            <tr class="subsection-row">
+                                <td>3</td>
+                                <td class="equipment-column">VOLTAGE</td>
+                                <td>Standart</td>
+                                <td>M1</td>
+                                <td>M2</td>
+                                <td>MS</td>
+                                <td></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">V 28</td>
+                                <td>28</td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">V 12 P</td>
+                                <td>12</td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr class="item-row">
+                                <td></td>
+                                <td class="equipment-column">V 12 N</td>
+                                <td>−12</td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+
+                            <tr>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="section-title">B. LINGKUNGAN KERJA</div>
+                    <table class="form-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 5%;">NO</th>
+                                <th style="width: 40%;">KEGIATAN</th>
+                                <th class="nominal-column">Nominal</th>
+                                <th style="width: 20%;">HASIL</th>
+                                <th style="width: 35%;">KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="center">1</td>
+                                <td style="text-align: left; padding-left: 15px;">PEMERIKSAAN SUHU RUANGAN</td>
+                                <td class="center"> 22º C</td>
+                                <td><input type="text" class="form-input"></td>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="center">2</td>
+                                <td style="text-align: left; padding-left: 15px;">PEMERIKSAAN AIR HUMIDITY</td>
+                                <td>√/-</td>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                            <tr>
+                                <td class="center">3</td>
+                                <td style="text-align: left; padding-left: 15px;">PEMERIKSAAN KEBERSIHAN RUANGAN</td>
+                                <td>√/-</td>
+                                <td style="width: 90px;">
+                                <select style="width: 100%; border: none;text-align:center;">
+                                    <option value=""></option>
+                                    <option value="√">√</option>
+                                    <option value="−">−</option>
+                                <td><input type="text" class="form-input"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="form-table signature-table">
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>NAMA TEKNISI</th>
+                                <th>SUPERVISOR</th>
+                                <th>MANAGER TEKNIK</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="center">1</td>
+                                <td><input type="text" class="teknisi-nama"></td>
+                                <td rowspan="5" style="text-align:center; vertical-align:bottom; padding-bottom: 15px;">
+                                    <div style="height: 90px;"></div>
+                                    ( <input type="text" id="supervisor" placeholder="Nama Supervisor" style="border:none; border-bottom:1px solid #000; width:90%; text-align:center;"> )
+                                </td>
+                                <td rowspan="5" style="text-align:center; vertical-align:bottom; padding-bottom: 15px;">
+                                    <div style="height: 90px;"></div>
+                                    ( <input type="text" id="manager" placeholder="Nama Manager Teknik" style="border:none; border-bottom:1px solid #000; width:90%; text-align:center;"> )
+                                </td>
+                            </tr>
+                            <tr><td class="center">2</td><td><input type="text" class="teknisi-nama"></td></tr>
+                            <tr><td class="center">3</td><td><input type="text" class="teknisi-nama"></td></tr>
+                            <tr><td class="center">4</td><td><input type="text" class="teknisi-nama"></td></tr>
+                            <tr><td class="center">5</td><td><input type="text" class="teknisi-nama"></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+           <div class="flex justify-center gap-4 mt-6 mb-6 no-print">
+                <button type="button" id="save-btn" class="bg-green-600 hover:bg-green-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">Simpan</button>
+                <button type="button" id="print-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">Print Form</button>
+                <button type="button" id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-3 rounded-lg font-semibold shadow-lg hover:shadow-xl transition">Batal</button>
+            </div>
+        </div>
+        
+        <div id="list-container" class="bg-white p-6 rounded-lg shadow-md hidden">
+            <h3 class="text-lg font-bold leading-6 text-gray-900 mb-4">Daftar Meter Reading</h3>
+            <div id="tableContent" class="overflow-x-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const formContainer = document.getElementById('form-container');
+            const listContainer = document.getElementById('list-container');
+            const tableContent = document.getElementById('tableContent');
+            const atisForm = document.getElementById('atis-form');
+            const dataIdInput = document.getElementById('data_id');
+            const createNewBtn = document.getElementById('create-new-btn');
+            const viewListBtn = document.getElementById('view-list-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const printBtn = document.getElementById('print-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+            let currentEditId = null;
+            const STORAGE_KEY = 'meterReadingData_ILS_N4';
+
+            const showForm = () => {
+                formContainer.classList.remove('hidden');
+                listContainer.classList.add('hidden');
+                document.getElementById('main-controls').classList.add('hidden'); // Sembunyikan kontrol utama saat di form
+                window.scrollTo(0, 0);
+            };
+
+            const showList = () => {
+                formContainer.classList.add('hidden');
+                listContainer.classList.remove('hidden');
+                document.getElementById('main-controls').classList.remove('hidden'); // Tampilkan kontrol utama
+                loadTableData();
+            };
+
+            const getSavedData = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const saveAllData = (data) => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+
+            const loadTableData = () => {
+                const data = getSavedData();
+                if (data.length === 0) {
+                    tableContent.innerHTML = '<p class="text-center text-gray-500 py-8">Belum ada data yang tersimpan.</p>';
+                    return;
+                }
+                const tableHtml = `
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${data.sort((a, b) => new Date(b.tanggal) - new Date(a.tanggal)).map((item, index) => `
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.tanggal}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.shift}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Selesai
+                                            </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="#" onclick="event.preventDefault(); window.app.editData(${item.id})" class="text-blue-600 hover:text-blue-800">Edit</a>
+                                            <a href="#" onclick="event.preventDefault(); window.app.deleteData(${item.id})" class="text-red-600 hover:text-red-800 ml-4">Hapus</a>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>`;
+                tableContent.innerHTML = tableHtml;
+            };
+
+            const clearForm = () => {
+                atisForm.reset();
+                dataIdInput.value = '';
+                currentEditId = null;
+                // Set default values
+                document.getElementById('lokasi').value = 'CABANG SURABAYA';
+                document.getElementById('merk').value = 'NORMARC';
+                document.getElementById('type').value = 'NM 7014B';
+                document.getElementById('sn').value = '117';
+
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                document.getElementById('tanggal').value = `${yyyy}-${mm}-${dd}`;
+                
+                // Set default shift based on current time
+                const jam = today.getHours();
+                let shiftValue = 'malam';
+                if (jam >= 7 && jam < 13) shiftValue = 'pagi';
+                else if (jam >= 13 && jam < 19) shiftValue = 'siang';
+                document.getElementById('shift').value = shiftValue;
+            };
+
+            const handleSave = () => {
+                const tanggal = document.getElementById('tanggal').value;
+                if (!tanggal) {
+                    Swal.fire('Error', 'Tanggal wajib diisi!', 'error');
+                    return;
+                }
+                
+                const savedData = getSavedData();
+                const teknisiNama = Array.from(document.querySelectorAll('.teknisi-nama')).map(el => el.value);
+                // Note: The original N-4 form uses the same table for Technicians and a single field for Supervisor/Manager. 
+                // The second example form had a separate "Paraf" column, which is not present in the N-4, so we'll skip saving "paraf" for N-4 structure.
+                
+                const formInputs = Array.from(document.querySelectorAll('.form-input')).map(input => input.value);
+                const formData = {
+                    id: currentEditId || Date.now(),
+                    tanggal,
+                    shift: document.getElementById('shift').options[document.getElementById('shift').selectedIndex].text,
+                    shiftValue: document.getElementById('shift').value,
+                    lokasi: document.getElementById('lokasi').value,
+                    merk: document.getElementById('merk').value,
+                    type: document.getElementById('type').value,
+                    sn: document.getElementById('sn').value,
+                    supervisor: document.getElementById('supervisor').value,
+                    manager: document.getElementById('manager').value,
+                    teknisi: teknisiNama,
+                    dataInput: formInputs
+                };
+                
+                if (currentEditId) {
+                    const index = savedData.findIndex(data => data.id === currentEditId);
+                    if (index !== -1) savedData[index] = formData;
+                } else {
+                    savedData.push(formData);
+                }
+                
+                saveAllData(savedData);
+                Swal.fire('Sukses!', `Data berhasil ${currentEditId ? 'diperbarui' : 'disimpan'}.`, 'success');
+                showList();
+            };
+            
+            const handleCreateNew = () => {
+                clearForm();
+                saveBtn.innerText = 'SIMPAN DATA';
+                showForm();
+            };
+
+            const handleCancel = () => {
+                Swal.fire({
+                    title: 'Anda yakin?',
+                    text: "Perubahan yang belum disimpan akan hilang dan kembali ke daftar.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Ya, batalkan!',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        showList();
+                    }
+                });
+            };
+
+            const handlePrint = () => {
+                // Remove existing print spans and restore inputs first (to ensure current data is printed)
+                const formToPrint = document.getElementById('form-container');
+                formToPrint.querySelectorAll('.print-value').forEach(el => {
+                    const originalType = el.getAttribute('data-original-type');
+                    const originalId = el.getAttribute('data-original-id');
+                    const originalValue = el.getAttribute('data-original-value');
+                    const isSelect = el.getAttribute('data-is-select') === 'true';
+
+                    let newElement;
+                    if (isSelect) {
+                        newElement = document.createElement('select');
+                        newElement.innerHTML = el.getAttribute('data-original-options');
+                        newElement.value = el.getAttribute('data-original-value-select');
+                    } else {
+                        newElement = document.createElement('input');
+                        newElement.type = originalType;
+                        newElement.value = originalValue;
+                    }
+                    newElement.id = originalId;
+                    newElement.className = el.getAttribute('data-original-class');
+                    newElement.style.cssText = el.style.cssText;
+                    el.parentNode.replaceChild(newElement, el);
+                });
+
+
+                // Create a temporary clone for manipulation or proceed with current form (as print CSS will hide inputs anyway)
+                // For simplicity and to use the existing CSS logic:
+                
+                // Get fresh input values
+                const inputs = formToPrint.querySelectorAll('input:not([type="hidden"]), select');
+                
+                // Replace inputs with static text for printing
+                inputs.forEach(input => {
+                    const span = document.createElement('span');
+                    let displayValue = input.value;
+                    let isSelect = input.tagName === 'SELECT';
+                    
+                    if(isSelect) {
+                        displayValue = input.options[input.selectedIndex]?.text || '';
+                    } else if (input.type === 'date') {
+                        // Format date if needed, otherwise use ISO date
+                    }
+
+                    span.textContent = displayValue || '.....................'; // Fallback for empty fields
+                    span.className = 'print-value ' + input.className;
+                    
+                    // Store original attributes for restoration
+                    span.setAttribute('data-original-type', input.type || 'text');
+                    span.setAttribute('data-original-id', input.id || '');
+                    span.setAttribute('data-original-value', input.value || '');
+                    span.setAttribute('data-original-class', input.className || '');
+                    if (isSelect) {
+                        span.setAttribute('data-is-select', 'true');
+                        span.setAttribute('data-original-options', input.innerHTML);
+                        span.setAttribute('data-original-value-select', input.value);
+                    }
+                    
+                    // Copy styles for inline display consistency
+                    span.style.cssText = input.style.cssText;
+                    
+                    input.parentNode.replaceChild(span, input);
+                });
+
+                window.print();
+            };
+
+            // Restore form after print (reload is the simplest way for complex DOM changes)
+            window.onafterprint = () => {
+                // Reload is safer to revert all DOM manipulations for print
+                location.reload(); 
+            };
+
+            window.app = {
+                showList,
+                editData: (id) => {
+                    const data = getSavedData().find(d => d.id === id);
+                    if (!data) return;
+                    currentEditId = id;
+                    dataIdInput.value = id;
+                    document.getElementById('tanggal').value = data.tanggal;
+                    document.getElementById('shift').value = data.shiftValue;
+                    document.getElementById('lokasi').value = data.lokasi;
+                    document.getElementById('merk').value = data.merk;
+                    document.getElementById('type').value = data.type;
+                    document.getElementById('sn').value = data.sn;
+                    document.getElementById('supervisor').value = data.supervisor;
+                    document.getElementById('manager').value = data.manager;
+                    document.querySelectorAll('.form-input').forEach((input, i) => input.value = data.dataInput[i] || '');
+                    document.querySelectorAll('.teknisi-nama').forEach((input, i) => input.value = data.teknisi[i] || '');
+                    
+                    saveBtn.innerText = 'PERBARUI DATA';
+                    showForm();
+                },
+                deleteData: (id) => {
+                    Swal.fire({
+                        title: 'Anda yakin ingin menghapus data ini?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let data = getSavedData();
+                            data = data.filter(item => item.id !== id);
+                            saveAllData(data);
+                            Swal.fire('Terhapus!', 'Data telah berhasil dihapus.', 'success');
+                            loadTableData();
+                        }
+                    });
+                }
+            };
+            
+            createNewBtn.addEventListener('click', handleCreateNew);
+            viewListBtn.addEventListener('click', showList);
+            saveBtn.addEventListener('click', handleSave);
+            cancelBtn.addEventListener('click', handleCancel);
+            printBtn.addEventListener('click', handlePrint);
+            
+            showList(); // Start by showing the list
+        });
+    </script>
+</body>
+</html>

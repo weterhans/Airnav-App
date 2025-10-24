@@ -1,4 +1,4 @@
-// renderer_kegiatan_tfp.js (Versi Final dengan Perbaikan Tampilan Tanggal)
+// renderer_kegiatan_tfp.js (Versi Final dengan Auto-fill Teknisi TFP)
 
 document.addEventListener('DOMContentLoaded', function () {
     // Auth Guard
@@ -22,6 +22,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const imageLightbox = document.getElementById('image-lightbox');
     const lightboxImage = document.getElementById('lightbox-image');
     const closeLightboxButton = document.getElementById('close-lightbox-button');
+    // --- TAMBAHAN: Elemen untuk auto-fill ---
+    const activityDateInput = document.getElementById('activity-date');
+    const activityShiftSelect = document.getElementById('activity-shift');
     
     // --- Variabel State ---
     let technicianList = [];
@@ -49,11 +52,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 
                 let formattedDate = '-';
                 if (activity.tanggal) {
-                    // PERBAIKAN FINAL: Format tanggal secara manual untuk menghindari timezone
                     try {
-                        const dateString = new Date(activity.tanggal).toLocaleDateString('en-CA'); // Hasil: "2025-10-21"
+                        const dateString = new Date(activity.tanggal).toLocaleDateString('en-CA'); 
                         const [year, month, day] = dateString.split('-');
-                        formattedDate = `${day} ${monthNames[parseInt(month, 10) - 1]} ${year}`; // Hasil: "21 Okt 2025"
+                        formattedDate = `${day} ${monthNames[parseInt(month, 10) - 1]} ${year}`; 
                     } catch (e) {
                         console.error("Gagal memformat tanggal:", activity.tanggal, e);
                         formattedDate = "Invalid Date";
@@ -94,6 +96,9 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let i = 1; i <= 5; i++) {
             const select = document.createElement('select');
             select.name = `teknisi-${i}`;
+            // --- PERBAIKAN 1: Tambahkan ID ---
+            select.id = `teknisi-${i}`; 
+            // --- AKHIR PERBAIKAN 1 ---
             select.className = 'block w-full border-gray-300 rounded-md shadow-sm';
             let options = `<option value="">Pilih Teknisi ${i}${i > 2 ? ' (Opsional)' : ''}</option>`;
             technicianList.forEach(name => options += `<option value="${name}">${name}</option>`);
@@ -123,6 +128,40 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     };
 
+    // --- TAMBAHAN 2: Fungsi Auto-fill Teknisi TFP ---
+    const autoFillTechnicians = async () => {
+        const tanggal = activityDateInput.value;
+        const dinas = activityShiftSelect.value;
+        
+        // Reset dulu semua dropdown
+        for (let i = 1; i <= 5; i++) {
+            const select = document.getElementById(`teknisi-${i}`);
+            if (select) select.value = '';
+        }
+
+        if (!tanggal || !dinas) return; 
+
+        try {
+            // Panggil API TFP
+            const result = await window.api.getTfpTechniciansBySchedule({ tanggal: tanggal, dinas: dinas }); 
+            if (result.success && result.data.length > 0) {
+                result.data.forEach((name, index) => {
+                    if (index < 5) { 
+                        const select = document.getElementById(`teknisi-${index + 1}`);
+                        if (select && technicianList.includes(name)) { 
+                            select.value = name;
+                        }
+                    }
+                });
+            } else {
+                console.log(`Tidak ada jadwal teknisi TFP ditemukan untuk ${tanggal} dinas ${dinas}.`);
+            }
+        } catch (error) {
+            console.error("Gagal auto-fill teknisi TFP:", error);
+        }
+    };
+    // --- AKHIR TAMBAHAN 2 ---
+
     const openModal = async (isEditing = false, data = null) => {
         activityForm.reset();
         newAttachmentFiles = [];
@@ -144,7 +183,7 @@ document.addEventListener('DOMContentLoaded', function () {
             
             let teknisiArray = data.teknisi ? (typeof data.teknisi === 'string' ? JSON.parse(data.teknisi) : data.teknisi) : [];
             for (let i = 0; i < 5; i++) {
-                const select = document.querySelector(`select[name="teknisi-${i+1}"]`);
+                const select = document.getElementById(`teknisi-${i + 1}`); // Gunakan ID
                 if (select) select.value = teknisiArray[i] || '';
             }
             existingAttachmentPaths = data.lampiran ? (typeof data.lampiran === 'string' ? JSON.parse(data.lampiran) : data.lampiran) : [];
@@ -152,6 +191,9 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('activity-code').value = `KG-TFP-${Date.now().toString().slice(-6)}`;
             document.getElementById('activity-date').value = new Date().toISOString().slice(0,10);
             document.getElementById('activity-shift').value = getCurrentShift();
+            // --- TAMBAHAN 3: Panggil autoFill saat tambah baru ---
+            await autoFillTechnicians();
+            // --- AKHIR TAMBAHAN 3 ---
         }
         await renderAllPreviews();
         addActivityModal.classList.remove('hidden');
@@ -178,11 +220,7 @@ document.addEventListener('DOMContentLoaded', function () {
             if (result.success && result.data) {
                 await openModal(true, result.data);
             } else {
-                Swal.fire({
-                    title: 'Gagal!',
-                    text: 'Gagal mengambil detail kegiatan.',
-                    icon: 'error'
-                });
+                Swal.fire({ title: 'Gagal!', text: 'Gagal mengambil detail kegiatan.', icon: 'error' });
             }
         }
     });
@@ -249,32 +287,28 @@ document.addEventListener('DOMContentLoaded', function () {
         const result = await window.api.saveTfpActivity(activityData);
 
         if (result.success) {
-            Swal.fire({
-                title: 'Berhasil!',
-                text: result.message,
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false
-            });
+            Swal.fire({ title: 'Berhasil!', text: result.message, icon: 'success', timer: 2000, showConfirmButton: false });
             closeModal();
             loadActivities();
         } else {
-            Swal.fire({
-                title: 'Gagal!',
-                text: result.message || 'Terjadi kesalahan',
-                icon: 'error'
-            });
+            Swal.fire({ title: 'Gagal!', text: result.message || 'Terjadi kesalahan', icon: 'error' });
         }
     });
     
+    // --- TAMBAHAN 4: Listener untuk Tanggal dan Dinas ---
+    activityDateInput.addEventListener('change', autoFillTechnicians);
+    activityShiftSelect.addEventListener('change', autoFillTechnicians);
+    // --- AKHIR TAMBAHAN 4 ---
+
     // --- Inisialisasi Halaman ---
     const initializePage = async () => {
-        const techResult = await window.api.getTechnicians();
+        // Ambil daftar teknisi umum (dari tabel users)
+        const techResult = await window.api.getTechnicians(); 
         if (techResult.success) {
             technicianList = techResult.data;
-            createTechnicianDropdowns();
+            createTechnicianDropdowns(); // Buat dropdown dulu
         }
-        await loadActivities();
+        await loadActivities(); // Baru load kegiatan TFP
     };
 
     initializePage();

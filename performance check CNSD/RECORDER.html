@@ -162,14 +162,21 @@
         
         <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
             <div>
-                <h1 class="text-2xl font-bold text-gray-800">Meter Reading Recorder</h1>
+                <div class="flex items-center">
+                    <a href="performance_cnsd.html" onclick="history.back(); return false;" class="flex items-center text-gray-600 hover:text-gray-800 font-semibold p-2 rounded-md hover:bg-gray-200">
+                        <svg class="w-6 h-6 mr-0" fill="none" stroke="currentColor" viewBox="0 0 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-800 ml-4">Meter Reading Recorder </h1>
+                </div>
+                
                 <div class="mt-4 flex flex-wrap gap-4">
-                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-semibold">Buat Data Baru</button>
-                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg font-semibold">Lihat Daftar Data</button>
+                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Buat Data Baru</button>
+                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Lihat Daftar Data</button>
                 </div>
             </div>
-            <img src="airnav.jpg" alt="AirNav Logo" class="h-12 w-auto">
+            <img src="../img/airnav.png" alt="AirNav Logo" class="h-12 w-auto">
         </div>
+        
         <div id="form-container" class="hidden">
             <form id="atis-form">
                 <input type="hidden" id="data_id" name="id">
@@ -178,7 +185,7 @@
                     <table class="form-table-layout no-border" style="margin-bottom:4px;">
                         <tr>
                             <td colspan="2" style="width:30%; vertical-align: top; border-right:none;" class="no-border">
-                                <img src="airnav.jpg" alt="AirNav Indonesia" class="logo">
+                                <img src="../img/airnav_logo.png" alt="AirNav Indonesia" class="logo">
                                 <div style="margin-top:3px; font-weight:700; font-size:11px; text-align: center;">AirNav Indonesia</div>
                             </td>
                             <td colspan="2" style="width:40%; text-align:center; vertical-align:middle; border-left:none; border-right:none;" class="no-border">

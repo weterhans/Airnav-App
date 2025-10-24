@@ -173,13 +173,13 @@
     
     <div id="main-content" class="max-w-7xl mx-auto p-4 md:p-6">
         
-        <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
+        <<div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
             <div>
                 <div class="flex items-center">
-                    <a href="#" onclick="window.app.showList()" class="flex items-center text-gray-600 hover:text-gray-800 font-semibold p-2 rounded-md hover:bg-gray-200">
+                    <a href="performance_cnsd.html" onclick="history.back(); return false;" class="flex items-center text-gray-600 hover:text-gray-800 font-semibold p-2 rounded-md hover:bg-gray-200">
                         <svg class="w-6 h-6 mr-0" fill="none" stroke="currentColor" viewBox="0 0 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
                     </a>
-                    <h1 class="text-2xl font-bold text-gray-800 ml-4">Meter Reading DVOR (Form N-5)</h1>
+                    <h1 class="text-2xl font-bold text-gray-800 ml-4">Meter Reading DVOR </h1>
                 </div>
                 
                 <div class="mt-4 flex flex-wrap gap-4">
@@ -187,7 +187,7 @@
                     <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Lihat Daftar Data</button>
                 </div>
             </div>
-            <img src="airnav.png" alt="AirNav Logo" class="h-12 w-auto">
+            <img src="../img/airnav.png" alt="AirNav Logo" class="h-12 w-auto">
         </div>
 
         <div id="form-container" class="hidden">
@@ -494,32 +494,30 @@
             };
 
            const clearForm = () => {
-                dvorForm.reset();
-                dataIdInput.value = '';
-                currentEditId = null;
-                
-                // Set default values for fixed inputs
-                document.getElementById('lokasi').value = 'SURABAYA';
-                
-                // Set default TX status
-                document.querySelector('input[name="tx1_status"][value="MAIN"]').checked = true;
-                document.querySelector('input[name="tx2_status"][value="STANDBY"]').checked = true;
+                 dvorForm.reset();
+                dataIdInput.value = '';
+                currentEditId = null;
+                // Set default values for fixed input
+                document.getElementById('lokasi').value = 'SURABAYA';
 
-                // Set today's date and default shift
-                const today = new Date();
-                const yyyy = today.getFullYear();
-                const mm = String(today.getMonth() + 1).padStart(2, '0');
-                const dd = String(today.getDate()).padStart(2, '0');
-                // document.getElementById('tanggal').value = `${yyyy}-${mm}-${dd}`; // Tanggal Dihapus
-                
-                const jam = today.getHours();
-                let shiftValue = 'malam';
-                if (jam >= 7 && jam < 13) shiftValue = 'pagi';
-                else if (jam >= 13 && jam < 19) shiftValue = 'siang';
-                
-                // document.getElementById('shift').value = shiftValue; // SHIFT DIHAPUS
+                // Set default TX status
+                document.querySelector('input[name="tx1_status"][value="MAIN"]').checked = true;
+                document.querySelector('input[name="tx2_status"][value="STANDBY"]').checked = true;
+                // Set today's date and default shift
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
+                const dd = String(today.getDate()).padStart(2, '0');
+                // document.getElementById('tanggal').value = `${yyyy}-${mm}-${dd}`; // Tanggal Dihapus
+
+                const jam = today.getHours();
+                let shiftValue = 'malam';
+                if (jam >= 7 && jam < 13) shiftValue = 'pagi';
+                else if (jam >= 13 && jam < 19) shiftValue = 'siang';
+
+                 // document.getElementById('shift').value = shiftValue; // SHIFT DIHAPUS
                 document.getElementById('shift').value = ''; // Set nilai kosong agar tampilannya reset/kosong
-            };
+};
 
             const handleSave = () => {
                 const tanggal = document.getElementById('tanggal').value;

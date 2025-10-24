@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meter Reading TRANSMITTER RADIO - AirNav Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ... (CSS ASLI ANDA TIDAK ADA PERUBAHAN) ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Container and Structure styles */
+        .form-container-inner {
+            max-width: 900px;
+            margin: 20px auto;
+            border: 3px solid #000;
+            background-color: white !important;
+            color: #000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 3px solid #000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0066b3 0%, #003d7a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .logo::before {
+            content: 'AirNav';
+            position: absolute;
+        }
+
+        .company-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .company-subtitle {
+            font-size: 11px;
+            color: #0066b3;
+            font-weight: bold;
+        }
+
+        .company-info {
+            text-align: right;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .company-info strong {
+            display: block;
+            font-size: 11px;
+        }
+
+        .title-section {
+            text-align: center;
+            padding: 10px;
+            border-bottom: 3px solid #000;
+        }
+
+        .title-section h2 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .form-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border-bottom: 3px solid #000;
+        }
+
+        .form-header > div {
+            padding: 10px;
+            border-right: 3px solid #000;
+            font-size: 12px;
+        }
+
+        .form-header > div:last-child {
+            border-right: none;
+        }
+
+        .form-header .receiver-cell {
+            background-color: #d9d9d9;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .equipment-info {
+            padding: 10px;
+            border-bottom: 3px solid #000;
+            font-size: 11px;
+        }
+
+        .equipment-row {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 2px solid #000;
+            padding: 6px 8px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        th {
+            background-color: #b4c7e7;
+            font-weight: bold;
+        }
+
+        .no-column {
+            width: 40px;
+        }
+
+        .pemeriksaan-column {
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        .section-header {
+            background-color: #c5e0b4;
+            font-weight: bold;
+            text-align: left;
+            padding-left: 10px !important;
+        }
+
+        .section-subheader {
+            background-color: #f9b1e0;
+            font-weight: bold;
+            text-align: left;
+            padding-left: 10px !important;
+        }
+
+        .equipment-name {
+            background-color: #c5e0b4;
+            font-weight: bold;
+            text-align: left;
+            padding-left: 20px !important;
+        }
+
+        .item-row {
+            text-align: left;
+            padding-left: 25px !important;
+        }
+
+        .status-column {
+            width: 100px;
+        }
+
+        .lingkungan-header {
+            background-color: #ffd966;
+            font-weight: bold;
+            padding: 8px;
+            border: 2px solid #000;
+            border-bottom: none;
+            font-size: 12px;
+        }
+
+        .signature-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border-top: 2px solid #000;
+        }
+
+        .signature-box {
+            border-right: 2px solid #000;
+            padding: 15px;
+            min-height: 150px;
+        }
+
+        .signature-box:last-child {
+            border-right: none;
+        }
+
+        .signature-title {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .technician-table {
+            width: 100%;
+            border: none;
+        }
+
+        .technician-table td {
+            border: none;
+            padding: 4px;
+            text-align: left;
+            font-size: 10px;
+        }
+
+        .technician-table td:first-child {
+            width: 30px;
+            text-align: center;
+        }
+
+        .technician-table input {
+            width: 100%;
+            padding: 2px;
+            font-size: 10px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 3px;
+            border: 1px solid #ccc;
+            font-size: 10px;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .action-buttons button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save { background-color: #ff9800; color: white; }
+        .btn-save:hover { background-color: #f57c00; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3); }
+
+        .btn-print { background-color: #4caf50; color: white; }
+        .btn-print:hover { background-color: #45a049; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3); }
+
+        .btn-cancel { background-color: #f44336; color: white; }
+        .btn-cancel:hover { background-color: #da190b; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3); }
+
+        /* PRINT STYLES */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 4mm 6mm;
+            }
+
+            body {
+                padding: 0;
+                background-color: white;
+                margin: 0;
+            }
+
+            .action-buttons {
+                display: none;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+
+            /* Mengatur ulang gaya tabel untuk cetak */
+            .form-container-inner {
+                margin: 0 auto;
+                border: 1px solid #000; /* Perbaikan untuk border cetak */
+                box-shadow: none;
+            }
+            
+            .header, .title-section, .form-header, table {
+                 border-left: 1px solid #000;
+                 border-right: 1px solid #000;
+            }
+            
+            .header { border-top: 1px solid #000; }
+            .title { border-top: none; }
+
+
+            th, td {
+                border: 1px solid #000;
+                padding: 2px 4px;
+                font-size: 10px;
+            }
+            
+            .footer-table td {
+                /* Mengurangi padding saat cetak agar pas di halaman A4 */
+                padding: 4px 6px; 
+            }
+
+            /* Mengurangi tinggi sel rowspan saat cetak agar pas */
+            .footer-table tbody tr:first-child td[rowspan="5"] {
+                height: 100px !important; /* Tinggi total untuk 5 baris */
+            }
+            
+            input[type="text"], input[type="date"], select {
+                padding: 0;
+                font-size: 10px;
+                border: none;
+                background-color: transparent; /* Penting untuk cetak */
+            }
+
+            select {
+                height: auto;
+                line-height: normal;
+            }
+
+            td select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                background-color: white;
+                padding: 0px !important;
+                height: auto !important;
+                line-height: 1.1;
+                font-size: 7px;
+                border: none;
+            }
+
+            .page-break-before {
+            page-break-before: always;
+            break-before: page;
+        }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="main-content" class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
+            <div>
+                <div class="flex items-center">
+                    <a href="performance_cnsd.html" onclick="history.back(); return false;" class="flex items-center text-gray-600 hover:text-gray-800 font-semibold p-2 rounded-md hover:bg-gray-200">
+                        <svg class="w-6 h-6 mr-0" fill="none" stroke="currentColor" viewBox="0 0 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-800 ml-4">Meter Reading Transmitter (TX) Radio </h1>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-4">
+                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Buat Data Baru</button>
+                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Lihat Daftar Data</button>
+                </div>
+            </div>
+            <img src="../img/airnav.png" alt="AirNav Logo" class="h-12 w-auto">
+        </div>
+
+        <div id="data-list" class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-semibold mb-4 text-gray-800">Daftar Data Meter Reading Transmitter (TX) Radio</h2>
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200 border border-gray-300">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Manager Teknik</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-table-body" class="bg-white divide-y divide-gray-200">
+                        </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="form-container" class="hidden"> 
+            <form id="txradio-form">
+                <input type="hidden" id="data_id" name="id">
+                <div class="form-container-inner">
+        <div class="header">
+            <div class="logo-section">
+                <img src="../img/airnav_logo.png" alt="AirNav Indonesia" style="width: 120px; height: auto; object-fit: contain;">
+                <div>
+                    <div class="company-name">AirNav Indonesia</div>
+                </div>
+            </div>
+            <div class="company-info">
+                <strong>Perum<br>KANTOR CABANG SURABAYA</strong>
+                Telp. (031)8688456 Fax : (031) 8688536<br>
+                email : sub@ airnavindonesia.co.id<br>
+                Web : www.airnavindonesia.co.id
+            </div>
+        </div>
+
+        <div class="title-section">
+            <h2>METER READING TRANSMITTER</h2>
+        </div>
+
+        <div class="form-header">
+            <div>
+                <strong>LOKASI : KANTOR CABANG SURABAYA</strong>
+            </div>
+            <div class="receiver-cell" >
+                TRANSMITTER
+            </div>
+            <div class="company-subtitle">FAS CNS & OTOMASI</div>
+        </div>
+
+        <div class="form-header">
+            <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px;">
+                <strong>TANGGAL/JAM :</strong> 
+                <input type="date" name="tanggal" style="border: 1px solid #ccc; padding: 3px; flex-shrink: 0;" required>
+                <select id="shift" name="shift" style="border: 1px solid #ccc; padding: 3px; flex-shrink: 0;" required>
+                    <option value="">Pilih Shift</option>
+                    <option value="07.00-13.00">07.00-13.00</option>
+                    <option value="13.00-19.00">13.00-19.00</option>
+                    <option value="19.00-07.00">19.00-07.00</option>
+                </select>
+                <strong>WIB</strong>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 5%;" class="no-column">NO</th>
+                    <th style="width: 20%;">FREQUENCY</th>
+                    <th style="width: 10%;">MERK</th>
+                    <th style="width: 15%;">STATUS</th>
+                    <th style="width: 15%;">POWER O/P</th>
+                    <th style="width: 15%;">MODULASI</th>
+                    <th style="width: 20%;">KETERANGAN</th>
+                </tr>
+
+
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="section-header">1</td>
+                    <td class="section-header" colspan="6">GROUND</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Primary 118.9 MHz</td>
+                    <td class="section-subheader">PAE</td>
+                    <td><input type="text" name="ground_pri_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_pri_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_pri_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_pri_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="ground_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="ground_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="ground_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="ground_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="ground_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="ground_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Secondary 119.15 MHz</td>
+                    <td class="section-subheader">OTE</td>
+                    <td><input type="text" name="ground_sec_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_sec_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_sec_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_sec_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="ground_sec_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="ground_sec_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="ground_sec_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_sec_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_sec_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="ground_sec_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="ground_sec_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="ground_sec_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_sec_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ground_sec_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td class="section-header">2</td>
+                    <td class="section-header" colspan="6">ADC</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Primary 118.3 MHz</td>
+                    <td class="section-subheader">PAE</td>
+                    <td><input type="text" name="adc_pri_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_pri_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_pri_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_pri_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="adc_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="adc_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="adc_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="adc_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="adc_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="adc_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Secondary 118.1 MHz</td>
+                    <td class="section-subheader">OTE</td>
+                    <td><input type="text" name="adc_sec_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_sec_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_sec_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_sec_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="adc_sec_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="adc_sec_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="adc_sec_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_sec_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_sec_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="adc_sec_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="adc_sec_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="adc_sec_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_sec_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="adc_sec_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td class="section-header">3</td>
+                    <td class="section-header" colspan="6">CDU</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Primary 121.65 MHz</td>
+                    <td class="section-subheader">PAE</td>
+                    <td><input type="text" name="cdu_pri_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_pri_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_pri_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_pri_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="cdu_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="cdu_sec_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="cdu_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="cdu_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="cdu_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="cdu_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Secondary 121.8 MHz</td>
+                    <td class="section-subheader">PAE</td>
+                    <td><input type="text" name="cdu_sec_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_sec_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_sec_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_sec_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="cdu_sec_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_sec_tx1_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_sec_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_sec_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="cdu_sec_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td class="section-header">4</td>
+                    <td class="section-header" colspan="6">APP</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Primary 123.2 MHz</td>
+                    <td class="section-subheader">PAE</td>
+                    <td><input type="text" name="app_pri_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_pri_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_pri_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_pri_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="app_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="app_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="app_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="app_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="app_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="app_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Secondary 124.5 MHz</td>
+                    <td class="section-subheader">OTE</td>
+                    <td><input type="text" name="app_sec_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_sec_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_sec_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_sec_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="app_sec_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="app_sec_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="app_sec_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_sec_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_sec_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="app_sec_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="app_sec_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="app_sec_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_sec_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="app_sec_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td class="section-header">5</td>
+                    <td class="section-header" colspan="6">TMA West</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Primary 125.1 MHz</td>
+                    <td class="section-subheader">PAE</td>
+                    <td><input type="text" name="tmawest_pri_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_pri_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_pri_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_pri_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="tmawest_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="tmawest_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="tmawest_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="tmawest_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="tmawest_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="tmawest_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Secondary 123.55 MHz</td>
+                    <td class="section-subheader">PAE</td>
+                    <td><input type="text" name="tmawest_sec_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_sec_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_sec_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_sec_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="tmawest_sec_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="tmawest_sec_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="tmawest_sec_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_sec_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_sec_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="tmawest_sec_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="tmawest_sec_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="tmawest_sec_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_sec_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmawest_sec_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td class="section-header">6</td>
+                    <td class="section-header" colspan="6">TMA East</td>
+                </tr>
+                
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Primary 124.0 MHz</td>
+                    <td class="section-subheader">PAE</td>
+                    <td><input type="text" name="tmaeast_pri_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_pri_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_pri_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_pri_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="tmaeast_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="tmaeast_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="tmaeast_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="tmaeast_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="tmaeast_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="tmaeast_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Secondary 122.85 MHz</td>
+                    <td class="section-subheader">OTE</td>
+                    <td><input type="text" name="tmaeast_sec_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_sec_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_sec_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_sec_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="tmaeast_sec_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="tmaeast_sec_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="tmaeast_sec_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_sec_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_sec_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="tmaeast_sec_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="tmaeast_sec_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="tmaeast_sec_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_sec_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="tmaeast_sec_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td class="section-header">7</td>
+                    <td class="section-header"colspan="6">ER Makassar</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Primary 123.9 MHz (-5 KHz)</td>
+                    <td class="section-subheader">OTE</td>
+                    <td><input type="text" name="ermks_pri_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_pri_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_pri_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_pri_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="ermks_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="ermks_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="ermks_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="ermks_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="ermks_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="ermks_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Secondary 125.9 MHz</td>
+                    <td class="section-subheader">PAE</td>
+                    <td><input type="text" name="ermks_sec_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_sec_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_sec_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_sec_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="ermks_sec_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="ermks_sec_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="ermks_sec_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_sec_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_sec_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="ermks_sec_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="ermks_sec_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">Online/Offline</option>
+                            <option value="Online">Online</option>
+                            <option value="Offline">Offline</option>
+                        </select></td>
+                    <td><input type="text" name="ermks_sec_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_sec_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ermks_sec_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                
+
+                <tr>
+                    <td class="section-header">8</td>
+                    <td class="section-header" colspan="6">ATIS</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="section-subheader">Primary 128.2 MHz</td>
+                    <td class="section-subheader"></td>
+                    <td><input type="text" name="atis_pri_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="atis_pri_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="atis_pri_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="atis_pri_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 1</td>
+                    <td><input type="text" name="atis_tx1_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="atis_tx1_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="atis_tx1_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="atis_tx1_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="atis_tx1_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">TX 2</td>
+                    <td><input type="text" name="atis_tx2_merk" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><select name="atis_tx2_status" style="width: 100%; border: none;text-align:center;">
+                            <option value="">On Air/STBY</option>
+                            <option value="On Air">On Air</option>
+                            <option value="STBY">STBY</option>
+                        </select></td>
+                    <td><input type="text" name="atis_tx2_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="atis_tx2_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="atis_tx2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+
+                <tr>
+                    <td class="section-header">9</td>
+                    <td class="section-header" colspan="6">Back Up Radio</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">118.1 MHz</td>
+                    <td><input type="text" name="backup_118_merk" value="Becker" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_118_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_118_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_118_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_118_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">123.2 MHz</td>
+                    <td><input type="text" name="backup_123_merk" value="OTE" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_123_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_123_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_123_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_123_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">122.85 MHz</td>
+                    <td><input type="text" name="backup_122_merk" value="PAE" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_122_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_122_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_122_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_122_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td class="item-row">119.15 MHz</td>
+                    <td><input type="text" name="backup_119_merk" value="PAE" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_119_status" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_119_power" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_119_modulasi" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="backup_119_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="lingkungan-header">II LINGKUNGAN KERJA</div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="no-column" style="width: 5%;">NO</th>
+                    <th style="width: 25%;">KEGIATAN</th>
+                    <th style="width: 20%;">NOMINAL</th>
+                    <th style="width: 20%;">HASIL</th>
+                    <th style="width: 30%;">KETERANGAN</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="pemeriksaan-column">Pemeriksaann suhu Ruangan</td>
+                    <td><input type="text" name="suhu_nominal" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="suhu_hasil" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="suhu_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="pemeriksaan-column">Pemeriksaan Air Humidity</td>
+                    <td><input type="text" name="humidity_nominal" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="humidity_hasil" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="humidity_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="pemeriksaan-column">Pemeriksaan Kebersihan Ruangan</td>
+                    <td><input type="text" name="kebersihan_nominal" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="kebersihan_hasil" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="kebersihan_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="pemeriksaan-column">Pemeriksaan UPS</td>
+                    <td><input type="text" name="ups_nominal" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ups_hasil" style="width: 100%; border: none; padding: 5px;"></td>
+                    <td><input type="text" name="ups_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="footer-table">
+        <thead>
+            <tr>
+                <th style="width: 5%;">NO</th>
+                <th style="width: 35%;">TEKNISI</th>
+                <th style="width: 10%;">PARAF</th>
+                <th style="width: 25%;">SUPERVISOR</th>
+                <th style="width: 25%;">MANAGER TEKNIK</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td class="center">1</td>
+                <td><input type="text" name="teknisi_1" style="width: 100%; border: none;"></td>
+                <td><input type="text" name="paraf_1" style="width: 100%; border: none;"></td>
+                <td rowspan="5" style="text-align:center; vertical-align:bottom;">
+                <br><br><br><br><br>
+                ( <input type="text" name="supervisor" placeholder="Nama Supervisor" style="width:90%;text-align:center; border-bottom: 1px solid #000;border: none;"> )
+                </td>
+                <td rowspan="5" style="text-align:center; vertical-align:bottom;">
+                <br><br><br><br><br>
+                ( <input type="text" name="manager_teknik" placeholder="Nama Manager Teknik" style="width:90%;text-align:center; border-bottom: 1px solid #000; border: none;" required> )
+                </td>
+            </tr>
+            <tr><td class="center">2</td><td><input type="text" name="teknisi_2" style="width: 100%; border: none;"></td><td><input type="text" name="paraf_2" style="width: 100%; border: none;"></td></tr>
+            <tr><td class="center">3</td><td><input type="text" name="teknisi_3" style="width: 100%; border: none;"></td><td><input type="text" name="paraf_3" style="width: 100%; border: none;"></td></tr>
+            <tr><td class="center">4</td><td><input type="text" name="teknisi_4" style="width: 100%; border: none;"></td><td><input type="text" name="paraf_4" style="width: 100%; border: none;"></td></tr>
+            <tr><td class="center">5</td><td><input type="text" name="teknisi_5" style="width: 100%; border: none;"></td><td><input type="text" name="paraf_5" style="width: 100%; border: none;"></td></tr>
+        </tbody>
+    </table>
+    </div>
+
+    <div class="action-buttons no-print">
+        <button type="button" class="btn-save" id="save-btn">
+            💾 SIMPAN
+        </button>
+        <button type="button" class="btn-print" onclick="window.print()">
+            🖨️ CETAK / PRINT
+        </button>
+        <button type="button" class="btn-cancel" onclick="window.app.cancelForm()">
+            ✖ BATAL
+        </button>
+    </div>
+    </form>
+    </div>
+    </div>
+
+<script>
+    // PERUBAHAN: Definisikan STORAGE KEY baru
+    const STORAGE_KEY = 'meterreadingTX'; 
+
+    // PENTING: Untuk menghindari kebingungan, Anda mungkin perlu menghapus data lama ('meterReadings') dari Local Storage browser Anda.
+
+    const app = {
+        // Menggunakan STORAGE_KEY baru
+        get data() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        },
+        // Menggunakan STORAGE_KEY baru
+        set data(newData) {
+            // Urutkan data berdasarkan ID terbaru saat menyimpan
+            const sortedData = newData.sort((a, b) => b.id - a.id);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(sortedData));
+        },
+        
+        getFormData() {
+            const form = document.getElementById('txradio-form'); 
+            const data = {};
+            
+            // Mengambil semua input field dari form
+            const formElements = form.querySelectorAll('input, select, textarea');
+            formElements.forEach(element => {
+                if (element.name) {
+                    data[element.name] = element.value;
+                }
+            });
+
+            // Mendapatkan ID dari data object, yang diambil dari hidden input
+            
+            const ringkasan = {
+                // Gunakan ID dari hidden input atau buat baru
+                id: data.id ? parseInt(data.id) : Date.now(),
+                tanggal: data.tanggal || '',
+                shift: data.shift || '', // Nilai option (07.00-13.00)
+                manager_teknik: data.manager_teknik || '',
+                status: 'SELESAI',
+                data_form: data // Simpan seluruh data form
+            };
+            return ringkasan;
+        },
+
+        saveToTable(event) {
+            event.preventDefault();
+            const newData = app.getFormData();
+            let allData = app.data;
+
+            if (newData.tanggal === '' || newData.shift === '' || newData.manager_teknik === '') {
+                Swal.fire('Gagal!', 'Tanggal, Shift, dan Manager Teknik wajib diisi.', 'warning');
+                return;
+            }
+
+            const index = allData.findIndex(item => item.id == newData.id);
+
+            if (index !== -1) {
+                // Perbarui data yang sudah ada
+                allData[index] = newData;
+                Swal.fire('Berhasil!', 'Data berhasil diperbarui.', 'success');
+            } else {
+                // Simpan data baru
+                newData.id = Date.now(); 
+                // Karena ID di data_form juga diambil dari input hidden, kita pastikan data_form.id juga di-update
+                newData.data_form.id = newData.id; 
+                allData.push(newData);
+                Swal.fire('Berhasil!', 'Data baru berhasil disimpan.', 'success');
+            }
+
+            app.data = allData;
+            app.showList();
+        },
+        
+        loadForm(id) {
+            const allData = app.data;
+            const dataToEdit = allData.find(item => item.id == id);
+            
+            const form = document.getElementById('txradio-form');
+            
+            if (dataToEdit && dataToEdit.data_form) {
+                // Kosongkan form sebelum memuat data baru
+                form.reset(); 
+                
+                // Mengisi data_id
+                document.getElementById('data_id').value = dataToEdit.id;
+
+                // Loop untuk mengisi SEMUA input/select form dengan data_form
+                for (const key in dataToEdit.data_form) {
+                    const element = form.elements[key]; // Menggunakan form.elements[name]
+                    if (element) {
+                        element.value = dataToEdit.data_form[key];
+                    }
+                }
+                
+                // Mengubah teks tombol saat mode edit
+                document.getElementById('save-btn').textContent = '💾 PERBARUI DATA';
+
+                app.showForm();
+            } else {
+                Swal.fire('Error!', 'Data tidak ditemukan.', 'error');
+            }
+        },
+
+        deleteData(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const allData = app.data.filter(item => item.id !== id);
+                    app.data = allData;
+                    app.renderList();
+                    Swal.fire('Dihapus!', 'Data telah berhasil dihapus.', 'success');
+                }
+            })
+        },
+
+        renderList() {
+            const tableBody = document.getElementById('data-table-body');
+            tableBody.innerHTML = '';
+            
+            const allData = app.data.sort((a, b) => b.id - a.id); 
+
+            if (allData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-8 text-gray-500">Belum ada data yang tersimpan.</td></tr>';
+                return;
+            }
+
+            allData.forEach((data, index) => {
+                const row = tableBody.insertRow();
+                row.className = 'hover:bg-gray-100';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 no-column text-center">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">${data.tanggal}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">${data.shift}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">${data.manager_teknik}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">SELESAI</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
+                        <a href="#" onclick="event.preventDefault(); window.app.loadForm(${data.id})" class="text-blue-600 hover:underline font-bold mx-1">Edit</a>
+                        <span class="text-gray-400">|</span>
+                        <a href="#" onclick="event.preventDefault(); window.app.deleteData(${data.id})" class="text-red-600 hover:underline font-bold mx-1">Hapus</a>
+                    </td>
+                `;
+            });
+        },
+        
+        showForm() {
+            document.getElementById('data-list').classList.add('hidden');
+            document.getElementById('form-container').classList.remove('hidden');
+        },
+
+        showList() {
+            document.getElementById('form-container').classList.add('hidden');
+            document.getElementById('data-list').classList.remove('hidden'); 
+            app.renderList();
+        },
+
+        cancelForm() {
+            Swal.fire({
+                title: 'Batalkan Pengisian?',
+                text: "Data yang belum disimpan akan hilang.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#f44336',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Batalkan',
+                cancelButtonText: 'Lanjutkan Edit'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('txradio-form').reset();
+                    document.getElementById('data_id').value = '';
+                    document.getElementById('save-btn').textContent = '💾 SIMPAN'; // Reset teks tombol
+                    app.showList();
+                }
+            })
+        }
+    };
+
+    window.app = app; 
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        // Inisialisasi data dummy dengan STORAGE_KEY baru
+        if (!localStorage.getItem(STORAGE_KEY)) {
+            const initialData = [
+                {
+                    id: Date.now(),
+                    tanggal: '2025-10-22',
+                    shift: '07.00-13.00',
+                    manager_teknik: 'Dummy Manager',
+                    status: 'SELESAI',
+                    data_form: {
+                        id: Date.now(),
+                        tanggal: '2025-10-22',
+                        shift: '07.00-13.00', 
+                        manager_teknik: 'Dummy Manager',
+                        supervisor: 'Dummy Supervisor',
+                        teknisi_1: 'Dummy Teknisi 1',
+                        ground_pri_status: 'OK', 
+                        ground_tx1_status: 'On Air',
+                        suhu_hasil: '24°C',
+                        // --- Tambahkan semua field form di sini untuk data dummy yang lengkap ---
+                        ground_pri_power: '10W', ground_pri_modulasi: '60%', ground_pri_keterangan: 'Normal',
+                        ground_tx1_merk: 'PAE', ground_tx1_power: '10W', ground_tx1_modulasi: '60%', ground_tx1_keterangan: 'Clear',
+                        ground_tx2_merk: 'PAE', ground_tx2_status: 'STBY', ground_tx2_power: '0W', ground_tx2_modulasi: '0%', ground_tx2_keterangan: 'Siaga',
+                        // ... dan seterusnya untuk semua 70+ field di form Anda.
+                        suhu_nominal: '22C', suhu_keterangan: 'AC OK', 
+                        humidity_nominal: '50%', humidity_hasil: '50%', humidity_keterangan: 'Stabil',
+                        kebersihan_nominal: 'Baik', kebersihan_hasil: 'Baik', kebersihan_keterangan: 'Bersih',
+                        ups_nominal: '220V', ups_hasil: '220V', ups_keterangan: 'OK',
+                        paraf_1: 'T1', paraf_2: 'T2', paraf_3: '', paraf_4: '', paraf_5: ''
+                    }
+                }
+            ];
+            // Simpan menggunakan key baru
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData)); 
+        }
+
+        app.showList(); 
+
+        // Menghubungkan tombol SIMPAN (Button ID: save-btn)
+        document.getElementById('save-btn').addEventListener('click', (event) => {
+            app.saveToTable(event);
+        });
+
+        // Menghubungkan tombol navigasi Buat Data Baru
+        document.getElementById('create-new-btn').addEventListener('click', () => {
+            document.getElementById('txradio-form').reset();
+            document.getElementById('data_id').value = '';
+            document.getElementById('save-btn').textContent = '💾 SIMPAN';
+            app.showForm();
+        });
+
+        // Menghubungkan tombol navigasi Lihat Daftar Data
+        document.getElementById('view-list-btn').addEventListener('click', () => {
+            app.showList();
+        });
+        
+        // Handling error logo
+        document.querySelectorAll('img[src="airnav.png"]').forEach(img => {
+            img.onerror = function() {
+                this.onerror = null;
+                this.src = 'https://upload.wikimedia.org/wikipedia/id/thumb/7/77/AirNav_Indonesia_logo.svg/1200px-AirNav_Indonesia_logo.svg.png';
+            };
+        });
+    });
+</script>
+</body>
+</html>

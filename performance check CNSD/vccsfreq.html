@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meter Reading VCCS FREQUENTIS - AirNav Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        /* ========================================================== */
+        /* GLOBAL & FORM STYLING - DISESUAIKAN DENGAN KODE ASLI */
+        /* ========================================================== */
+        body { font-family: Arial, sans-serif; }
+        .form-container-inner {
+            max-width: 900px;
+            margin: 20px auto;
+            border: 2px solid #000;
+            background: white;
+            color: #000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Header Section Styling */
+        .header-section { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 15px 20px; 
+            border-bottom: 2px solid #000; 
+        }
+        .header-left { display: flex; align-items: center; gap: 10px; }
+        .logo-image { width: 70px; height: 70px; object-fit: contain; }
+        .logo-text { font-weight: bold; color: #1e5a96; font-size: 16px; line-height: 1.2; }
+        .header-info-right { 
+            text-align: right; 
+            font-size: 9px; 
+            line-height: 1.5; 
+        }
+
+        /* Title Section Styling */
+        .title-section { 
+            background: #fff; 
+            color: #000; 
+            text-align: center; 
+            padding: 8px; 
+            font-weight: bold; 
+            font-size: 16px; 
+            border-bottom: 2px solid #000; 
+        }
+
+        /* Info Grid Styling */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 80px 1fr 280px 1fr;
+            grid-template-rows: auto auto auto;
+            border-bottom: 2px solid #000;
+        }
+
+        .info-cell {
+            padding: 6px 10px;
+            border-right: 2px solid #000;
+            border-bottom: 2px solid #000;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .info-cell:nth-child(4n) { border-right: none; }
+        .info-label { font-weight: bold; }
+        
+        .vccs-box {
+            background-color: #90c695;
+            color: black;
+            font-weight: bold;
+            font-size: 15px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            grid-column: 3;
+            grid-row: 1 / 3;
+            border-left: 2px solid #000; 
+            border-right: 2px solid #000; 
+            border-bottom: 2px solid #000; 
+            line-height: 1.1; 
+        }
+        .vccs-box h1 { font-size: 20px; }
+        
+        .info-input {
+            width: 100%; 
+            padding: 4px 8px; 
+            border: 1px solid #999; 
+            border-radius: 3px; 
+            font-size: 11px;
+            box-sizing: border-box;
+            outline: none;
+            background-color: white;
+        }
+
+        /* Form Controls Styling */
+        input[type="date"], select {
+            padding: 4px 8px;
+            border: 1px solid #999;
+            border-radius: 3px;
+            font-size: 11px;
+            font-family: Arial, sans-serif;
+            background-color: white;
+            cursor: pointer;
+            outline: none;
+        }
+
+        /* Table Styling */
+        table.form-table { width: 100%; border-collapse: collapse; font-size: 11px; }
+        table.form-table th, table.form-table td { 
+            border: 1px solid #000; 
+            padding: 6px 8px; 
+            text-align: center; 
+            vertical-align: middle; 
+            height: 28px;
+        }
+        table.form-table th { background: #90c695; font-weight: bold; }
+        
+        .section-header-row {
+             background: #eaedea;
+             padding: 8px;
+             font-weight: bold;
+             text-align: left;
+             border-bottom: 2px solid #000;
+             font-size: 12px;
+             display: block; /* Agar bisa diisi penuh di luar tabel */
+             border-left: 2px solid #000;
+             border-right: 2px solid #000;
+        }
+        .sub-header td { background-color: #d4f4d4; font-weight: bold; }
+        .text-left { text-align: left !important; padding-left: 8px !important; }
+        .numbered-cell { font-weight: bold; width: 40px; }
+        
+        .input-field-table {
+            width: 100%;
+            border: none;
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            font-size: 11px;
+            text-align: center;
+            box-sizing: border-box;
+            outline: none;
+        }
+        .input-select-table {
+            width: 100%;
+            height: 100%;
+            border: none;
+            padding: 0;
+            margin: 0;
+            background-color: transparent;
+            font-size: 11px;
+            text-align: center;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        /* Signature Area Styling */
+        .signature-table-section {
+            border-top: 2px solid #000;
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+        }
+        .signature-table-section th {
+            background-color: #90c695;
+            padding: 8px;
+            font-size: 11px;
+        }
+        .signature-table-section td {
+            border: 1px solid #000;
+            padding: 5px;
+            text-align: center;
+            vertical-align: top;
+            font-size: 11px;
+        }
+        .sig-col {
+            position: relative;
+            height: 150px; /* Tinggi baris untuk tanda tangan */
+        }
+        .tech-table {
+            width: 100%;
+            margin-top: 5px; 
+            border-collapse: collapse;
+        }
+        .tech-table td {
+            border: 1px solid #000;
+            padding: 3px 4px;
+            font-size: 10px;
+            height: 25px;
+        }
+        .signature-input-line {
+            display: block;
+            width: 80%; 
+            margin: 50px auto 0 auto; 
+            border: none;
+            border-bottom: 1px solid #000;
+            text-align: center;
+            font-weight: bold;
+            font-size: 11px;
+            padding: 5px 0;
+            background-color: transparent;
+            outline: none;
+        }
+        .sig-role {
+            font-weight: normal; 
+            font-size: 10px; 
+            margin-top: 5px;
+            margin-bottom: 10px;
+        }
+        
+        /* PRINT STYLING */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 6mm;
+            }
+            body {
+                padding: 0;
+                margin: 0;
+                font-size: 12px;
+                background-color: white !important; 
+                -webkit-print-color-adjust: exact; 
+                print-color-adjust: exact;
+            }
+            .no-print { display: none !important; }
+            .form-container-inner { border: 3px solid #000; margin: 0; max-width: 100%; box-shadow: none; }
+            
+            /* Mengubah input dan select menjadi teks statis saat print */
+            .input-field-table, .input-select-table, .info-input, input[type="date"], select, .signature-input-line, input[type="text"] {
+                border: none !important;
+                background-color: transparent !important;
+                padding: 0 !important;
+                font-size: 11px !important;
+                color: black !important;
+            }
+            
+            /* Mengembalikan garis bawah pada signature */
+            .signature-input-line { border-bottom: 1px solid #000 !important; }
+            
+            /* Pastikan checkbox terlihat */
+            input[type="checkbox"] {
+                border: 1px solid #000 !important;
+                width: 12px !important; 
+                height: 12px !important;
+                display: inline-block !important;
+                transform: scale(0.8);
+                margin: 0 auto;
+            }
+            
+            .sig-col { height: 100px; }
+            .signature-input-line { margin: 10px auto 0 auto; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 p-4">
+    
+    <div id="main-content" class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
+            <div>
+                <div class="flex items-center">
+                    <a href="performance_cnsd.html" onclick="history.back(); return false;" class="flex items-center text-gray-600 hover:text-gray-800 font-semibold p-2 rounded-md hover:bg-gray-200">
+                        <svg class="w-6 h-6 mr-0" fill="none" stroke="currentColor" viewBox="0 0 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-800 ml-4">Meter Reading VCCS FREQUENTIS </h1>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-4">
+                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Buat Data Baru</button>
+                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Lihat Daftar Data</button>
+                </div>
+            </div>
+            <img src="../img/airnav.png" alt="AirNav Logo" class="h-12 w-auto">
+        </div>
+
+        <div id="form-container" class="hidden">
+            <form id="vccs-form">
+                <input type="hidden" id="data_id" name="id">
+                <div class="form-container-inner">
+                    <div class="header-section">
+                        <div class="header-left">
+                            <img src="../img/airnav_logo.png" alt="AirNav Indonesia Logo" class="logo-image" onerror="this.onerror=null;this.src='https://upload.wikimedia.org/wikipedia/id/thumb/7/77/AirNav_Indonesia_logo.svg/1200px-AirNav_Indonesia_logo.svg.png';">
+                            <div class="logo-text">AirNav<br>Indonesia</div>
+                        </div>
+                        <div class="header-info-right">
+                            <div>Perum: LPPNPI</div>
+                            <div><strong>KANTOR CABANG SURABAYA</strong></div>
+                            <div>Telp: (031) 8688456 Fax: (031) 8688536</div>
+                            <div>email: sub@airnavindonesia.co.id</div>
+                            <div>Web: www.airnavindonesia.co.id</div>
+                        </div>
+                    </div>
+
+                    <div class="title-section">METER READING</div>
+
+                    <div class="info-grid">
+                        <div class="info-cell info-label">LOKASI</div>
+                        <div class="info-cell" style="grid-column: 2 / 3;">: <span id="lokasi-display">CABANG SURABAYA</span></div>
+                        
+                        <div class="info-cell vccs-box">
+                            <h1>VCCS</h1> 
+                        </div>
+                        <div class="info-cell"></div>
+                        
+                        <div class="info-cell info-label">TGL/JAM</div>
+                        <div class="info-cell" style="grid-column: 2 / 3;">
+                            : <input type="date" id="tanggal" class="info-input" required>
+                            <select id="jam" class="info-input" required>
+                                <option value="">Pilih Jam</option>
+                                <option value="07.00-13.00">07.00-13.00</option>
+                                <option value="13.00-19.00">13.00-19.00</option>
+                                <option value="19.00-07.00">19.00-07.00</option>
+                            </select>
+                        </div>
+                        <div class="info-cell" style="grid-column: 4 / 5; border-right: none;"></div>
+                        
+                        <div class="info-cell info-label" style="border-bottom: none; grid-row: span 3; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 8px; padding-top: 10px; padding-bottom: 10px;">
+                            <div>MERK :</div>
+                            <div>TYPE :</div>
+                            <div>S N :</div>
+                        </div>
+                        <div class="info-cell" style="border-bottom: none; grid-column: 2 / 5; flex-direction: column; align-items: flex-start; justify-content: flex-start; gap: 8px; padding-top: 10px; padding-bottom: 10px; border-right: none;">
+                            <div style="display:flex; width:100%; gap:5px; align-items:center;">
+                                <input type="text" id="merk" value="FREQUENTIS" class="info-input">
+                            </div>
+                            <div style="display:flex; width:100%; gap:5px; align-items:center;">
+                                <input type="text" id="type" class="info-input">
+                            </div>
+                            <div style="display:flex; width:100%; gap:5px; align-items:center;">
+                                <input type="text" id="sn" class="info-input">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="section-header-row">A. PERALATAN</div>
+                    
+                    <table class="form-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">NO</th>
+                                <th>PEMBACAAN METER READING</th>
+                                <th style="width: 100px;">NOMINAL</th>
+                                <th style="width: 120px;" colspan="2">HASIL PEMERIKSAAN</th>
+                                <th style="width: 150px;">KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="sub-header" data-group="front-panel">
+                                <td class="numbered-cell">1</td>
+                                <td class="text-left"><strong>FRONT PANEL</strong></td>
+                                <td class="text-center"><strong>Standart</strong></td>
+                                <td class="text-center" colspan="2"><strong>Redundant Server</strong></td>
+                                <td></td>
+                            </tr>
+                            <tr data-item="front-panel-status">
+                                <td></td>
+                                <td class="text-left">All Status Indikator</td>
+                                <td class="text-center">Normal / Alrm</td>
+                                <td colspan="2">
+                                    <select name="front_panel_status_hasil" class="input-select-table form-input" required>
+                                        <option value="">-Pilih-</option>
+                                        <option value="Normal">Normal</option>
+                                        <option value="Alarm">Alarm</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" name="front_panel_status_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="front-panel-server">
+                                <td></td>
+                                <td class="text-left">Server</td>
+                                <td class="text-center">√/ -</td>
+                                <td colspan="2">
+                                    <select name="front_panel_server_hasil" class="input-select-table form-input" required>
+                                        <option value="">-Pilih-</option>
+                                        <option value="✓">✓</option>
+                                        <option value="-">-</option>
+                                    </select>
+                                </td>
+                                <td><input type="text" name="front_panel_server_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="front-panel-ac-power">
+                                <td></td>
+                                <td class="text-left">AC Power</td>
+                                <td class="text-center">220 V</td>
+                                <td colspan="2"><input type="text" name="front_panel_ac_power_hasil" class="input-field-table form-input"></td>
+                                <td><input type="text" name="front_panel_ac_power_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr class="sub-header" data-group="msc-rcms-header">
+                                <td class="numbered-cell">2</td>
+                                <td class="text-left"><strong>MSC & RCMS</strong></td>
+                                <td class="text-center"><strong>Indicator</strong></td>
+                                <td class="text-center"><strong>Normal</strong></td>
+                                <td class="text-center"><strong>Fault</strong></td>
+                                <td></td>
+                            </tr>
+                            <tr class="sub-header" data-group="frame-1">
+                                <td></td>
+                                <td class="text-left">FRAME 1</td>
+                                <td></td><td></td><td></td><td></td>
+                            </tr>
+                            <tr data-item="msc-x2-01">
+                                <td></td>
+                                <td class="text-left">GATE X2- 01</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_x2_01_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_x2_01_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_x2_01_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-x2-02">
+                                <td></td>
+                                <td class="text-left">GATE X2- 02</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_x2_02_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_x2_02_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_x2_02_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-x2-03">
+                                <td></td>
+                                <td class="text-left">GATE X2- 03</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_x2_03_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_x2_03_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_x2_03_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-x2-04">
+                                <td></td>
+                                <td class="text-left">GATE X2- 04</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_x2_04_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_x2_04_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_x2_04_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            
+                            <tr class="sub-header" data-group="frame-2">
+                                <td></td>
+                                <td class="text-left">FRAME 2</td>
+                                <td></td><td></td><td></td><td></td>
+                            </tr>
+                            <tr data-item="msc-gpif-1">
+                                <td></td>
+                                <td class="text-left">GPIF -1</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_gpif_1_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_gpif_1_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_gpif_1_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-gpif-2">
+                                <td></td>
+                                <td class="text-left">GPIF -2</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_gpif_2_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_gpif_2_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_gpif_2_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-gpif-3">
+                                <td></td>
+                                <td class="text-left">GPIF -3</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_gpif_3_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_gpif_3_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_gpif_3_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-gpif-4">
+                                <td></td>
+                                <td class="text-left">GPIF -4</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_gpif_4_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_gpif_4_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_gpif_4_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            
+                            <tr class="sub-header" data-group="frame-3">
+                                <td></td>
+                                <td class="text-left">FRAME 3</td>
+                                <td></td><td></td><td></td><td></td>
+                            </tr>
+                            <tr data-item="msc-erif-1">
+                                <td></td>
+                                <td class="text-left">ERIF -1</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_1_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_1_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_1_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-erif-2">
+                                <td></td>
+                                <td class="text-left">ERIF -2</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_2_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_2_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_2_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-erif-3">
+                                <td></td>
+                                <td class="text-left">ERIF -3</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_3_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_3_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_3_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-erif-4">
+                                <td></td>
+                                <td class="text-left">ERIF -4</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_4_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_4_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_4_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-erif-5">
+                                <td></td>
+                                <td class="text-left">ERIF -5</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_5_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_5_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_5_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-erif-6">
+                                <td></td>
+                                <td class="text-left">ERIF -6</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_6_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_6_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_6_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-erif-7">
+                                <td></td>
+                                <td class="text-left">ERIF -7</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_7_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_7_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_7_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="msc-erif-8">
+                                <td></td>
+                                <td class="text-left">ERIF -8</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_8_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_8_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_8_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-erif-9">
+                                <td></td>
+                                <td class="text-left">ERIF -9</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_9_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_9_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_9_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-erif-10">
+                                <td></td>
+                                <td class="text-left">ERIF -10</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_erif_10_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_erif_10_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_erif_10_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr class="sub-header" data-group="frame-4">
+                                <td></td>
+                                <td class="text-left">FRAME 4</td>
+                                <td></td><td></td><td></td><td></td>
+                            </tr>
+
+                            <tr data-item="msc-bca-1">
+                                <td></td>
+                                <td class="text-left">BCA -1</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bca_1_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bca_1_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bca_1_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bca-2">
+                                <td></td>
+                                <td class="text-left">BCA -2</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bca_2_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bca_2_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bca_2_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bca-3">
+                                <td></td>
+                                <td class="text-left">BCA -3</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bca_3_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bca_3_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bca_3_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bca-4">
+                                <td></td>
+                                <td class="text-left">BCA -4</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bca_4_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bca_4_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bca_4_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bca-5">
+                                <td></td>
+                                <td class="text-left">BCA -5</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bca_5_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bca_5_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bca_5_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bcb-1">
+                                <td></td>
+                                <td class="text-left">BCB -1</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bcb_1_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bcb_1_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bcb_1_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bcb-2">
+                                <td></td>
+                                <td class="text-left">BCB -2</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bcb_2_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bcb_2_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bcb_2_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bcb-3">
+                                <td></td>
+                                <td class="text-left">BCB -3</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bcb_3_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bcb_3_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bcb_3_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bcb-4">
+                                <td></td>
+                                <td class="text-left">BCB -4</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bcb_4_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bcb_4_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bcb_4_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bcb-5">
+                                <td></td>
+                                <td class="text-left">BCB -5</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bcb_5_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bcb_5_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bcb_5_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bcb-6">
+                                <td></td>
+                                <td class="text-left">BCB -6</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bcb_6_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bcb_6_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bcb_6_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bcb-7">
+                                <td></td>
+                                <td class="text-left">BCB -7</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bcb_7_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bcb_7_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bcb_7_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                  <tr data-item="msc-bcb-8">
+                                <td></td>
+                                <td class="text-left">BCB -8</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bcb_8_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bcb_8_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bcb_8_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                                <tr data-item="msc-bcb-9">
+                                <td></td>
+                                <td class="text-left">BCB -9</td>
+                                <td class="text-center">LED Hijau</td>
+                                <td class="text-center"><input type="text" name="msc_bcb_9_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_bcb_9_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_bcb_9_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr class="sub-header" data-group="msc-rcms-header">
+                                <td class="numbered-cell">3</td>
+                                <td class="text-left"><strong>CWP</strong></td>
+                                <td class="text-center"><strong>Name</strong></td>
+                                <td class="text-center"><strong>Normal</strong></td>
+                                <td class="text-center"><strong>Fault</strong></td>
+                                <td></td>
+                            </tr>
+
+                                <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">TOWER CONTROL </td>
+                                <td class="text-center">CWP 1</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">TOWER ASSISTANT </td>
+                                <td class="text-center">CWP 2</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">GROUND CONTROL </td>
+                                <td class="text-center">CWP 3</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">EAST ASSISTANT </td>
+                                <td class="text-center">CWP 4</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">EAST CONTROL </td>
+                                <td class="text-center">CWP 5</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">WEST CONTROL </td>
+                                <td class="text-center">CWP 6</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="finput-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">WEST ASSISTANT </td>
+                                <td class="text-center">CWP 7</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">DIRRECTOR CONTROL </td>
+                                <td class="text-center">CWP 8</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">DIRRECTOR ASSISTANT </td>
+                                <td class="text-center">CWP 9</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="form-input-checkbox"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="form-input-checkbox"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">SUPERVISOR APP </td>
+                                <td class="text-center">CWP 10</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">CDU </td>
+                                <td class="text-center">CWP 11</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+
+                            <tr data-item="msc-cwp">
+                                <td></td>
+                                <td class="text-left">TEKNIK </td>
+                                <td class="text-center">CWP 12</td>
+                                <td class="text-center"><input type="text" name="msc_cwp_normal" class="input-field-table form-input"></td>
+                                <td class="text-center"><input type="text" name="msc_cwp_fault" class="input-field-table form-input"></td>
+                                <td><input type="text" name="msc_cwp_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            
+
+                        </tbody>
+                    </table>
+
+                    <div class="section-header-row">B. LINGKUNGAN KERJA</div>
+
+                    <table class="form-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 40px;">NO</th>
+                                <th>KEGIATAN</th>
+                                <th style="width: 120px;">Nominal</th>
+                                <th style="width: 120px;" colspan="2">HASIL<br>PEMERIKSAAN</th>
+                                <th style="width: 150px;">KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr data-item="suhu-ruangan">
+                                <td class="numbered-cell">1</td>
+                                <td class="text-left">PEMERIKSAAN SUHU RUANGAN</td>
+                                <td class="text-center">&lt; 22° C</td>
+                                <td colspan="2"><input type="text" name="suhu_ruangan_hasil" class="input-field-table form-input"></td>
+                                <td><input type="text" name="suhu_ruangan_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="humidity">
+                                <td class="numbered-cell">2</td>
+                                <td class="text-left">PEMERIKSAAN AIR HUMIDITY</td>
+                                <td class="text-center">✓</td>
+                                <td colspan="2"><input type="text" name="humidity_hasil" class="input-field-table form-input"></td>
+                                <td><input type="text" name="humidity_ket" class="input-field-table form-input"></td>
+                            </tr>
+                            <tr data-item="kebersihan">
+                                <td class="numbered-cell">3</td>
+                                <td class="text-left">PEMERIKSAAN KEBERSIHAN RUANGAN</td>
+                                <td class="text-center">✓</td>
+                                <td colspan="2"><input type="text" name="kebersihan_hasil" class="input-field-table form-input"></td>
+                                <td><input type="text" name="kebersihan_ket" class="input-field-table form-input"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="signature-table-section">
+                        <thead>
+                            <tr>
+                                <th style="width: 40%;">TEKNISI</th>
+                                <th style="width: 30%;">SUPERVISOR</th>
+                                <th style="width: 30%; border-right: none;">MANAGER TEKNIK</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding: 0; vertical-align: top;">
+                                    <table class="tech-table">
+                                        <tr>
+                                            <td class="tech-number" style="width: 15%;">No</td>
+                                            <td style="text-align: center; font-weight: bold; width: 60%;">Nama</td>
+                                            <td style="width: 25%; text-align: center; font-weight: bold;">Paraf</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tech-number">1</td>
+                                            <td><input type="text" name="teknisi_nama_1" class="input-field-table teknisi-nama"></td>
+                                            <td><input type="text" name="teknisi_paraf_1" class="input-field-table teknisi-paraf"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tech-number">2</td>
+                                            <td><input type="text" name="teknisi_nama_2" class="input-field-table teknisi-nama"></td>
+                                            <td><input type="text" name="teknisi_paraf_2" class="input-field-table teknisi-paraf"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tech-number">3</td>
+                                            <td><input type="text" name="teknisi_nama_3" class="input-field-table teknisi-nama"></td>
+                                            <td><input type="text" name="teknisi_paraf_3" class="input-field-table teknisi-paraf"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tech-number">4</td>
+                                            <td><input type="text" name="teknisi_nama_4" class="input-field-table teknisi-nama"></td>
+                                            <td><input type="text" name="teknisi_paraf_4" class="input-field-table teknisi-paraf"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="sig-col" style="border-right: none; vertical-align: bottom">
+                                    <div class="sig-bottom-content">
+                                        <input type="text" id="supervisor_nama" name="supervisor_nama" class="signature-line" placeholder="(Nama Lengkap)" style="text-align: center;">
+                                        <div class="sig-role"></div>
+                                    </div>
+                                </td>
+                                <td class="sig-col" style="border-right: none; vertical-align: bottom">
+                                    <div class="sig-bottom-content">
+                                        <input type="text" id="manager_nama" name="manager_nama" class="signature-line" placeholder="(Nama Lengkap)" style="text-align: center;">
+                                        <div class="sig-role"></div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </form>
+            
+            <div class="flex justify-center gap-4 mt-6 no-print">
+                <button type="button" id="save-btn" class="bg-green-600 hover:bg-green-700 text-white px-8 py-2 rounded-lg font-semibold">Save To Table</button>
+                <button type="button" id="print-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white px-8 py-2 rounded-lg font-semibold">Print</button>
+                <button type="button" id="cancel-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-8 py-2 rounded-lg font-semibold">Batal</button>
+            </div>
+        </div>
+        
+        <div id="list-container" class="bg-white p-6 rounded-lg shadow-md hidden">
+            <h3 class="text-lg font-bold leading-6 text-gray-900 mb-4">Daftar Meter Reading</h3>
+            <div id="tableContent" class="overflow-x-auto"></div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const formContainer = document.getElementById('form-container');
+            const listContainer = document.getElementById('list-container');
+            const tableContent = document.getElementById('tableContent');
+            const vccsForm = document.getElementById('vccs-form');
+            const dataIdInput = document.getElementById('data_id');
+            const createNewBtn = document.getElementById('create-new-btn');
+            const viewListBtn = document.getElementById('view-list-btn');
+            const saveBtn = document.getElementById('save-btn');
+            const printBtn = document.getElementById('print-btn');
+            const cancelBtn = document.getElementById('cancel-btn');
+            let currentEditId = null;
+            const STORAGE_KEY = 'meterReadingData_VCCS_FREQUENTIS'; 
+
+            // --- Tampilan & Navigasi ---
+            const showForm = (mode = 'create') => {
+                formContainer.classList.remove('hidden');
+                listContainer.classList.add('hidden');
+                saveBtn.innerText = mode === 'create' ? 'Simpan' : 'Perbarui Data';
+                window.scrollTo(0, 0);
+            };
+
+            const showList = () => {
+                formContainer.classList.add('hidden');
+                listContainer.classList.remove('hidden');
+                loadTableData();
+            };
+
+            // --- CRUD Functions ---
+            const getSavedData = () => JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            const saveAllData = (data) => localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+            
+            // Mengumpulkan semua input data dari tabel, termasuk checkbox
+            const getTableInputs = () => {
+                const data = {};
+                document.querySelectorAll('.form-input, .form-input-checkbox').forEach(element => {
+                    const key = element.name;
+                    if (element.type === 'checkbox') {
+                        data[key] = element.checked;
+                    } else {
+                        data[key] = element.value;
+                    }
+                });
+                return data;
+            };
+            
+            // Mengisi form input dari data tersimpan
+            const populateTableInputs = (data) => {
+                 document.querySelectorAll('.form-input, .form-input-checkbox').forEach(element => {
+                    const key = element.name;
+                    if (data[key] !== undefined) {
+                        if (element.type === 'checkbox') {
+                            element.checked = data[key];
+                        } else {
+                            element.value = data[key];
+                        }
+                    }
+                });
+            };
+
+            const loadTableData = () => {
+                const data = getSavedData();
+                if (data.length === 0) {
+                    tableContent.innerHTML = '<p class="text-center text-gray-500 py-8">Belum ada data yang tersimpan.</p>';
+                    return;
+                }
+                const tableHtml = `
+                    <div class="overflow-x-auto border border-gray-200 rounded-lg">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            <thead class="bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">No</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tanggal</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Shift</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${data.sort((a, b) => b.id - a.id).map((item, index) => `
+                                    <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${index + 1}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.tanggal}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">${item.jam}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                                Selesai
+                                                </span>
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                            <a href="#" onclick="event.preventDefault(); window.app.editData(${item.id})" class="text-blue-600 hover:text-blue-800">Edit</a>
+                                            <a href="#" onclick="event.preventDefault(); window.app.deleteData(${item.id})" class="text-red-600 hover:text-red-800 ml-4">Hapus</a>
+                                        </td>  
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>`;
+                tableContent.innerHTML = tableHtml;
+            };
+
+            const clearForm = () => {
+                vccsForm.reset();
+                dataIdInput.value = '';
+                currentEditId = null;
+                
+                // Set default values (sesuai logika kode asli)
+                document.getElementById('lokasi-display').textContent = 'CABANG SURABAYA';
+                document.getElementById('merk').value = 'FREQUENTIS';
+                
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = (now.getMonth() + 1).toString().padStart(2, '0');
+                const day = now.getDate().toString().padStart(2, '0');
+                document.getElementById('tanggal').value = `${year}-${month}-${day}`;
+                
+                const hour = now.getHours();
+                let shiftValue = "07.00-13.00";
+                if (hour >= 13 && hour < 19) {
+                    shiftValue = "13.00-19.00";
+                } else if (hour >= 19 || hour < 7) {
+                    shiftValue = "19.00-07.00";
+                }
+                document.getElementById('jam').value = shiftValue;
+            };
+
+            const handleSave = () => {
+                const tanggal = document.getElementById('tanggal').value;
+                const jam = document.getElementById('jam').value;
+          
+                
+                if (!tanggal || !jam ) {
+                    Swal.fire('Error', 'Tanggal, Jam, Type, dan S/N wajib diisi!', 'error');
+                    return;
+                }
+
+                const savedData = getSavedData();
+                const tableData = getTableInputs();
+                
+                const formData = {
+                    id: currentEditId || Date.now(),
+                    tanggal,
+                    jam,
+                    lokasi: document.getElementById('lokasi-display').textContent,
+                    merk: document.getElementById('merk').value,
+                    type,
+                    sn,
+                    supervisor_nama: document.getElementById('supervisor_nama').value,
+                    manager_nama: document.getElementById('manager_nama').value,
+                    ...tableData // Masukkan semua data input/select/checkbox tabel
+                };
+                
+                if (currentEditId) {
+                    const index = savedData.findIndex(data => data.id === currentEditId);
+                    if (index !== -1) savedData[index] = formData;
+                } else {
+                    savedData.push(formData);
+                }
+                
+                saveAllData(savedData);
+                Swal.fire('Sukses!', `Data berhasil ${currentEditId ? 'diperbarui' : 'disimpan'}.`, 'success');
+                clearForm();
+                showList();
+            };
+            
+            const handleCancel = () => {
+                Swal.fire({
+                    title: 'Anda yakin?',
+                    text: "Perubahan yang belum disimpan akan hilang dan form akan dikosongkan.",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#d33',
+                    cancelButtonColor: '#3085d6',
+                    confirmButtonText: 'Ya, batalkan!',
+                    cancelButtonText: 'Tidak'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        clearForm();
+                        showList();
+                    }
+                });
+            };
+            
+            // --- Print Function ---
+            const prepareForPrint = () => {
+                const formToPrint = document.getElementById('vccs-form');
+                
+                // Menemukan semua input dan select
+                const elementsToReplace = formToPrint.querySelectorAll('input:not([type="hidden"]), select');
+                
+                elementsToReplace.forEach(element => {
+                    let value;
+                    if (element.type === 'checkbox') {
+                         value = element.checked ? '✓' : '';
+                    } else if (element.tagName === 'SELECT') {
+                         value = element.options[element.selectedIndex]?.text || '';
+                    } else {
+                         value = element.value || '';
+                    }
+                    
+                    const span = document.createElement('span');
+                    span.textContent = value;
+                    span.className = 'print-value';
+                    
+                    // Salin kelas penting (untuk styling khusus seperti signature-line)
+                    span.className += ' ' + Array.from(element.classList).join(' ');
+                    span.style.cssText = element.style.cssText;
+                    
+                    element.parentNode.replaceChild(span, element);
+                });
+                
+                window.print();
+            };
+
+            // Mengembalikan input setelah print (menggunakan reload)
+            window.onafterprint = () => {
+                location.reload();
+            };
+
+            // Global API untuk interaksi dari tabel list
+            window.app = {
+                showList,
+                editData: (id) => {
+                    const data = getSavedData().find(d => d.id === id);
+                    if (!data) return;
+                    currentEditId = id;
+                    dataIdInput.value = id;
+
+                    // Mengisi info grid
+                    document.getElementById('tanggal').value = data.tanggal;
+                    document.getElementById('jam').value = data.jam;
+                    document.getElementById('lokasi-display').textContent = data.lokasi;
+                    document.getElementById('merk').value = data.merk;
+                    document.getElementById('type').value = data.type;
+                    document.getElementById('sn').value = data.sn;
+
+                    // Mengisi data tabel dan tanda tangan
+                    populateTableInputs(data);
+                    document.getElementById('supervisor_nama').value = data.supervisor_nama || '';
+                    document.getElementById('manager_nama').value = data.manager_nama || '';
+
+                    showForm('edit');
+                },
+                deleteData: (id) => {
+                    Swal.fire({
+                        title: 'Anda yakin ingin menghapus data ini?',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        confirmButtonText: 'Ya, hapus!',
+                        cancelButtonText: 'Batal'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            let data = getSavedData();
+                            data = data.filter(item => item.id !== id);
+                            saveAllData(data);
+                            Swal.fire('Terhapus!', 'Data telah berhasil dihapus.', 'success');
+                            loadTableData();
+                        }
+                    });
+                }
+            };
+            
+            // --- Event Listeners ---
+            createNewBtn.addEventListener('click', () => { clearForm(); showForm('create'); });
+            viewListBtn.addEventListener('click', showList);
+            saveBtn.addEventListener('click', handleSave);
+            cancelBtn.addEventListener('click', handleCancel);
+            printBtn.addEventListener('click', prepareForPrint);
+            
+            // Inisialisasi awal
+            clearForm();
+            showList();
+        });
+    </script>
+</body>
+</html>

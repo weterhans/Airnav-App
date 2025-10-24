@@ -22,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const imageLightbox = document.getElementById('image-lightbox');
     const lightboxImage = document.getElementById('lightbox-image');
     const closeLightboxButton = document.getElementById('close-lightbox-button');
+    const activityDateInput = document.getElementById('activity-date');
+    const activityShiftSelect = document.getElementById('activity-shift');
     
     // --- Variabel State ---
     let technicianList = [];
@@ -96,6 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
         for (let i = 1; i <= 5; i++) {
             const select = document.createElement('select');
             select.name = `teknisi-${i}`;
+            select.id = `teknisi-${i}`;
             select.className = 'block w-full border-gray-300 rounded-md shadow-sm';
             let options = `<option value="">Pilih Teknisi ${i}${i > 2 ? ' (Opsional)' : ''}</option>`;
             technicianList.forEach(name => options += `<option value="${name}">${name}</option>`);
@@ -123,6 +126,40 @@ document.addEventListener('DOMContentLoaded', function () {
             reader.onload = e => newAttachmentPreview.appendChild(createPreviewElement(e.target.result, index, 'new'));
             reader.readAsDataURL(file);
         });
+    };
+
+    const autoFillTechnicians = async () => {
+        const tanggal = activityDateInput.value;
+        const dinas = activityShiftSelect.value;
+        
+        // Reset dulu semua dropdown
+        for (let i = 1; i <= 5; i++) {
+            const select = document.getElementById(`teknisi-${i}`);
+            if (select) select.value = '';
+        }
+
+        if (!tanggal || !dinas) return; // Belum lengkap, jangan ambil data
+
+        try {
+            const result = await window.api.getTechniciansBySchedule({ tanggal: tanggal, dinas: dinas });
+            if (result.success && result.data.length > 0) {
+                // Isi dropdown sesuai urutan dari jadwal
+                result.data.forEach((name, index) => {
+                    if (index < 5) { // Hanya isi maks 5 dropdown
+                        const select = document.getElementById(`teknisi-${index + 1}`);
+                        if (select && technicianList.includes(name)) { // Pastikan nama ada di daftar teknisi
+                            select.value = name;
+                        }
+                    }
+                });
+            } else {
+                console.log(`Tidak ada jadwal teknisi ditemukan untuk ${tanggal} dinas ${dinas}.`);
+                // Biarkan dropdown kosong
+            }
+        } catch (error) {
+            console.error("Gagal auto-fill teknisi:", error);
+            // Biarkan dropdown kosong jika error
+        }
     };
 
     const openModal = async (isEditing = false, data = null) => {
@@ -156,6 +193,7 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('activity-code').value = `KG-CNSD-${Date.now().toString().slice(-6)}`;
             document.getElementById('activity-date').value = new Date().toISOString().slice(0,10);
             document.getElementById('activity-shift').value = getCurrentShift();
+            await autoFillTechnicians();
         }
         await renderAllPreviews();
         addActivityModal.classList.remove('hidden');
@@ -278,6 +316,9 @@ document.addEventListener('DOMContentLoaded', function () {
             imageLightbox.classList.add('hidden');
         }
     });
+
+    activityDateInput.addEventListener('change', autoFillTechnicians);
+    activityShiftSelect.addEventListener('change', autoFillTechnicians);
 
     // --- FUNGSI INISIALISASI HALAMAN ---
     const initializePage = async () => {

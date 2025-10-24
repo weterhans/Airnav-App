@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meter Reading RECEIVER RADIO - AirNav Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* ... (CSS ASLI ANDA TIDAK ADA PERUBAHAN) ... */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Container and Structure styles */
+        .form-container-inner {
+            max-width: 900px;
+            margin: 20px auto;
+            border: 3px solid #000;
+            background-color: white !important;
+            color: #000;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: white !important;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 3px solid #000;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #0066b3 0%, #003d7a 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+            position: relative;
+        }
+
+        .company-name {
+            font-size: 20px;
+            font-weight: bold;
+            color: #000;
+        }
+
+        .company-subtitle {
+            font-size: 11px;
+            color: #0066b3;
+            font-weight: bold;
+        }
+
+        .company-info {
+            text-align: right;
+            font-size: 10px;
+            line-height: 1.5;
+        }
+
+        .company-info strong {
+            display: block;
+            font-size: 11px;
+        }
+
+        .title-section {
+            text-align: center;
+            padding: 10px;
+            border-bottom: 3px solid #000;
+        }
+
+        .title-section h2 {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .form-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border-bottom: 3px solid #000;
+        }
+
+        .form-header > div {
+            padding: 10px;
+            border-right: 3px solid #000;
+            font-size: 12px;
+        }
+
+        .form-header > div:last-child {
+            border-right: none;
+        }
+
+        .form-header .receiver-cell {
+            background-color: #d9d9d9;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .equipment-info {
+            padding: 10px;
+            border-bottom: 3px solid #000;
+            font-size: 11px;
+        }
+
+        .equipment-row {
+            display: flex;
+            gap: 40px;
+            margin-bottom: 3px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 2px solid #000;
+            padding: 6px 8px;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        th {
+            background-color: #b4c7e7;
+            font-weight: bold;
+        }
+
+        .no-column {
+            width: 40px;
+        }
+
+        .pemeriksaan-column {
+            text-align: left;
+            padding-left: 15px;
+        }
+
+        .section-header {
+            background-color: #c5e0b4;
+            font-weight: bold;
+            text-align: left;
+            padding-left: 10px !important;
+        }
+
+        .item-row {
+            text-align: left;
+            padding-left: 25px !important;
+        }
+
+        .status-column {
+            width: 100px;
+        }
+
+        .lingkungan-header {
+            background-color: #ffd966;
+            font-weight: bold;
+            padding: 8px;
+            border: 2px solid #000;
+            border-top: none;
+            border-bottom: none;
+            font-size: 12px;
+            text-align: left;
+            padding-left: 10px;
+        }
+
+        .signature-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            border-top: 2px solid #000;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 3px;
+            border: 1px solid #ccc;
+            font-size: 10px;
+        }
+
+        /* ACTION BUTTONS */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            padding: 20px;
+            background-color: #f5f5f5;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .action-buttons button {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save { background-color: #ff9800; color: white; }
+        .btn-save:hover { background-color: #f57c00; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(255, 152, 0, 0.3); }
+
+        .btn-print { background-color: #4caf50; color: white; }
+        .btn-print:hover { background-color: #45a049; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(76, 175, 80, 0.3); }
+
+        .btn-cancel { background-color: #f44336; color: white; }
+        .btn-cancel:hover { background-color: #da190b; transform: translateY(-2px); box-shadow: 0 4px 8px rgba(244, 67, 54, 0.3); }
+        
+        .status-selesai {
+            background-color: #c5e0b4;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #1e4620;
+            font-size: 10px;
+        }
+
+        /* CSS untuk tampilan awal seperti gambar */
+        #data-list table th, #data-list table td {
+            border: 1px solid #e5e7eb; 
+            padding: 12px;
+            font-size: 14px;
+        }
+        /* PERBAIKAN: Menambahkan perataan tengah pada th di tabel daftar */
+        #data-list table th {
+            text-align: center;
+        }
+
+
+        /* PRINT STYLES */
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 4mm 6mm;
+            }
+
+            body {
+                background-color: white;
+                margin: 0;
+            }
+            
+            .no-print {
+                    display: none !important;
+                }
+
+            .form-container-inner {
+                border: 1px solid #000;
+                padding: 1.5mm;
+                box-shadow: none;
+                margin: 0;
+                max-width: 100%;
+            }
+
+            .action-buttons {
+                display: none;
+            }
+
+            th, td {
+                border: 1px solid #000;
+                padding: 2px 4px;
+                font-size: 10px;
+            }
+            
+            .footer-table td {
+                 padding: 4px 6px; 
+            }
+
+            .footer-table tbody tr:first-child td[rowspan="5"] {
+                height: 100px !important; 
+            }
+            
+            input[type="text"], input[type="date"], select {
+                padding: 0;
+                font-size: 10px;
+                border: none;
+            }
+            select {
+                height: auto;
+                line-height: normal;
+            }
+            
+            td select {
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                background-color: white;
+                padding: 0px !important;
+                height: auto !important;
+                line-height: 1.1;
+                font-size: 7px;
+                border: none;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div id="main-content" class="max-w-7xl mx-auto p-4 md:p-6">
+        
+        <div id="main-controls" class="bg-white p-6 rounded-lg shadow-md mb-6 no-print flex items-center justify-between">
+            <div>
+                <div class="flex items-center">
+                    <a href="performance_cnsd.html" onclick="history.back(); return false;" class="flex items-center text-gray-600 hover:text-gray-800 font-semibold p-2 rounded-md hover:bg-gray-200">
+                        <svg class="w-6 h-6 mr-0" fill="none" stroke="currentColor" viewBox="0 0 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+                    </a>
+                    <h1 class="text-2xl font-bold text-gray-800 ml-4">Meter Reading Receiver (RX) Radio </h1>
+                </div>
+                
+                <div class="mt-4 flex flex-wrap gap-4">
+                    <button id="create-new-btn" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg">Buat Data Baru</button>
+                    <button id="view-list-btn" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Lihat Daftar Data</button>
+                </div>
+            </div>
+            <img src="../img/airnav.png" alt="AirNav Logo" class="h-12 w-auto">
+        </div>
+        
+        <div id="data-list" class="bg-white p-6 rounded-lg shadow-md">
+            <h2 class="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Daftar Meter Reading Receiver (RX) Radio</h2>
+            
+            <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-blue-50"> 
+                        <tr>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider no-column">NO</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">TANGGAL</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">SHIFT</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">MANAGER TEKNIK</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider status-column">STATUS</th>
+                            <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">AKSI</th>
+                        </tr>
+                    </thead>
+                    <tbody id="data-table-body" class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td colspan="6" class="text-center p-8 text-gray-500">Belum ada data yang tersimpan.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div id="form-container" class="hidden"> 
+            <form id="rxradio-form"> 
+                <input type="hidden" id="data_id" name="id">
+                <div class="form-container-inner">
+                    <div class="header">
+                        <div class="logo-section">
+                            <img src="../img/airnav_logo.png" alt="AirNav Indonesia" style="width: 120px; height: auto; object-fit: contain;">
+                            <div>
+                                <div class="company-name">AirNav Indonesia</div>
+                            </div>
+                        </div>
+                        <div class="company-info">
+                            <strong>Perum<br>KANTOR CABANG SURABAYA</strong>
+                            Telp. (031)8688456 Fax : (031) 8688536<br>
+                            email : sub@ airnavindonesia.co.id<br>
+                            Web : www.airnavindonesia.co.id
+                        </div>
+                    </div>
+
+                    <div class="title-section">
+                        <h2>METER READING</h2>
+                    </div>
+
+                    <div class="form-header">
+                        <div>
+                            <strong>LOKASI : CABANG SURABAYA</strong>
+                        </div>
+                        <div class="receiver-cell">
+                            RECEIVER RADIO
+                        </div>
+                        <div class="company-subtitle">FAS CNS & OTOMASI</div>
+                    </div>
+
+                    
+                    <div class="form-header">
+                        <div style="grid-column: 1 / -1; display: flex; align-items: center; gap: 10px;">
+                            <strong>TANGGAL/JAM :</strong> 
+                            <input type="date" name="tanggal" style="border: 1px solid #ccc; padding: 3px; flex-shrink: 0;" required>
+                            <select id="shift" name="shift" style="border: 1px solid #ccc; padding: 3px; flex-shrink: 0;" required>
+                                <option value="">Pilih Shift</option>
+                                <option value="07.00-13.00">07.00-13.00</option>
+                                <option value="13.00-19.00">13.00-19.00</option>
+                                <option value="19.00-07.00">19.00-07.00</option>
+                            </select>
+                            <strong>WIB</strong>
+                        </div>
+                    </div>
+
+                    <div class="equipment-info">
+                        <div class="equipment-row">
+                            <span><strong>MERK :</strong> <input type="text" name="merk" value="OTE / PAE / TELERAD" style="width: 250px; border: none; padding: 5px;"></span>
+                        </div>
+                        <div class="equipment-row">
+                            <span><strong>TYPE :</strong> <input type="text" name="type" style="width: 250px; border: none; padding: 5px;"></span>
+                        </div>
+                        <div class="equipment-row">
+                            <span><strong>S N :</strong> <input type="text" name="sn" style="width: 250px; border: none; padding: 5px;"></span>
+                        </div>
+                    </div>
+
+                    <table>
+                        <thead>
+                            <tr>
+                                <th rowspan="2" style="width: 5%;" class="no-column">NO</th>
+                                <th rowspan="2" style="width: 25%;">PEMERIKSAAN</th>
+                                <th rowspan="2" style="width: 10%;"></th>
+                                <th colspan="2" style="width: 20%;">STATUS</th>
+                                <th rowspan="2" style="width: 20%;">SEQUELSH ON</th>
+                                <th rowspan="2" style="width: 20%;">KETERANGAN</th>
+                            </tr>
+
+                            <tr style="background-color: #bcd2ee;">
+                                <th style="width: 10%;">A</th>
+                                <th style="width: 10%;">B</th>
+                            </tr>
+                            
+                            <tr>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th colspan="2">4</th>
+                                <th>5</th>
+                                <th>6</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="no-column">1</td>
+                                <td class="section-header" colspan="6">ADC</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">118.30 MHz</td>
+                                <td><input type="text" name="adc_118_30_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="adc_118_30_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="adc_118_30_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="adc_118_30_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="adc_118_30_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">118.30 MHz</td>
+                                <td><input type="text" name="adc_118_30_2_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="adc_118_30_2_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="adc_118_30_2_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="adc_118_30_2_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="adc_118_30_2_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">118.10 MHz</td>
+                                <td><input type="text" name="adc_118_10_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="adc_118_10_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="adc_118_10_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="adc_118_10_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="adc_118_10_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="no-column">2</td>
+                                <td class="section-header" colspan="6">GROUND CONTROL</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">118.90 MHz</td>
+                                <td><input type="text" name="gc_118_90_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="gc_118_90_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="gc_118_90_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="gc_118_90_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="gc_118_90_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">119.15 MHz</td>
+                                <td><input type="text" name="gc_119_15_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="gc_119_15_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="gc_119_15_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="gc_119_15_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="gc_119_15_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="no-column">3</td>
+                                <td class="section-header" colspan="6">CONTROL DELIVERY UNIT (CDU)</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">121.65 MHz</td>
+                                <td><input type="text" name="cdu_121_65_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="cdu_121_65_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="cdu_121_65_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="cdu_121_65_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="cdu_121_65_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="no-column">4</td>
+                                <td class="section-header" colspan="6">APP WEST</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">125.10 MHz</td>
+                                <td><input type="text" name="app_west_125_10_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="app_west_125_10_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="app_west_125_10_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="app_west_125_10_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="app_west_125_10_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">123.55 MHz</td>
+                                <td><input type="text" name="app_west_123_55_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="app_west_123_55_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="app_west_123_55_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="app_west_123_55_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="app_west_123_55_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="no-column">5</td>
+                                <td class="section-header" colspan="6">APP DIRECTOR</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">123.20 MHz</td>
+                                <td><input type="text" name="app_dir_123_20_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="app_dir_123_20_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="app_dir_123_20_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="app_dir_123_20_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="app_dir_123_20_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">124.50 MHz</td>
+                                <td><input type="text" name="app_dir_124_50_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="app_dir_124_50_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="app_dir_124_50_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="app_dir_124_50_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="app_dir_124_50_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="no-column">6</td>
+                                <td class="section-header" colspan="6">APP EAST</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">124.00 MHz</td>
+                                <td><input type="text" name="app_east_124_00_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="app_east_124_00_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="app_east_124_00_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="app_east_124_00_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="app_east_124_00_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">122.85 MHz</td>
+                                <td><input type="text" name="app_east_122_85_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="app_east_122_85_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="app_east_122_85_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="app_east_122_85_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="app_east_122_85_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="no-column">7</td>
+                                <td class="section-header"colspan="6">ATIS</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">128.20 MHz</td>
+                                <td><input type="text" name="atis_128_20_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="atis_128_20_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="atis_128_20_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="atis_128_20_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="atis_128_20_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+
+                            <tr>
+                                <td class="no-column">8</td>
+                                <td class="section-header" colspan="6">ER MAKASSAR</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">123.90 MHz</td>
+                                <td><input type="text" name="er_makassar_123_90_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="er_makassar_123_90_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="er_makassar_123_90_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="er_makassar_123_90_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="er_makassar_123_90_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">125.90 MHz</td>
+                                <td><input type="text" name="er_makassar_125_90_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="er_makassar_125_90_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="er_makassar_125_90_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="er_makassar_125_90_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="er_makassar_125_90_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+
+                            <tr>
+                                <td>9</td>
+                                <td class="section-header" colspan="6">BACK UP</td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">119.15 MHz</td>
+                                <td><input type="text" name="backup_119_15_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="backup_119_15_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="backup_119_15_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="backup_119_15_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="backup_119_15_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">123.20 MHz</td>
+                                <td><input type="text" name="backup_123_20_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="backup_123_20_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="backup_123_20_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="backup_123_20_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="backup_123_20_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">124.00 MHz</td>
+                                <td><input type="text" name="backup_124_00_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="backup_124_00_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="backup_124_00_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="backup_124_00_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="backup_124_00_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                                <td class="item-row">125.10 MHz</td>
+                                <td><input type="text" name="backup_125_10_value" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><select name="backup_125_10_status_a" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><select name="backup_125_10_status_b" style="width: 100%; border: none;text-align:center;">
+                                        <option value="">Online/Offline</option>
+                                        <option value="Online">Online</option>
+                                        <option value="Offline">Offline</option>
+                                    </select></td>
+                                <td><input type="text" name="backup_125_10_sequelsh" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="backup_125_10_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    
+                    <div class="page-break-before"></div>
+                    <div class="lingkungan-header" style="border-top: 2px solid #000; border-bottom: none;">II LINGKUNGAN KERJA</div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="no-column" style="width: 5%;">NO</th>
+                                <th style="width: 25%;">KEGIATAN</th>
+                                <th style="width: 20%;">NOMINAL</th>
+                                <th style="width: 20%;">HASIL</th>
+                                <th style="width: 30%;">KETERANGAN</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td class="pemeriksaan-column">Pemeriksaann suhu Ruangan</td>
+                                <td><input type="text" name="suhu_nominal" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="suhu_hasil" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="suhu_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td class="pemeriksaan-column">Pemeriksaan Air Humidity</td>
+                                <td><input type="text" name="humidity_nominal" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="humidity_hasil" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="humidity_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td class="pemeriksaan-column">Pemeriksaan Kebersihan Ruangan</td>
+                                <td><input type="text" name="kebersihan_nominal" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="kebersihan_hasil" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="kebersihan_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td class="pemeriksaan-column">Pemeriksaan UPS</td>
+                                <td><input type="text" name="ups_nominal" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="ups_hasil" style="width: 100%; border: none; padding: 5px;"></td>
+                                <td><input type="text" name="ups_keterangan" style="width: 100%; border: none; padding: 5px;"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="footer-table" style="margin-top: 0;">
+                        <tr>
+                            <th style="width: 5%;">NO</th>
+                            <th style="width: 35%;">TEKNISI</th>
+                            <th style="width: 10%;">PARAF</th>
+                            <th style="width: 25%;">SUPERVISOR</th>
+                            <th style="width: 25%;">MANAGER TEKNIK</th>
+                        </tr>
+                        <tr>
+                            <td class="center">1</td>
+                            <td><input type="text" name="teknisi_1" class="teknisi-nama" style="border: none;"></td> <td><input type="text" name="paraf_1" class="paraf_1" style="border: none;"></td> <td rowspan="6" class="ttd-td-height" style="text-align:center; vertical-align:bottom;">
+                                ( <input type="text" id="supervisor" name="supervisor" class="ttd-input" placeholder="Nama Supervisor" style="width:90%; text-align:center; border: none;" > ) </td>
+                           <td rowspan="6" class="ttd-td-height" style="text-align:center; vertical-align:bottom;">
+                                ( <input type="text" id="manager" name="manager_teknik" class="ttd-input" placeholder="Nama Manager Teknik" style="width:90%; text-align:center; border: none;"> ) </td>
+                        </tr>
+                        <tr><td class="center">2</td><td><input type="text" name="teknisi_2" class="teknisi-nama" style="border: none;"></td><td><input type="text" name="paraf_2" class="paraf_2" style="border: none;"></td></tr> <tr><td class="center">3</td><td><input type="text" name="teknisi_3" class="teknisi-nama" style="border: none;"></td><td><input type="text" name="paraf_3" class="paraf_3" style="border: none;"></td></tr> <tr><td class="center">4</td><td><input type="text" name="teknisi_4" class="teknisi-nama" style="border: none;"></td><td><input type="text" name="paraf_4" class="paraf_4" style="border: none;"></td></tr> <tr><td class="center">5</td><td><input type="text" name="teknisi_5" class="teknisi-nama" style="border: none;"></td><td><input type="text" name="paraf_5" class="paraf_5" style="border: none;"></td></tr> </table>
+                </div>
+
+                <div class="flex justify-center gap-4 mt-6 no-print">
+                    <button type="button" id="save-wo" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2 rounded-lg">Simpan</button>
+                    <button type="button" id="print-wo" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg">Print Form</button>
+                    <button type="button" id="cancel-wo" class="bg-gray-600 hover:bg-gray-700 text-white px-6 py-2 rounded-lg">Batal</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script>
+    // Definisikan STORAGE KEY baru
+    const STORAGE_KEY = 'meterReadingRX'; 
+
+    // PENTING: Jika Anda pernah menyimpan data dengan nama key lama ('meterReadings'),
+    // Anda harus menghapus data tersebut dari Local Storage browser Anda 
+    // agar data dummy yang baru dimuat, atau untuk menghindari konflik.
+
+    const app = {
+        // Menggunakan STORAGE_KEY baru
+        get data() {
+            return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+        },
+        set data(newData) {
+            // Urutkan data berdasarkan ID terbaru saat menyimpan
+            const sortedData = newData.sort((a, b) => b.id - a.id);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(sortedData));
+        },
+        
+        getFormData() {
+            const form = document.getElementById('rxradio-form'); 
+            const data = {};
+            
+            // Mengambil SEMUA input field dari form berdasarkan atribut 'name'
+            const formElements = form.querySelectorAll('input, select, textarea');
+            formElements.forEach(element => {
+                if (element.name) {
+                    data[element.name] = element.value;
+                }
+            });
+
+            const currentId = document.getElementById('data_id').value;
+            
+            const ringkasan = {
+                id: currentId ? parseInt(currentId) : Date.now(),
+                tanggal: data.tanggal || '',
+                shift: data.shift || '',
+                manager_teknik: data.manager_teknik || '', 
+                status: 'SELESAI',
+                data_form: data 
+            };
+            return ringkasan;
+        },
+
+        saveToTable(event) {
+            event.preventDefault();
+            const newData = app.getFormData();
+            let allData = app.data;
+
+            if (newData.tanggal === '' || newData.shift === '') {
+                 Swal.fire('Gagal!', 'Tanggal dan Shift wajib diisi.', 'warning');
+                 return;
+            }
+
+            const index = allData.findIndex(item => item.id == newData.id);
+
+            if (index !== -1) {
+                // UPDATE DATA
+                allData[index] = newData; 
+                Swal.fire('Berhasil!', 'Data berhasil diperbarui.', 'success');
+            } else {
+                // TAMBAH DATA BARU
+                newData.id = Date.now(); 
+                newData.data_form.id = newData.id;
+                allData.push(newData);
+                Swal.fire('Berhasil!', 'Data baru berhasil disimpan.', 'success');
+            }
+
+            app.data = allData;
+            app.showList();
+        },
+        
+        // FUNGSI UTAMA UNTUK EDIT
+        loadForm(id) {
+            const allData = app.data;
+            const dataToEdit = allData.find(item => item.id == id);
+            const form = document.getElementById('rxradio-form');
+            
+            if (dataToEdit && dataToEdit.data_form) {
+                form.reset(); 
+                
+                // Isi hidden ID untuk mode EDIT
+                document.getElementById('data_id').value = dataToEdit.id;
+
+                // Loop untuk mengisi SEMUA input/select form dengan data_form
+                for (const key in dataToEdit.data_form) {
+                    const element = form.elements.namedItem(key); // Menggunakan namedItem untuk akses yang lebih andal
+                    if (element) {
+                        element.value = dataToEdit.data_form[key];
+                    }
+                }
+                
+                // Mengubah teks tombol saat mode edit
+                document.getElementById('save-btn-form').textContent = '💾 PERBARUI DATA';
+
+                app.showForm(true); // Tampilkan form
+            } else {
+                Swal.fire('Error!', 'Data tidak ditemukan.', 'error');
+            }
+        },
+
+        deleteData(id) {
+            Swal.fire({
+                title: 'Apakah Anda yakin?',
+                text: "Data ini akan dihapus permanen!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Hapus!',
+                cancelButtonText: 'Batal'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const allData = app.data.filter(item => item.id !== id);
+                    app.data = allData;
+                    app.renderList();
+                    Swal.fire('Dihapus!', 'Data telah berhasil dihapus.', 'success');
+                }
+            })
+        },
+
+        renderList() {
+            const tableBody = document.getElementById('data-table-body');
+            tableBody.innerHTML = '';
+            
+            const allData = app.data; // Sudah diurutkan saat disimpan
+
+            if (allData.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center p-8 text-gray-500">Belum ada data yang tersimpan.</td></tr>';
+                return;
+            }
+
+            allData.forEach((data, index) => {
+                const row = tableBody.insertRow();
+                row.className = 'hover:bg-gray-100';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 no-column text-center">${index + 1}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">${data.tanggal}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">${data.shift}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">${data.manager_teknik || '-'}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-center">
+                        <span class="status-selesai">${data.status}</span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-center">
+                        <a href="#" onclick="event.preventDefault(); window.app.loadForm(${data.id})" class="text-blue-600 hover:underline font-bold">Edit</a>
+                        <span class="text-gray-400">|</span>
+                        <a href="#" onclick="event.preventDefault(); window.app.deleteData(${data.id})" class="text-red-600 hover:underline font-bold">Hapus</a>
+                    </td>
+                `;
+            });
+        },
+        
+        showForm(isEdit = false) {
+            document.getElementById('data-list').classList.add('hidden');
+            document.getElementById('form-container').classList.remove('hidden');
+            
+            if (!isEdit) {
+                // Reset form dan ID hanya jika ini adalah form baru
+                document.getElementById('rxradio-form').reset();
+                document.getElementById('data_id').value = '';
+                // Mengatur ulang teks tombol simpan
+                const saveBtn = document.getElementById('save-btn-form');
+                if(saveBtn) saveBtn.textContent = '💾 SIMPAN DATA';
+            }
+        },
+
+        showList() {
+            document.getElementById('form-container').classList.add('hidden');
+            document.getElementById('data-list').classList.remove('hidden'); 
+            app.renderList();
+        },
+
+        cancelForm() {
+            Swal.fire({
+                title: 'Batalkan Pengisian?',
+                text: "Data yang belum disimpan akan hilang.",
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#f44336',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Ya, Batalkan',
+                cancelButtonText: 'Lanjutkan Edit'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('rxradio-form').reset();
+                    document.getElementById('data_id').value = ''; 
+                    app.showList();
+                }
+            })
+        }
+    };
+
+    window.app = app; 
+    
+    document.addEventListener('DOMContentLoaded', () => {
+        // Inisialisasi data dummy agar ada data yang bisa langsung di-edit
+        // Menggunakan STORAGE_KEY baru
+        if (!localStorage.getItem(STORAGE_KEY)) {
+            const initialData = [
+                {
+                    id: 1672531200000, // Dummy ID
+                    tanggal: '2025-01-01',
+                    shift: '07.00-13.00',
+                    manager_teknik: 'Manager A',
+                    status: 'SELESAI',
+                    data_form: {
+                        id: 1672531200000,
+                        tanggal: '2025-01-01',
+                        shift: '07.00-13.00',
+                        // Equipment Info
+                        merk: 'OTE / PAE / TELERAD',
+                        type: 'R-7000',
+                        sn: 'SN-001A',
+                        
+                        // Data ADC (diisi sebagai contoh)
+                        adc_118_30_value: '0.8',
+                        adc_118_30_status_a: 'Online',
+                        adc_118_30_status_b: 'Online',
+                        adc_118_30_sequelsh: '7',
+                        adc_118_30_keterangan: 'Normal',
+                        adc_118_30_2_value: '0.8',
+                        adc_118_30_2_status_a: 'Online',
+                        adc_118_30_2_status_b: 'Online',
+                        adc_118_30_2_sequelsh: '7',
+                        adc_118_30_2_keterangan: 'Normal',
+                        adc_118_10_value: '0.9',
+                        adc_118_10_status_a: 'Online',
+                        adc_118_10_status_b: 'Offline',
+                        adc_118_10_sequelsh: '6',
+                        adc_118_10_keterangan: 'Backup Ready',
+                        // ... (tambahkan semua field lain di sini jika perlu)
+                        
+                        // Data Lingkungan
+                        suhu_nominal: '22C',
+                        suhu_hasil: '24C',
+                        suhu_keterangan: 'Normal',
+                        humidity_nominal: '50%',
+                        humidity_hasil: '55%',
+                        humidity_keterangan: 'Baik',
+                        kebersihan_nominal: 'Bersih',
+                        kebersihan_hasil: 'Bersih',
+                        kebersihan_keterangan: 'OK',
+                        ups_nominal: 'Baik',
+                        ups_hasil: 'Baik',
+                        ups_keterangan: 'OK',
+
+                        // Data Footer
+                        teknisi_1: 'Budi Santoso',
+                        paraf_1: 'B.S.',
+                        teknisi_2: 'Rina Dewi',
+                        paraf_2: 'R.D.',
+                        teknisi_3: '',
+                        paraf_3: '',
+                        teknisi_4: '',
+                        paraf_4: '',
+                        teknisi_5: '',
+                        paraf_5: '',
+                        supervisor: 'S. Wijaya',
+                        manager_teknik: 'Manager A',
+                    }
+                }
+            ];
+            // Simpan menggunakan key baru
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(initialData)); 
+        }
+
+        app.showList(); 
+
+        // Menghubungkan tombol SIMPAN ke fungsi saveToTable
+        document.getElementById('rxradio-form').addEventListener('submit', app.saveToTable);
+
+        // Menghubungkan tombol navigasi
+        document.getElementById('create-new-btn').addEventListener('click', () => {
+            app.showForm(false); // Mode buat baru
+        });
+
+        document.getElementById('view-list-btn').addEventListener('click', () => {
+            app.showList();
+        });
+        
+        // Handling error logo
+        document.querySelectorAll('img[src="airnav.png"]').forEach(img => {
+            img.onerror = function() {
+                this.onerror = null;
+                this.src = 'https://upload.wikimedia.org/wikipedia/id/thumb/7/77/AirNav_Indonesia_logo.svg/1200px-AirNav_Indonesia_logo.svg.png';
+            };
+        });
+        
+    });
+</script>
+</body>
+</html>
